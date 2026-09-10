@@ -111,6 +111,8 @@ article{min-width:0}
 
 @media (min-width:1080px){
   .shell{grid-template-columns:216px minmax(0,1fr); gap:3.4rem}
+  /* 목차가 없는 요약 페이지는 2열로 가면 본문이 216px 열에 갇힌다 */
+  .shell.solo{grid-template-columns:minmax(0,1fr); gap:0}
   .sidetoc{
     position:sticky; top:calc(var(--bar-h) + 1.6rem); align-self:start;
     max-height:calc(100vh - var(--bar-h) - 3.5rem); overflow-y:auto;

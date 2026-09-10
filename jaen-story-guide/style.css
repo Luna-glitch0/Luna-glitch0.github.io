@@ -246,6 +246,47 @@ td code{font-size:.85em}
   color:var(--accent); border:1px solid currentColor; border-radius:4px;
   padding:.03rem .32rem; margin-bottom:.38rem; text-transform:uppercase}
 
+/* ═══════════ 요약 페이지 — 목차 없이 한 단 ═══════════ */
+.shell.solo{display:block; max-width:880px}
+.shell.solo article{max-width:none}
+
+/* 「이렇게 쓰면 → 이렇게 나온다 → 대신」 */
+.miss table{min-width:560px; font-size:.9rem}
+.miss td:first-child{white-space:nowrap; font-weight:600}
+.miss td:nth-child(2){color:var(--muted)}
+.miss td:last-child{font-weight:600}
+.miss .arrow{color:var(--faint); padding:0 .1rem}
+
+/* 요약의 원칙 항목 */
+.pick{border-top:1px solid var(--line); padding:1.25rem 0 .3rem; margin:0}
+.pick:first-of-type{border-top:0; padding-top:.4rem}
+.pick h3{margin:0 0 .3rem; font-size:1.06rem}
+.pick p{margin:.2rem 0 .55rem; color:var(--muted); font-size:.945rem; line-height:1.65}
+.pick pre{margin:.55rem 0 0; font-size:12.5px}
+
+/* 요약 → 본문으로 보내는 안내 */
+.more{
+  display:flex; flex-wrap:wrap; gap:.7rem; margin:1.4rem 0 0; padding:0; list-style:none;
+}
+.more a{
+  display:inline-block; border:1px solid var(--line); border-radius:9px;
+  padding:.55rem .95rem; text-decoration:none; background:var(--card);
+  font-size:.9rem; font-weight:650; color:var(--fg); transition:border-color .15s;
+}
+.more a:hover{border-color:var(--accent); color:var(--accent)}
+.more a span.sub{display:block; font-size:.78rem; font-weight:500; color:var(--faint);
+  margin-top:.1rem}
+
+/* 규격 한 줄 */
+.spec{
+  display:flex; flex-wrap:wrap; gap:.4rem .5rem; margin:1rem 0; padding:0; list-style:none;
+}
+.spec li{
+  border:1px solid var(--line); border-radius:7px; padding:.28rem .6rem;
+  font-size:.845rem; background:var(--card); color:var(--muted);
+}
+.spec li b{color:var(--fg); font-weight:650}
+
 hr{border:0; border-top:1px solid var(--line); margin:3.6rem 0 0}
 
 /* ═══════════ 언어 전환 ═══════════ */

@@ -5,172 +5,84 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>에셋 · 1인칭 일본 드라마</title>
-<style>
-:root{
-  --bg:#fcfcfb; --fg:#1a1a18; --muted:#6e6e68; --line:#e4e4de;
-  --card:#fff; --accent:#a8481a; --key-bar:#d8a37a;
-  --shade:#f0efec;
-  --code-bg:#f5f4f1; --code-fg:#24231e;
-  --maxw:940px;
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#121211; --fg:#e7e6e2; --muted:#98978f; --line:#2b2b28;
-    --card:#1a1a18; --accent:#e8895a; --key-bar:#8a5330;
-    --shade:#232320;
-    --code-bg:#1d1d1b; --code-fg:#d9d8d3;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#121211; --fg:#e7e6e2; --muted:#98978f; --line:#2b2b28;
-  --card:#1a1a18; --accent:#e8895a; --key-bar:#8a5330;
-  --shade:#232320;
-  --code-bg:#1d1d1b; --code-fg:#d9d8d3;
-}
-:root[data-theme="light"]{
-  --bg:#fcfcfb; --fg:#1a1a18; --muted:#6e6e68; --line:#e4e4de;
-  --card:#fff; --accent:#a8481a; --key-bar:#d8a37a;
-  --shade:#f0efec;
-  --code-bg:#f5f4f1; --code-fg:#24231e;
-}
-
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
-body{
-  margin:0; background:var(--bg); color:var(--fg);
-  font:16.5px/1.72 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Hiragino Sans",
-       "Noto Sans KR",Segoe UI,sans-serif;
-}
-
-.topbar{
-  position:sticky; top:0; z-index:50;
-  background:var(--bg);
-  background:color-mix(in srgb, var(--bg) 90%, transparent);
-  -webkit-backdrop-filter:saturate(180%) blur(12px);
-  backdrop-filter:saturate(180%) blur(12px);
-  border-bottom:1px solid var(--line);
-}
-.topbar-in{
-  max-width:var(--maxw); margin:0 auto; padding:.62rem 1.25rem;
-  display:flex; align-items:center; gap:1rem; justify-content:space-between;
-}
-.back{font-size:.82rem; font-weight:600; color:var(--muted); text-decoration:none;
-  white-space:nowrap}
-.back:hover{color:var(--accent)}
-.seg{display:inline-flex; border:1px solid var(--line); border-radius:999px;
-  overflow:hidden; background:var(--card); flex-shrink:0}
-.seg button{
-  appearance:none; border:0; background:transparent; color:var(--muted);
-  font:inherit; font-size:.78rem; font-weight:600; padding:.3rem .76rem; cursor:pointer;
-}
-.seg button[aria-pressed="true"]{background:var(--accent); color:#fff}
-
-main{max-width:var(--maxw); margin:0 auto; padding:2.4rem 1.25rem 6rem}
-h1{font-size:clamp(1.6rem,4vw,2.15rem); line-height:1.24; margin:.15em 0 .45em;
-  letter-spacing:-.022em; font-weight:700}
-.lede{font-size:1.02rem; color:var(--muted); margin:0 0 2.4rem; line-height:1.65}
-
-.part{margin:3.8rem 0 1.3rem}
-.part:first-of-type{margin-top:2.2rem}
-.part-n{font-size:.72rem; font-weight:800; letter-spacing:.12em; color:var(--accent);
-  text-transform:uppercase; display:block; margin-bottom:.28rem}
-.part h2{font-size:clamp(1.28rem,2.8vw,1.5rem); margin:0; letter-spacing:-.018em;
-  font-weight:700}
-.part p{margin:.5rem 0 0; color:var(--muted); font-size:.94rem}
-
-.key{margin:.5rem 0 1.1rem; padding:.1rem 0 .1rem 1rem;
-  border-left:3px solid var(--key-bar);
-  font-size:1.02rem; line-height:1.6; font-weight:600; letter-spacing:-.008em}
-
-/* ── 에셋 그리드 ── */
-.grid{display:grid; gap:1.1rem; margin:1.3rem 0 0;
-  grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
-.a{border:1px solid var(--line); border-radius:11px; overflow:hidden;
-  background:var(--card); display:flex; flex-direction:column}
-.a a.shot{display:block; background:var(--shade); line-height:0;
-  border-bottom:1px solid var(--line)}
-.a img{width:100%; height:225px; object-fit:contain; display:block}
-.a .meta{padding:.7rem .85rem .85rem}
-.a .nm{font-size:.9rem; font-weight:650; margin:0 0 .12rem; line-height:1.4}
-.a .dim{font-size:.72rem; color:var(--muted); font-variant-numeric:tabular-nums;
-  margin:0 0 .4rem; font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-.a .role{font-size:.845rem; color:var(--muted); margin:0; line-height:1.58}
-.a .tag{display:inline-block; font-size:.68rem; font-weight:750; letter-spacing:.04em;
-  color:var(--accent); border:1px solid currentColor; border-radius:4px;
-  padding:.02rem .3rem; margin-bottom:.35rem; text-transform:uppercase}
-
-pre{
-  background:var(--code-bg); color:var(--code-fg); border:1px solid var(--line);
-  border-radius:9px; padding:.9rem 1rem; overflow-x:auto; margin:.9rem 0;
-  font:12.5px/1.62 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  white-space:pre; -webkit-overflow-scrolling:touch;
-}
-code{font:.87em/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  background:var(--code-bg); padding:.12em .36em; border-radius:4px}
-pre code{background:transparent; padding:0; font-size:inherit}
-
-details{margin:1rem 0 0; border:1px solid var(--line); border-radius:9px;
-  background:var(--card); overflow:hidden}
-details[open]{background:transparent}
-summary{cursor:pointer; padding:.5rem .85rem; font-size:.8rem; font-weight:650;
-  color:var(--muted); list-style:none; display:flex; align-items:center; gap:.45rem;
-  user-select:none}
-summary::-webkit-details-marker{display:none}
-summary::before{content:"▸"; font-size:.7rem; transition:transform .15s; color:var(--accent)}
-details[open] summary::before{transform:rotate(90deg)}
-summary:hover{color:var(--fg)}
-details pre{margin:0; border:0; border-top:1px solid var(--line); border-radius:0}
-
-.caution{border-left:3px solid var(--accent); padding:.15rem 0 .15rem 1rem;
-  margin:1.2rem 0; font-size:.94rem}
-.caution .lbl{font-weight:700}
-
-p{margin:.7em 0}
-strong{font-weight:650}
-em{font-style:italic}
-a{color:var(--accent)}
-hr{border:0; border-top:1px solid var(--line); margin:3.4rem 0 0}
-
-[data-lang="ko"] .en{display:none}
-[data-lang="en"] .ko{display:none}
-:lang(ja){font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif}
-
-footer{max-width:var(--maxw); margin:0 auto; padding:1.6rem 1.25rem 4rem;
-  color:var(--muted); font-size:.83rem}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-in">
-    <a class="back" href="./">
-      <span class="ko">← 제작 가이드</span>
-      <span class="en">← Production guide</span>
-    </a>
+  <div class="bar-row top">
+    <span class="brand">
+      <span class="ko">1인칭 일본 드라마 · Seedance 2.5</span>
+      <span class="en">First-Person Japanese Drama · Seedance 2.5</span>
+    </span>
     <div class="seg" role="group" aria-label="Language">
       <button id="btn-ko" aria-pressed="true">한국어</button>
       <button id="btn-en" aria-pressed="false">English</button>
     </div>
   </div>
+  <nav class="tabs">
+    <a href="./"><span class="ko">제작 가이드</span><span class="en">Guide</span></a>
+    <a href="assets.html" aria-current="page"><span class="ko">에셋</span><span class="en">Assets</span></a>
+  </nav>
 </div>
 
-<main>
+<div class="shell">
 
-<!-- ════════════════════ 한국어 ════════════════════ -->
+<aside class="sidetoc">
+  <h4><span class="ko">목차</span><span class="en">Contents</span></h4>
+
+  <nav class="ko"><ol>
+    <li><a href="#k-1">1. 시작 프레임</a>
+      <ul><li><a href="#k-1p">함께 붙이는 지시문</a></li></ul>
+    </li>
+    <li><a href="#k-2">2. 인물</a>
+      <ul><li><a href="#k-2p">함께 붙이는 지시문</a></li></ul>
+    </li>
+    <li><a href="#k-3">3. 배경</a>
+      <ul><li><a href="#k-3p">함께 붙이는 지시문</a></li></ul>
+    </li>
+    <li><a href="#k-4">4. 소품</a>
+      <ul><li><a href="#k-4p">함께 붙이는 지시문</a></li></ul>
+    </li>
+  </ol></nav>
+
+  <nav class="en"><ol>
+    <li><a href="#e-1">1. Start frames</a>
+      <ul><li><a href="#e-1p">Instructions</a></li></ul>
+    </li>
+    <li><a href="#e-2">2. Cast</a>
+      <ul><li><a href="#e-2p">Instructions</a></li></ul>
+    </li>
+    <li><a href="#e-3">3. Locations</a>
+      <ul><li><a href="#e-3p">Instructions</a></li></ul>
+    </li>
+    <li><a href="#e-4">4. Props</a>
+      <ul><li><a href="#e-4p">Instructions</a></li></ul>
+    </li>
+  </ol></nav>
+</aside>
+
+<article>
+
+<!-- ═══════════════════════ 한국어 ═══════════════════════ -->
 <div class="ko">
 
 <h1>에셋</h1>
-<p class="lede">JAEN 스토리에 실제로 쓴 레퍼런스입니다. 이미지를 누르면 원본 크기로 열립니다.
-각 묶음 아래에 <strong>그 에셋과 함께 붙이는 지시문</strong>을 넣었습니다.</p>
+<p class="lede">JAEN 스토리에 실제로 쓴 레퍼런스 15장입니다.
+이미지를 누르면 원본 크기로 열립니다.</p>
 
-<p class="key">레퍼런스는 «역할이 겹치지 않게» 줍니다. 넣을 때마다
-그 이미지가 무엇을 정의하는지 문장으로 못 박아야 합니다.</p>
+<p class="key">레퍼런스는 «무엇을 정의하는가» 를 문장으로 못 박아야 쓸모가 있습니다.</p>
+<p>역할을 지정하지 않은 레퍼런스는 서로 다툽니다. 캐릭터 시트는 분할 화면과 스튜디오 배경을
+가지고 있어서, 그대로 넣으면 결과에 회색 배경이나 인물 둘이 딸려 나옵니다.
+그래서 각 묶음 아래에 <strong>그 에셋과 함께 붙이는 지시문</strong>을 두었습니다.</p>
 
 
-<div class="part">
+<!-- ─────────── 1 ─────────── -->
+<div class="part" id="k-1">
   <span class="part-n">Part 1</span>
   <h2>시작 프레임</h2>
-  <p>구도를 먼저 확정합니다. 왜곡이 가장 적었던 방식입니다.</p>
+  <p>구도를 먼저 확정합니다. 왜곡이 가장 적었던 방식입니다.
+  <strong>시작 프레임을 고르는 것이 곧 씬을 고르는 것입니다.</strong></p>
 </div>
 
 <div class="grid">
@@ -183,7 +95,7 @@ footer{max-width:var(--maxw); margin:0 auto; padding:1.6rem 1.25rem 4rem;
       <p class="nm">집 앞 · 문 닫힘</p>
       <p class="dim">1536 × 2752</p>
       <p class="role">캐리어를 끌고 도착해 인터폰을 누르는 씬의 시작점.
-      우편함과 인터폰이 프레임에 들어와 있어 «시선이 우편함에 잠깐 머문다» 같은 지시가 가능합니다.</p>
+      우편함과 인터폰이 프레임에 있어 «시선이 우편함에 잠깐 머문다» 같은 지시가 가능합니다.</p>
     </div>
   </figure>
 
@@ -195,8 +107,8 @@ footer{max-width:var(--maxw); margin:0 auto; padding:1.6rem 1.25rem 4rem;
       <span class="tag">대화</span>
       <p class="nm">문 열림 · 렌즈 정면</p>
       <p class="dim">480 × 854</p>
-      <p class="role">문이 열리고 히나타가 <strong>렌즈를 곧바로 봅니다.</strong>
-      입이 살짝 벌어진 놀란 표정. 고정 대화 씬의 시작 프레임입니다.</p>
+      <p class="role">히나타가 <strong>렌즈를 곧바로 봅니다.</strong> 입이 살짝 벌어진 놀란 표정.
+      카메라를 고정하는 대화 씬용입니다.</p>
     </div>
   </figure>
 
@@ -209,32 +121,32 @@ footer{max-width:var(--maxw); margin:0 auto; padding:1.6rem 1.25rem 4rem;
       <p class="nm">안으로 안내</p>
       <p class="dim">480 × 854</p>
       <p class="role">문을 잡은 채 안쪽으로 돌아선 상태. 현관 타일 · 마루 단차 · 계단 · 벽시계 ·
-      주방까지 한 프레임에 있어 <strong>이동 씬의 경로가 전부 보입니다.</strong></p>
+      주방이 한 프레임에 있어 <strong>이동 경로가 전부 보입니다.</strong></p>
     </div>
   </figure>
 </div>
 
-<details>
-<summary>시작 프레임과 함께 붙이는 지시문</summary>
+<div class="caution">
+  <span class="lbl">프레임과 지시가 어긋나면 둘 중 하나가 버려집니다.</span>
+  <p>«문 열림» 프레임에 이동 지시를 붙이거나 «안내» 프레임에 고정 카메라 지시를 붙이면
+  모델은 둘 중 하나를 버립니다. 어느 쪽을 버릴지는 고를 수 없습니다.</p>
+</div>
+
+<h4 id="k-1p">함께 붙이는 지시문</h4>
 <pre><code>@Image 1 IS THE FIRST FRAME. The shot begins exactly on it - same framing,
 same objects in the same places, same light. Nothing is re-staged or added at the start.
 
 Continue directly from the supplied starting frame.
 
 Match the starting frame's camera position, framing, Hinata's facial identity, hairstyle, clothing, door opening angle, hand placement, lighting, and entrance layout.</code></pre>
-</details>
-
-<div class="caution">
-  <span class="lbl">시작 프레임을 고르는 것이 곧 씬을 고르는 것입니다.</span>
-  «문 열림» 프레임에 이동 지시를 붙이거나, «안내» 프레임에 고정 카메라 지시를 붙이면
-  서로 충돌합니다.
-</div>
 
 
-<div class="part">
+<!-- ─────────── 2 ─────────── -->
+<div class="part" id="k-2">
   <span class="part-n">Part 2</span>
   <h2>인물</h2>
-  <p>얼굴은 정면 포트레이트가, 옷과 비율은 전신이 정합니다.</p>
+  <p>얼굴은 정면 포트레이트가, 옷과 비율은 전신이 정합니다.
+  <strong>역할을 나눠 주는 것이 핵심입니다.</strong></p>
 </div>
 
 <div class="grid">
@@ -259,8 +171,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <span class="tag">주인공</span>
       <p class="nm">히나타 · 전신</p>
       <p class="dim">1536 × 1024</p>
-      <p class="role"><strong>옷과 신체 비율</strong> 전용. 얼굴 동일성은 포트레이트가 맡습니다.
-      역할을 겹치지 않게 나눠 주는 것이 핵심입니다.</p>
+      <p class="role"><strong>옷과 신체 비율</strong> 전용. 얼굴 동일성은 포트레이트가 맡습니다.</p>
     </div>
   </figure>
 
@@ -272,7 +183,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <span class="tag">표정</span>
       <p class="nm">당황</p>
       <p class="dim">2496 × 1664</p>
-      <p class="role">예상보다 이른 방문에 대한 반응. «놀람» 을 크게 키우지 않는 절제된 판을 씁니다.</p>
+      <p class="role">예상보다 이른 방문에 대한 반응. 놀람을 키우지 않은 절제된 판을 씁니다.</p>
     </div>
   </figure>
 
@@ -284,7 +195,8 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <span class="tag">표정</span>
       <p class="nm">곤란</p>
       <p class="dim">1086 × 1448</p>
-      <p class="role">집 안에 미처 정리하지 못한 일이 있어 난처한 상태. 사회적 수습 직전의 얼굴입니다.</p>
+      <p class="role">집 안에 미처 정리하지 못한 일이 있어 난처한 상태.
+      사회적 수습 직전의 얼굴입니다.</p>
     </div>
   </figure>
 
@@ -297,7 +209,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <p class="nm">웃음</p>
       <p class="dim">2496 × 1664</p>
       <p class="role">활짝 웃는 판입니다. 씬이 <em>옅은</em> 미소를 요구하면
-      <strong>이 사진은 빼거나</strong> 역할을 좁게 한정해야 합니다.</p>
+      <strong>이 사진은 빼야 합니다.</strong> 사진이 지시문을 이깁니다.</p>
     </div>
   </figure>
 
@@ -310,7 +222,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <p class="nm">방문자 의상</p>
       <p class="dim">941 × 1672</p>
       <p class="role">흰 크루넥 스웨트셔츠 · 청바지 · 검정 스니커.
-      <strong>얼굴은 의도적으로 가려져 있습니다</strong> — 1인칭이라 절대 보이지 않아야 하니까요.
+      <strong>얼굴이 의도적으로 가려져 있습니다</strong> — 1인칭이라 절대 보이면 안 되니까요.
       <strong>소매와 소맷단만</strong> 참조합니다.</p>
     </div>
   </figure>
@@ -337,13 +249,12 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <p class="nm">정장 남성 · 시트</p>
       <p class="dim">1536 × 1024</p>
       <p class="role">네이비 재킷 · 흰 셔츠 · 회색 슬랙스 · 검정 구두.
-      파일명이 UUID 라 <strong>이름이 확인되지 않았습니다.</strong></p>
+      파일명이 UUID 라 <strong>캐릭터 이름이 확인되지 않았습니다.</strong></p>
     </div>
   </figure>
 </div>
 
-<details>
-<summary>인물 레퍼런스와 함께 붙이는 지시문</summary>
+<h4 id="k-2p">함께 붙이는 지시문</h4>
 <pre><code>[ 역할 분리 ]
 All three images depict ONE AND THE SAME woman. Show only one Hinata.
 Keep each reference assigned to its specified subject.
@@ -363,19 +274,13 @@ No exaggerated wide eyes, stretched mouth, or theatrical shock.
 Use ONLY for the unseen first-person visitor's white cotton sweatshirt sleeves and ribbed cuffs.
 Do not generate this reference person standing in the scene.
 Do not copy the reference person's face, hairstyle, or full-body pose into the video.</code></pre>
-</details>
-
-<div class="caution">
-  <span class="lbl">시트 이미지는 «시트처럼» 나오려 합니다.</span>
-  캐릭터 시트는 분할 화면과 스튜디오 배경을 가지고 있어서, 그대로 두면 결과에
-  회색 배경이나 인물 둘이 딸려 나옵니다. 그래서 위 지시문의 첫 묶음이 필요합니다.
-</div>
 
 
-<div class="part">
+<!-- ─────────── 3 ─────────── -->
+<div class="part" id="k-3">
   <span class="part-n">Part 3</span>
   <h2>배경</h2>
-  <p>문턱 · 바닥 단차 · 문 · 계단 · 가구가 일관되어야 합니다.</p>
+  <p>문턱 · 바닥 단차 · 문 · 계단 · 가구가 씬마다 같아야 합니다.</p>
 </div>
 
 <div class="grid">
@@ -387,7 +292,7 @@ Do not copy the reference person's face, hairstyle, or full-body pose into the v
       <span class="tag">실내</span>
       <p class="nm">현관</p>
       <p class="dim">941 × 1672</p>
-      <p class="role">회색 타일 바닥에서 <strong>마루로 올라가는 단차</strong>가 명확합니다.
+      <p class="role">회색 타일에서 <strong>마루로 올라가는 단차</strong>가 뚜렷합니다.
       신발 세 켤레 · 계단 · 복도 · 주방 · 벽시계까지 들어 있어
       «타일을 건너 마루에 올라선다» 경로의 단일 출처입니다.</p>
     </div>
@@ -413,15 +318,14 @@ Do not copy the reference person's face, hairstyle, or full-body pose into the v
       <span class="tag">실외</span>
       <p class="nm">집 외관</p>
       <p class="dim">1669 × 942</p>
-      <p class="role"><strong>가로 사진입니다.</strong> 그래서 «건축만 참조하고
-      이 사진의 와이드 구도는 따르지 말라» 는 지시를 반드시 함께 붙입니다.
+      <p class="role"><strong>가로 사진입니다.</strong> 그래서 «건축만 참조하고 이 사진의
+      와이드 구도는 따르지 말라» 는 지시를 반드시 함께 붙입니다.
       실내만 보이는 연결 씬에는 <strong>넣지 않습니다.</strong></p>
     </div>
   </figure>
 </div>
 
-<details>
-<summary>배경 레퍼런스와 함께 붙이는 지시문</summary>
+<h4 id="k-3p">함께 붙이는 지시문</h4>
 <pre><code>[ 실내 ]
 Do not mirror or rearrange the layout.
 This image defines the interior space, not a separate shot.
@@ -434,10 +338,10 @@ Recompose the entrance naturally for vertical 9:16; do not reproduce the wide fr
 Frame only what is naturally visible from the visitor's position.
 Allow the roof, ground, suitcase, and Hinata's lower body to extend outside the frame.
 Do not widen the lens to fit everything into one image.</code></pre>
-</details>
 
 
-<div class="part">
+<!-- ─────────── 4 ─────────── -->
+<div class="part" id="k-4">
   <span class="part-n">Part 4</span>
   <h2>소품</h2>
   <p>«어디에 남는지» 까지 정해야 소품이 카메라를 따라오지 않습니다.</p>
@@ -452,48 +356,51 @@ Do not widen the lens to fit everything into one image.</code></pre>
       <span class="tag">소품</span>
       <p class="nm">유저의 캐리어</p>
       <p class="dim">1122 × 1402</p>
-      <p class="role">방문자가 <strong>왼손</strong>으로 끕니다.
-      프레임에는 <strong>손잡이와 케이스 일부만</strong> 왼쪽 아래로 들어옵니다.
+      <p class="role">방문자가 <strong>왼손</strong>으로 끕니다. 프레임에는
+      <strong>손잡이와 케이스 일부만</strong> 왼쪽 아래로 들어옵니다.
       현관에서는 타일 왼쪽에 세워 두고 손을 뗍니다.</p>
     </div>
   </figure>
 </div>
 
-<details>
-<summary>소품과 함께 붙이는 지시문</summary>
+<h4 id="k-4p">함께 붙이는 지시문</h4>
 <pre><code>[ 일부만 프레임에 ]
 Only the handle and a small portion of the case need to enter the lower-left edge.
 Do not force the whole suitcase into view.
 
 [ 놓은 뒤에는 남는다 ]
 The visitor parks the suitcase upright beside their left leg, clear of the front door's swing and the path onto the wooden floor, and releases the handle.</code></pre>
-</details>
 
 <div class="caution">
   <span class="lbl">발췌를 그대로 복사하지 않습니다.</span>
-  «세 장» 은 그때의 레퍼런스 개수를, «현관» 은 그 씬을 전제합니다.
-  실제 개수와 씬에 맞게 고쳐 씁니다.
+  <p>«세 장» 은 그때의 레퍼런스 개수를, «현관» 은 그 씬을 전제합니다.
+  실제 개수와 씬에 맞게 고쳐 씁니다.</p>
 </div>
 
 <hr>
 
 </div>
 
-<!-- ════════════════════ ENGLISH ════════════════════ -->
+<!-- ═══════════════════════ ENGLISH ═══════════════════════ -->
 <div class="en">
 
 <h1>Assets</h1>
-<p class="lede">The references actually used on the JAEN story. Click an image to open it at full
-size. Under each group are <strong>the instructions that ship with those assets</strong>.</p>
+<p class="lede">The fifteen references actually used on the JAEN story.
+Click an image to open it at full size.</p>
 
-<p class="key">Give references clear, separate roles. Every reference you add needs a sentence
-pinning down what it defines.</p>
+<p class="key">A reference is only useful once a sentence pins down what it defines.</p>
+<p>References without assigned roles fight each other. Character sheets carry split-screen
+layouts and studio backdrops, so dropped in as-is they bring a grey background or a second
+copy of the person along with them. That is why each group below ends with
+<strong>the instructions that ship with those assets</strong>.</p>
 
 
-<div class="part">
+<!-- ─────────── 1 ─────────── -->
+<div class="part" id="e-1">
   <span class="part-n">Part 1</span>
   <h2>Start frames</h2>
-  <p>Establish the composition first. This produced the least distortion.</p>
+  <p>Establish the composition first — this produced the least distortion.
+  <strong>Choosing the start frame is choosing the scene.</strong></p>
 </div>
 
 <div class="grid">
@@ -519,8 +426,8 @@ pinning down what it defines.</p>
       <span class="tag">Dialogue</span>
       <p class="nm">Door open · facing the lens</p>
       <p class="dim">480 × 854</p>
-      <p class="role">The door opens and Hinata looks <strong>directly into the lens</strong>,
-      lips slightly parted in surprise. This is the start frame for the stationary dialogue scene.</p>
+      <p class="role">Hinata looks <strong>directly into the lens</strong>, lips slightly parted
+      in surprise. For the stationary-camera dialogue scene.</p>
     </div>
   </figure>
 
@@ -534,32 +441,32 @@ pinning down what it defines.</p>
       <p class="dim">480 × 854</p>
       <p class="role">Holding the door, turned toward the interior. The tiled entrance, the raised
       wooden floor, the stairs, the wall clock, and the kitchen are all in one frame, so
-      <strong>the whole route of the relocation scene is visible.</strong></p>
+      <strong>the whole route is visible.</strong></p>
     </div>
   </figure>
 </div>
 
-<details>
-<summary>Instructions that ship with a start frame</summary>
+<div class="caution">
+  <span class="lbl">A frame that contradicts the direction loses one of the two.</span>
+  <p>Attach relocation directions to the “door open” frame, or stationary-camera directions to
+  the “leading in” frame, and the model drops one of them. You do not get to choose which.</p>
+</div>
+
+<h4 id="e-1p">Instructions that ship with a start frame</h4>
 <pre><code>@Image 1 IS THE FIRST FRAME. The shot begins exactly on it - same framing,
 same objects in the same places, same light. Nothing is re-staged or added at the start.
 
 Continue directly from the supplied starting frame.
 
 Match the starting frame's camera position, framing, Hinata's facial identity, hairstyle, clothing, door opening angle, hand placement, lighting, and entrance layout.</code></pre>
-</details>
-
-<div class="caution">
-  <span class="lbl">Choosing the start frame is choosing the scene.</span>
-  Attaching relocation directions to the “door open” frame, or stationary-camera directions to
-  the “leading in” frame, puts the two in conflict.
-</div>
 
 
-<div class="part">
+<!-- ─────────── 2 ─────────── -->
+<div class="part" id="e-2">
   <span class="part-n">Part 2</span>
   <h2>Cast</h2>
-  <p>The portrait defines the face; the full body defines clothing and proportions.</p>
+  <p>The portrait defines the face; the full body defines clothing and proportions.
+  <strong>Splitting the roles is the point.</strong></p>
 </div>
 
 <div class="grid">
@@ -571,9 +478,8 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <span class="tag">Lead</span>
       <p class="nm">Hinata · indoor sheet</p>
       <p class="dim">2496 × 1664</p>
-      <p class="role">The indoor character sheet — the version that includes
-      <strong>white socks</strong>. Bare feet or different socks mean the result drifted from
-      this sheet.</p>
+      <p class="role">The indoor character sheet — the version with <strong>white socks</strong>.
+      Bare feet or different socks mean the result drifted from this sheet.</p>
     </div>
   </figure>
 
@@ -586,7 +492,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <p class="nm">Hinata · full body</p>
       <p class="dim">1536 × 1024</p>
       <p class="role">For <strong>clothing and proportions only</strong>. Facial identity is the
-      portrait's job. Splitting the roles is the point.</p>
+      portrait's job.</p>
     </div>
   </figure>
 
@@ -599,7 +505,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <p class="nm">Flustered</p>
       <p class="dim">2496 × 1664</p>
       <p class="role">Her reaction to an arrival earlier than expected. Use the restrained
-      version — do not enlarge the surprise.</p>
+      version, not an enlarged surprise.</p>
     </div>
   </figure>
 
@@ -625,7 +531,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
       <p class="nm">Smiling</p>
       <p class="dim">2496 × 1664</p>
       <p class="role">A broad smile. If the scene needs a <em>faint</em> one,
-      <strong>omit this image</strong> or give it a narrowly defined role.</p>
+      <strong>omit this image.</strong> The image beats the sentence.</p>
     </div>
   </figure>
 
@@ -670,8 +576,7 @@ Match the starting frame's camera position, framing, Hinata's facial identity, h
   </figure>
 </div>
 
-<details>
-<summary>Instructions that ship with cast references</summary>
+<h4 id="e-2p">Instructions that ship with cast references</h4>
 <pre><code>[ Role separation ]
 All three images depict ONE AND THE SAME woman. Show only one Hinata.
 Keep each reference assigned to its specified subject.
@@ -691,20 +596,13 @@ No exaggerated wide eyes, stretched mouth, or theatrical shock.
 Use ONLY for the unseen first-person visitor's white cotton sweatshirt sleeves and ribbed cuffs.
 Do not generate this reference person standing in the scene.
 Do not copy the reference person's face, hairstyle, or full-body pose into the video.</code></pre>
-</details>
-
-<div class="caution">
-  <span class="lbl">Sheet images try to come out looking like sheets.</span>
-  Character sheets carry split-screen layouts and studio backgrounds, so left unchecked the
-  result arrives with a grey backdrop or two copies of the person. That is what the first block
-  above is for.
-</div>
 
 
-<div class="part">
+<!-- ─────────── 3 ─────────── -->
+<div class="part" id="e-3">
   <span class="part-n">Part 3</span>
   <h2>Locations</h2>
-  <p>Thresholds, floor levels, doors, stairs, and furniture must stay consistent.</p>
+  <p>Thresholds, floor levels, doors, stairs, and furniture must match across scenes.</p>
 </div>
 
 <div class="grid">
@@ -718,8 +616,7 @@ Do not copy the reference person's face, hairstyle, or full-body pose into the v
       <p class="dim">941 × 1672</p>
       <p class="role">The <strong>step up from grey tile to the wooden floor</strong> is explicit.
       Three pairs of shoes, the stairs, the corridor, the kitchen, and the wall clock are all
-      here, which makes this the single source for the “cross the tile and step onto the wood”
-      route.</p>
+      here, making this the single source for the “cross the tile and step onto the wood” route.</p>
     </div>
   </figure>
 
@@ -751,8 +648,7 @@ Do not copy the reference person's face, hairstyle, or full-body pose into the v
   </figure>
 </div>
 
-<details>
-<summary>Instructions that ship with location references</summary>
+<h4 id="e-3p">Instructions that ship with location references</h4>
 <pre><code>[ Interior ]
 Do not mirror or rearrange the layout.
 This image defines the interior space, not a separate shot.
@@ -765,10 +661,10 @@ Recompose the entrance naturally for vertical 9:16; do not reproduce the wide fr
 Frame only what is naturally visible from the visitor's position.
 Allow the roof, ground, suitcase, and Hinata's lower body to extend outside the frame.
 Do not widen the lens to fit everything into one image.</code></pre>
-</details>
 
 
-<div class="part">
+<!-- ─────────── 4 ─────────── -->
+<div class="part" id="e-4">
   <span class="part-n">Part 4</span>
   <h2>Props</h2>
   <p>Decide where a prop <em>stays</em>, or it follows the camera.</p>
@@ -790,55 +686,32 @@ Do not widen the lens to fit everything into one image.</code></pre>
   </figure>
 </div>
 
-<details>
-<summary>Instructions that ship with the prop</summary>
+<h4 id="e-4p">Instructions that ship with the prop</h4>
 <pre><code>[ Only part of it in frame ]
 Only the handle and a small portion of the case need to enter the lower-left edge.
 Do not force the whole suitcase into view.
 
 [ It stays where it was put ]
 The visitor parks the suitcase upright beside their left leg, clear of the front door's swing and the path onto the wooden floor, and releases the handle.</code></pre>
-</details>
 
 <div class="caution">
   <span class="lbl">Do not copy the excerpts verbatim.</span>
-  “All three images” assumes that reference count and “the doorway” assumes that scene.
-  Update them to match the actual count and scene.
+  <p>“All three images” assumes that reference count and “the doorway” assumes that scene.
+  Update them to match the actual count and scene.</p>
 </div>
 
 <hr>
 
 </div>
 
-</main>
+</article>
+</div>
 
 <footer>
   <p class="ko">JAEN 스토리 프로젝트 · <a href="./">제작 가이드로 돌아가기</a></p>
   <p class="en">JAEN story project · <a href="./">Back to the production guide</a></p>
 </footer>
 
-<script>
-(function(){
-  var root = document.documentElement;
-  var bKo = document.getElementById('btn-ko');
-  var bEn = document.getElementById('btn-en');
-
-  function setLang(l){
-    root.setAttribute('data-lang', l);
-    root.setAttribute('lang', l === 'ko' ? 'ko' : 'en');
-    bKo.setAttribute('aria-pressed', String(l === 'ko'));
-    bEn.setAttribute('aria-pressed', String(l === 'en'));
-    try { localStorage.setItem('jaen-guide-lang', l); } catch(e){}
-  }
-
-  var saved = null;
-  try { saved = localStorage.getItem('jaen-guide-lang'); } catch(e){}
-  setLang(saved === 'en' ? 'en' : 'ko');
-
-  bKo.addEventListener('click', function(){ setLang('ko'); });
-  bEn.addEventListener('click', function(){ setLang('en'); });
-})();
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>

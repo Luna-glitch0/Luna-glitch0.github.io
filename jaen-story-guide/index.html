@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>1인칭 일본 드라마 · 제작 가이드</title>
+<style>
+:root{
+  --bg:#fbfbfa; --fg:#1c1c1a; --muted:#6b6b66; --line:#e2e2dd;
+  --card:#fff; --accent:#b4531f; --accent-soft:#fdf1e8;
+  --warn:#8a4b00; --warn-bg:#fff6e6; --warn-line:#f0d4a3;
+  --ok:#1f6b3a; --ok-bg:#eef7f0; --ok-line:#c3e2cc;
+  --code-bg:#f4f3f0; --code-fg:#26251f;
+  --maxw:820px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#131313; --fg:#e6e5e1; --muted:#95948e; --line:#2c2c29;
+    --card:#1a1a19; --accent:#e8895a; --accent-soft:#2a1c14;
+    --warn:#eab364; --warn-bg:#2a2116; --warn-line:#4a3a20;
+    --ok:#7fc99a; --ok-bg:#16241a; --ok-line:#2d4a35;
+    --code-bg:#1e1e1c; --code-fg:#d8d7d2;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131313; --fg:#e6e5e1; --muted:#95948e; --line:#2c2c29;
+  --card:#1a1a19; --accent:#e8895a; --accent-soft:#2a1c14;
+  --warn:#eab364; --warn-bg:#2a2116; --warn-line:#4a3a20;
+  --ok:#7fc99a; --ok-bg:#16241a; --ok-line:#2d4a35;
+  --code-bg:#1e1e1c; --code-fg:#d8d7d2;
+}
+:root[data-theme="light"]{
+  --bg:#fbfbfa; --fg:#1c1c1a; --muted:#6b6b66; --line:#e2e2dd;
+  --card:#fff; --accent:#b4531f; --accent-soft:#fdf1e8;
+  --warn:#8a4b00; --warn-bg:#fff6e6; --warn-line:#f0d4a3;
+  --ok:#1f6b3a; --ok-bg:#eef7f0; --ok-line:#c3e2cc;
+  --code-bg:#f4f3f0; --code-fg:#26251f;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Hiragino Sans",
+       "Noto Sans KR",Segoe UI,sans-serif;
+  font-feature-settings:"kern" 1;
+}
+
+/* ---------- 상단 바 ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:var(--bg);
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter:saturate(180%) blur(12px);
+  backdrop-filter:saturate(180%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{
+  max-width:var(--maxw); margin:0 auto; padding:.7rem 1.25rem;
+  display:flex; align-items:center; gap:1rem; justify-content:space-between;
+}
+.brand{font-size:.82rem; font-weight:600; letter-spacing:.02em; color:var(--muted);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.controls{display:flex; gap:.5rem; flex-shrink:0}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:999px;
+  overflow:hidden; background:var(--card)}
+.seg button{
+  appearance:none; border:0; background:transparent; color:var(--muted);
+  font:inherit; font-size:.8rem; font-weight:600; padding:.34rem .78rem;
+  cursor:pointer; transition:background .15s,color .15s;
+}
+.seg button[aria-pressed="true"]{background:var(--accent); color:#fff}
+.seg button:hover:not([aria-pressed="true"]){color:var(--fg)}
+
+/* ---------- 레이아웃 ---------- */
+main{max-width:var(--maxw); margin:0 auto; padding:2.5rem 1.25rem 6rem}
+h1{font-size:clamp(1.65rem,4.2vw,2.3rem); line-height:1.25; margin:.2em 0 .35em; letter-spacing:-.015em}
+h2{font-size:clamp(1.2rem,2.8vw,1.45rem); margin:3.2rem 0 .9rem; letter-spacing:-.01em;
+  padding-bottom:.4rem; border-bottom:1px solid var(--line)}
+h3{font-size:1.03rem; margin:2rem 0 .6rem; letter-spacing:-.005em}
+h4{font-size:.93rem; margin:1.4rem 0 .4rem; color:var(--muted);
+  text-transform:uppercase; letter-spacing:.06em; font-weight:700}
+p{margin:.75em 0}
+ul,ol{padding-left:1.35em; margin:.7em 0}
+li{margin:.3em 0}
+a{color:var(--accent)}
+strong{font-weight:650}
+.lede{font-size:1.03rem; color:var(--muted); margin-bottom:1.6rem}
+hr{border:0; border-top:1px solid var(--line); margin:3rem 0}
+
+/* ---------- 목차 ---------- */
+.toc{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:1.1rem 1.35rem; margin:2rem 0 1rem}
+.toc h4{margin:0 0 .5rem}
+.toc ol{margin:0; padding-left:1.2em; font-size:.92rem}
+.toc li{margin:.22em 0}
+.toc a{text-decoration:none; color:var(--fg)}
+.toc a:hover{color:var(--accent); text-decoration:underline}
+
+/* ---------- 강조 박스 ---------- */
+.box{border-radius:10px; padding:.95rem 1.15rem; margin:1.1rem 0; border:1px solid;
+  font-size:.95rem}
+.box p:first-child{margin-top:0}
+.box p:last-child{margin-bottom:0}
+.box .tag{display:block; font-size:.72rem; font-weight:800; letter-spacing:.07em;
+  text-transform:uppercase; margin-bottom:.35rem}
+.warn{background:var(--warn-bg); border-color:var(--warn-line)}
+.warn .tag{color:var(--warn)}
+.ok{background:var(--ok-bg); border-color:var(--ok-line)}
+.ok .tag{color:var(--ok)}
+.note{background:var(--accent-soft); border-color:color-mix(in srgb,var(--accent) 25%,transparent)}
+.note .tag{color:var(--accent)}
+
+/* ---------- 코드 ---------- */
+pre{
+  background:var(--code-bg); color:var(--code-fg); border:1px solid var(--line);
+  border-radius:10px; padding:1rem 1.1rem; overflow-x:auto; margin:1rem 0;
+  font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  white-space:pre; -webkit-overflow-scrolling:touch;
+}
+code{font:.88em/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:var(--code-bg); padding:.13em .38em; border-radius:4px}
+pre code{background:transparent; padding:0; font-size:inherit}
+.prompt-label{font-size:.75rem; font-weight:700; letter-spacing:.05em; color:var(--muted);
+  text-transform:uppercase; margin:1.4rem 0 -.4rem}
+
+/* ---------- 표 ---------- */
+.tw{overflow-x:auto; margin:1.1rem 0; -webkit-overflow-scrolling:touch;
+  border:1px solid var(--line); border-radius:10px}
+table{border-collapse:collapse; width:100%; font-size:.9rem; min-width:520px}
+th,td{text-align:left; padding:.62rem .85rem; border-bottom:1px solid var(--line);
+  vertical-align:top}
+th{background:var(--code-bg); font-weight:700; font-size:.82rem;
+  letter-spacing:.02em; white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td code{font-size:.82em}
+.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+
+/* ---------- 언어 전환 ---------- */
+[data-lang="ko"] .en{display:none}
+[data-lang="en"] .ko{display:none}
+:lang(ja){font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif}
+
+footer{max-width:var(--maxw); margin:0 auto; padding:2rem 1.25rem 4rem;
+  border-top:1px solid var(--line); color:var(--muted); font-size:.85rem}
+
+@media print{.topbar{display:none} .toc{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <span class="brand">
+      <span class="ko">1인칭 일본 드라마 · 제작 가이드</span>
+      <span class="en">First-Person Japanese Drama · Production Guide</span>
+    </span>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Language">
+        <button id="btn-ko" aria-pressed="true">한국어</button>
+        <button id="btn-en" aria-pressed="false">English</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════ 한국어 ══════════════════════════ -->
+<div class="ko">
+
+<h1>1인칭 일본 드라마<br>제작 가이드</h1>
+<p class="lede">Seedance 2.5 · Higgsfield 로 «자연스러운» 1인칭 실사 드라마를 만드는 법.
+JAEN 스토리 프로젝트에서 실제로 돌린 40여 건의 생성 기록을 되짚어 정리했습니다.</p>
+
+<div class="toc">
+  <h4>목차</h4>
+  <ol>
+    <li><a href="#k-status">이 문서의 근거</a></li>
+    <li><a href="#k-settings">작업 설정</a></li>
+    <li><a href="#k-traps">실측으로 확인한 함정 셋</a></li>
+    <li><a href="#k-assets">에셋 체크리스트</a></li>
+    <li><a href="#k-block">고정 1인칭 프롬프트 블록</a></li>
+    <li><a href="#k-open">시작 블록 고르기</a></li>
+    <li><a href="#k-move">움직임 지시</a></li>
+    <li><a href="#k-scene">씬마다 따로 쓸 것</a></li>
+    <li><a href="#k-acting">자연스러운 연기를 만드는 법</a></li>
+    <li><a href="#k-limits">제외한 것과 한계</a></li>
+    <li><a href="#k-log">생성 기록 실측</a></li>
+  </ol>
+</div>
+
+<h2 id="k-status">1. 이 문서의 근거</h2>
+<p>채택한 영상은 모두 <strong>Seedance 2.5</strong> 로 만들었습니다. 아래 설정은 대화 기록과
+화면 캡처에서 정리한 것이고, 채택본 하나하나의 생성 메타데이터를 전부 복원한 것은 아닙니다.
+에셋 선택 지침은 작업 흐름을 종합한 것입니다.</p>
+<p>인용한 지시문과 재사용 프롬프트 블록은 <strong>이전에 실제로 쓴 프롬프트에서 발췌해 조합한 것</strong>입니다.
+모든 문장이 모든 채택본에 들어 있었다는 뜻은 아닙니다.</p>
+<div class="box warn">
+  <span class="tag">확정 아님</span>
+  <p>노란 종이 씬은 <strong>아직 검증되지 않은 새 방향</strong>입니다. 성공 사례가 아닙니다.</p>
+</div>
+
+<h2 id="k-settings">2. 작업 설정</h2>
+<div class="tw"><table>
+<thead><tr><th>항목</th><th>기준값</th></tr></thead>
+<tbody>
+<tr><td>모델</td><td><code>seedance_2_5</code></td></tr>
+<tr><td>화면비</td><td>9:16</td></tr>
+<tr><td>해상도</td><td>480p</td></tr>
+<tr><td>비트레이트</td><td>High</td></tr>
+<tr><td>오디오</td><td>On</td></tr>
+<tr><td>작업 단위 길이</td><td>15초</td></tr>
+<tr><td>스틸에서 시작</td><td>Create Video + Start frame</td></tr>
+<tr><td>기존 영상 잇기</td><td>Extend Video → Sequel / Forward</td></tr>
+</tbody></table></div>
+<p>이전 채택본에는 19초짜리도 있습니다. 15초는 <strong>지금의 작업 단위</strong>일 뿐,
+지켜야 하는 규격이 아닙니다.</p>
+
+<h3>확립된 워크플로 둘</h3>
+<ul>
+<li><strong>Start-frame 생성</strong> — 스틸로 구도를 먼저 확정하고 그 상태에서 움직입니다.
+왜곡이 가장 적었던 채택본의 프롬프트에는 이 문장이 명시돼 있었습니다:
+<em>“Continue directly from the supplied starting frame.”</em></li>
+<li><strong>Forward 확장</strong> — 채택한 클립의 <strong>실제 마지막 프레임</strong>에서 잇습니다.
+입장 씬 <code>03_1.mp4</code> 가 이 방식으로 나왔습니다.</li>
+</ul>
+<p>어느 쪽도 연속성을 보장하지 않습니다. 움직임·대사·인물 동일성·이음매를 눈으로 확인하고 채택하세요.
+비트레이트 High 는 압축 손실을 줄일 뿐, 연기나 인물 동일성을 잡아주지 않습니다.</p>
+
+<h2 id="k-traps">3. 실측으로 확인한 함정 셋</h2>
+<p>생성 기록을 직접 조회해 발견한 것들입니다. 원 가이드에는 없던 내용입니다.</p>
+
+<div class="box warn">
+  <span class="tag">함정 1 — 길이는 파라미터가 이긴다</span>
+  <p>프롬프트에 <code>Create an 8-second…</code> 라고 써도 <code>duration</code> 파라미터가 15면
+  <strong>15초짜리가 나옵니다.</strong> 반대로 <code>Create a 15-second…</code> 라고 쓰고 파라미터를 11로 두면
+  11초가 나옵니다. 실제로 두 경우 다 기록에 있습니다.</p>
+  <p>프롬프트 안의 타임스탬프(<code>0.0–1.0</code>, <code>4.0–7.5</code>)는 <strong>전부 그 길이 기준</strong>으로
+  다시 계산해야 합니다. 안 맞추면 대사가 잘리거나 뒤가 빕니다.</p>
+  <p><strong>고칠 자리는 세 곳입니다.</strong> ①파라미터 <code>duration</code> ②프롬프트 첫 줄의 “N-second”
+  ③비트 타임스탬프. 셋을 항상 같이 고칩니다.</p>
+</div>
+
+<div class="box warn">
+  <span class="tag">함정 2 — 확장 모드에서는 화면비 파라미터가 무의미하다</span>
+  <p>Forward / Backward 확장과 영상 편집 작업의 기록을 보면 <code>aspect_ratio</code> 가
+  <code>16:9</code> 로 찍혀 있는데, <strong>실제 출력은 480×854 (9:16)</strong> 입니다.
+  확장·편집 모드에서는 소스 영상의 비율을 따라가고 파라미터는 무시됩니다.</p>
+  <p>그러니 <strong>파라미터 표시를 보고 «세로가 아니네» 하고 당황하지 않아도 됩니다.</strong>
+  대신 진짜로 확인할 것은 <em>소스 영상 자체가 9:16 인가</em> 입니다. 소스가 가로면 결과도 가로입니다.</p>
+</div>
+
+<div class="box warn">
+  <span class="tag">함정 3 — 프롬프트 칸에 대화가 섞여 들어간다</span>
+  <p>기록에 프롬프트 본문이 <code>맞아요. 제가 임의로 히나타 연기만 테스트하는 장면으로 줄이면서…</code>
+  로 시작하는 생성이 <strong>3건 연속</strong>으로 남아 있습니다. 설명하려고 쓴 한국어 문장이
+  그대로 프롬프트로 들어간 것입니다.</p>
+  <p>모델은 이걸 지시로 읽습니다. <strong>프롬프트 칸에는 영어 지시문만</strong> 넣고,
+  붙여넣기 전에 첫 줄이 <code>Create a…</code> 또는 <code>Extend the…</code> 로 시작하는지 눈으로 봅니다.</p>
+</div>
+
+<h2 id="k-assets">4. 에셋 체크리스트</h2>
+<div class="tw"><table>
+<thead><tr><th>에셋</th><th>쓸모 있으려면</th><th>실제로 쓴 지시문</th></tr></thead>
+<tbody>
+<tr><td>씬 시작 프레임</td><td>의도한 시점, 곧은 건축선, 인물 위치 정확, 원치 않는 손·물건 없음</td>
+<td><em>“Match the starting frame's camera position, framing, Hinata's facial identity, hairstyle, clothing, door opening angle, hand placement, lighting, and entrance layout.”</em></td></tr>
+<tr><td>인물 동일성 레퍼런스</td><td>또렷한 얼굴 정면, 옷·비율용 전신</td>
+<td><em>“Use the detailed facial portrait for facial identity and the full-body view for clothing and proportions.”</em></td></tr>
+<tr><td>표정 레퍼런스</td><td>의도한 연기에 가까운 <strong>절제된</strong> 표정</td>
+<td><em>“Do not hold the reference expression as a fixed pose or exaggerate the size of her eyes.”</em></td></tr>
+<tr><td>실내 레퍼런스</td><td>문턱·바닥 단차·문·계단·가구가 일관</td>
+<td><em>“Do not mirror or rearrange the layout.” / “This image defines the interior space, not a separate shot.”</em></td></tr>
+<tr><td>실외 레퍼런스</td><td>이번 씬에 필요한 건축만. 와이드 구도를 강요하지 않을 것</td>
+<td><em>“Use the architecture as reference, not the photograph's wide composition.”</em></td></tr>
+<tr><td>방문자 의상</td><td>소매 원단·색·소맷단이 읽힐 것</td>
+<td><em>“Use ONLY for the unseen first-person visitor's white cotton sweatshirt sleeves and ribbed cuffs.”</em></td></tr>
+<tr><td>소품</td><td>형태·색·손잡이가 또렷할 것</td>
+<td><em>“Only the handle and a small portion of the case need to enter the lower-left edge.” / “Do not force the whole suitcase into view.”</em></td></tr>
+<tr><td>채택한 소스 영상</td><td>이어갈 만한 끝 자세·카메라 위치·움직임·씬 상태</td>
+<td><em>“Begin directly from the source video's actual final frame and continue its ongoing movement naturally.”</em></td></tr>
+</tbody></table></div>
+<p>레퍼런스는 <strong>역할을 겹치지 않게</strong> 줍니다. 표정 사진과 의상 사진과 방 사진이
+같은 대상을 두고 경쟁하면 안 됩니다. 이번 씬에 필요한 것만 넣습니다.
+실내만 보이는 연결 씬에 집 전경 사진은 필요 없습니다.</p>
+
+<div class="box note">
+  <span class="tag">실측</span>
+  <p>레퍼런스 개수는 작업이 진행되면서 <strong>2 → 3 → 4 → 7 → 8장</strong>으로 늘었습니다.
+  많이 넣는다고 좋아지지 않습니다. 늘어난 만큼 <em>역할 배정 문장</em>도 같이 늘려야 합니다.</p>
+</div>
+
+<h4>레퍼런스 역할 분리 — 실제 발췌</h4>
+<pre><code>All three images depict ONE AND THE SAME woman. Show only one Hinata.
+
+Keep each reference assigned to its specified subject.
+Do not reproduce studio backgrounds, reference-sheet layouts, duplicate portraits, or split screens.
+
+Hinata's references apply ONLY to the woman inside the doorway.
+Do not transfer her pink sweater to the first-person visitor.
+
+Do not generate this reference person standing in the scene.
+Do not copy the reference person's face, hairstyle, or full-body pose into the video.</code></pre>
+<p>첫 줄은 히나타 이미지가 3장이라는 전제이고, 현관 문구는 그 씬에만 해당합니다.
+<strong>실제 레퍼런스 수와 씬에 맞게 고쳐 쓰고, 그대로 복사하지 않습니다.</strong></p>
+
+<h2 id="k-block">5. 고정 1인칭 프롬프트 블록</h2>
+<p>이전 프롬프트에서 실제로 쓴 문장들을 모은 블록입니다. 씬의 동작·정확한 대사·타이밍은
+<strong>따로</strong> 붙입니다. 셰어하우스 도착 설정은 이 프로젝트 전용입니다.</p>
+<pre><code>ONE uninterrupted take, entirely from the first-person viewpoint of a new resident arriving at a Japanese share house. The camera IS the visitor's eyes. All movement happens in real time within one continuous physical space.
+
+CAMERA AND FRAMING
+Strict eye-level first-person viewpoint.
+Maintain a fixed focal length throughout.
+
+Door frames, roof edges, wall corners, and tile lines remain straight across the image.
+Natural perspective convergence during head tilts is acceptable, but architectural lines must not bow or curve.
+
+Frame only what is naturally visible from the visitor's position.
+Allow the roof, ground, suitcase, and Hinata's lower body to extend outside the frame.
+Do not widen the lens to fit everything into one image.
+
+When stopped, retain very slight natural postural sway.
+Camera movement must not bend, stretch, or warp the environment.
+Never show the visitor's face or full body.
+
+Camera movement is visual only and must not produce audible breathing.
+
+CHARACTER PERFORMANCE
+Whenever she addresses the visitor, she looks directly into the camera lens.
+Play this with small, believable reactions rather than broad comedy.
+Preserve her normal facial proportions.
+No exaggerated wide eyes, stretched mouth, or theatrical shock.
+
+GLOBAL INTERACTIVE AUDIO RULE
+The visitor NEVER produces audible dialogue, breathing, sighs, gasps, humming, laughter, or other vocal sounds.
+Natural camera movement is visual only and must not be accompanied by breath noise.
+Footsteps, suitcase wheels, and physical interaction sounds are allowed.
+
+Whenever the script reaches a visitor response, replace the spoken response with approximately FOUR SECONDS of the other character looking into the lens and naturally waiting or listening.
+No audible visitor answer, subtitles, response text, or countdown.
+
+Use occasional natural blinking and tiny relaxed posture adjustments.
+Her mouth remains relaxed and still.
+She does not speak again or react as though an answer has already been confirmed.
+
+CONTINUOUS ACTION
+These timestamps are successive beats within ONE uninterrupted take, not separate shots.
+Preserve all actions in order.
+Use normal-speed movement with connected transitions between actions.
+
+FINAL CONSTRAINTS
+No cuts, hidden cuts, transitions, montage, reverse angles, inserts, time jumps, slow motion, or speed ramps.
+No subtitles, captions, speech bubbles, countdowns, logos, or text overlays.</code></pre>
+
+<div class="box warn">
+  <span class="tag">적용 범위 주의</span>
+  <p>«입을 편히 다물고 있다», «대답을 들은 것처럼 굴지 않는다» 는 <strong>4초 응답 구간에만</strong>
+  적용됩니다. 대사 중에는 아닙니다.</p>
+  <p>다음 동작이 «알아들었다» 는 반응이라면 <strong>4초 뒤에 명시적으로</strong> 배치합니다.
+  채택된 입장 씬은 응답 구간 뒤에 작은 끄덕임과 <span lang="ja">「はい！あ、どうぞ。」</span> 를 넣었습니다.</p>
+</div>
+
+<h2 id="k-open">6. 시작 블록 고르기</h2>
+
+<p class="prompt-label">Start image — 실제 발췌</p>
+<pre><code>Create a 15-second vertical 9:16 photorealistic Japanese live-action drama with synchronized Japanese dialogue and realistic location sound.
+
+Continue directly from the supplied starting frame.
+
+Match the starting frame's camera position, framing, Hinata's facial identity, hairstyle, clothing, door opening angle, hand placement, lighting, and entrance layout.</code></pre>
+
+<p class="prompt-label">Extend Video — 실제 발췌</p>
+<pre><code>Extend the uploaded video FORWARD with a 15-second continuation in vertical 9:16.
+
+Begin directly from the source video's actual final frame and continue its ongoing movement naturally. Preserve Hinata's position, pose, gaze direction, door angle, camera position, framing, lighting, and visible environment.
+
+Maintain one uninterrupted first-person shot from the visitor's eye level. Do not restart the scene, replay preceding actions, or repeat dialogue from the source video.
+
+All timestamps below refer only to the newly added 15-second continuation.</code></pre>
+<p>Forward 확장에서는 채택한 소스 영상만 올리고, 특별히 끝점을 지정할 이유가 없으면
+Start / End 이미지는 <strong>넣지 않습니다</strong>. End 레퍼런스를 넣는다고 끝 구간이
+원본과 똑같이 남는다는 보장은 없습니다.</p>
+
+<div class="box note">
+  <span class="tag">실측 — 잘 먹힌 표기</span>
+  <p>시작 프레임을 확실히 물리려면 이 한 줄이 효과적이었습니다.</p>
+  <pre style="margin:.6rem 0 0"><code>@Image 1 IS THE FIRST FRAME. The shot begins exactly on it - same framing,
+same objects in the same places, same light. Nothing is re-staged or added at the start.</code></pre>
+</div>
+
+<h2 id="k-move">7. 움직임 지시</h2>
+<p>필요할 때만 넣습니다.</p>
+
+<p class="prompt-label">고정 대화 — 왜곡이 가장 적었던 채택본 발췌</p>
+<pre><code>Maintain the same eye-level conversational viewpoint as the starting frame.
+
+No walking forward, zooming, deliberate nodding, or camera movement to follow Hinata's glances.
+
+Keep Hinata's face and upper body readable within the vertical frame.</code></pre>
+
+<p class="prompt-label">걷기·이동 — 입장 씬 프롬프트 발췌</p>
+<pre><code>Walking produces gentle footstep-induced bob and small irregular balance adjustments.
+
+Hinata must visibly walk whenever her location changes.
+Keep her in view throughout her movement from the doorway to the raised wooden floor. Show her crossing the tiled entrance and stepping onto the wood.
+Her position changes through continuous walking, without skipped movement or sudden relocation.</code></pre>
+<p><strong>고정 카메라 지시를 걷는 구간에 그대로 쓰지 않습니다.</strong>
+현관→마루 경로는 나중 씬에서 실제 경로로 바꿔 씁니다.</p>
+
+<div class="box note">
+  <span class="tag">실측 — 걷는 카메라를 «장비가 아닌 사람»으로</span>
+  <p>1인칭에서 카메라가 미끄러지면 장비처럼 보입니다. 실제로 쓴 문장:</p>
+  <pre style="margin:.6rem 0 0"><code>Each footstep lands with a small whole-frame DIP of a few centimetres that rises back by
+the next step - once per step, the rhythm of a real person, not a shake. The frame
+SWAYS a little as the weight shifts, and the gaze LEADS: the eyes turn first, the camera
+follows a beat later. NOT a dolly, NOT a gimbal glide, NOT a steadicam drift.
+If the frame moves smoothly like camera equipment, the frame is wrong.</code></pre>
+  <p style="margin-top:.7rem">마지막 줄의 형태에 주목하세요. <strong><code>If X, the frame is wrong.</code></strong>
+  «하지 마라» 보다 <strong>«그러면 틀린 것이다»</strong> 가 더 잘 듣습니다.</p>
+</div>
+
+<h2 id="k-scene">8. 씬마다 따로 쓸 것</h2>
+<ul>
+<li>정확한 대사와 화자. <strong>오답 분기는 기본 생성에서 뺍니다.</strong></li>
+<li>4초 응답 구간이 어디이고, 그동안 어떤 표정을 유지하는지</li>
+<li>인물의 시작 위치와 끝 위치</li>
+<li>보이는 이동 경로, 손과 물건의 접촉</li>
+<li>문 상태, 경첩 위치, 허용되는 움직임</li>
+<li>소품의 «주인» 과 그 뒤에 소품이 남는 자리</li>
+<li>다음 연결에 필요한 마지막 상태</li>
+</ul>
+
+<h3>이 프로젝트의 연속성 규칙</h3>
+<ul>
+<li>방문자의 <strong>왼손</strong>은 민트색 캐리어를 끌고, <strong>오른손</strong>으로 외부 인터폰을 누릅니다.</li>
+<li>방문자 소매는 <strong>흰색</strong>, 히나타 스웨터는 <strong>분홍색</strong>.</li>
+<li>캐리어는 현관 <strong>타일 바닥 왼쪽</strong>에 둡니다. 가운데 통로와 문이 열리는 궤적을 비웁니다.</li>
+<li>신발은 대본에 있을 때 화면 밖에서 벗습니다. <strong>마루에 올라가는 것은 방문자뿐</strong>이고 캐리어는 남습니다.</li>
+<li>소스에 이미 보이는 건축을 유지합니다. 문 상태가 안 맞는다고 <strong>없던 문을 새로 만들지 않습니다.</strong></li>
+</ul>
+
+<h2 id="k-acting">9. 자연스러운 연기를 만드는 법</h2>
+<p>결과 연기와 그림이 «아주 자연스러웠다» 고 평가된 프롬프트들이 어떻게 쓰였는지 정리한 것입니다.
+이 프로젝트에서 끌어낸 <strong>실무 원칙</strong>이고, 모델 성능의 원인을 실험으로 분리한 것은 아닙니다.
+어떤 문구도 결과를 보장하지 않습니다.</p>
+
+<h3>① 배우에게 «그럴 이유» 를 주고, 보이는 반응을 지정한다</h3>
+<p>감정 이름만 주면 연기의 대부분이 미정으로 남습니다.
+<strong>무엇을 예상했고, 무엇이 달라졌고, 무엇을 감추려 하는지</strong>를 정한 다음
+작고 관찰 가능한 반응 몇 개를 적습니다.</p>
+<pre><code>Hinata expected the visitor at six o'clock.
+She is surprised by the early arrival and is trying to remain polite while something unfinished inside the house distracts her.
+
+This recognition interrupts her movement: she briefly stops, her upper eyelids lift slightly, and her lips part gently.</code></pre>
+<p>패턴은 <strong>기대 → 계기 → 작은 신체 반응 → 사회적 수습</strong> 입니다.
+한 순간에 강한 감정을 여러 개 쌓지 않습니다. 가벼운 민망함은 머뭇거리는 시선과 절제된 미소로 충분하고,
+숨 들이키기·움찔·크게 물러서기를 <strong>동시에</strong> 시킬 필요가 없습니다.</p>
+
+<h3>② 포즈 목록이 아니라 «표정의 전환» 을 쓴다</h3>
+<p>자연스러운 연기는 움직임과 말 위에서 전개됩니다. 하나의 표정을 씬 내내 유지시키지 말고,
+미소가 <strong>언제 시작하고 누그러지고 사라지는지</strong>를 씁니다.</p>
+<pre><code>The smile develops across the movement rather than snapping on instantly.
+
+The movements flow together without rigidly stopping in separate poses.
+
+Her initial surprise softens into polite uncertainty.</code></pre>
+<p>반응에는 원인이 있어야 합니다. 방문자를 <em>먼저 알아보고</em> 놀라고,
+다시 말을 걸기 <em>전에</em> 예의를 회복하기 시작합니다.
+새 정보를 처리하는 동안 미소가 그대로일 것을 요구하지 않습니다.</p>
+
+<h3>③ 세기는 «몇 개의 얼굴 단서» 로 지정한다</h3>
+<pre><code>The smile is modest and a little effortful, not a broad grin.
+
+She is slightly flustered and self-conscious, not frightened, angry, or suspicious.
+
+Keep her cheeks relaxed and her smile restrained.</code></pre>
+<p>쓸모 있는 지시는 <strong>보이는 연기 그 자체</strong>입니다. 금지 표정을 길게 나열하는 것으로
+대신할 수 없습니다. 레퍼런스 사진이 활짝 웃는데 씬은 옅은 미소가 필요하다면,
+그 사진을 <strong>빼거나</strong> 역할을 좁게 한정합니다.</p>
+
+<h3>④ 일본어를 «낭독» 이 아니라 «대화» 로 연출한다</h3>
+<pre><code>Speak the exact Japanese sentence as one connected natural question.
+
+Do not slow the speech to fill the time or insert long pauses between words.
+
+The initial 「あ」 is a small realization. The rest is polite acknowledgment with a lightly questioning inflection.</code></pre>
+<p>정확한 대사를 적고 <strong>그 말의 대화적 목적</strong>을 설명합니다 — 알아들었다는 표시인지,
+조심스러운 확인인지, 혼잣말인지, 화제를 돌리려는 시도인지.
+남는 시간은 <strong>문장 뒤에</strong> 배치하지, 음절을 늘여서 채우지 않습니다.
+급한 대사는 «크게» 가 아니라 <strong>«빠른 대화 속도»</strong> 로 지정합니다.</p>
+
+<h3>⑤ 시선에 목적을 주고, 듣는 쪽도 반응하게 한다</h3>
+<pre><code>When Hinata addresses the visitor, she looks directly into the camera lens.
+When she addresses the man inside, she turns toward the interior, then returns to the lens afterward.
+
+Her eyes shift toward the living-room direction inside, followed by a small head turn.
+
+The camera stays on Hinata; do not pan or cut to the suitcase or clock.</code></pre>
+<div class="box ok">
+  <span class="tag">실측 — 시선과 고개를 분리한다</span>
+  <p>가장 «사람 같다» 는 평을 받은 문장 구조입니다. 눈만 움직이고 고개는 따라가지 않게 못 박습니다.</p>
+  <pre style="margin:.6rem 0 0"><code>HER EYES ALONE travel downward toward the floor in front of you.
+HER HEAD DOES NOT FOLLOW - the chin stays put; only eyelids and pupils move.</code></pre>
+</div>
+
+<h3>⑥ 응답 구간을 «적극적 듣기» 로 다룬다</h3>
+<p>4초 공백은 상호작용의 일부이지 정지 화면이 아닙니다.</p>
+<pre><code>Occasional natural blinking, a slight softening around the eyes, and tiny relaxed posture adjustments keep her alive.
+
+No freeze frame, slow motion, additional dialogue, silent mouthing, repeated nods, or exaggerated reactions.
+
+Once the full four-second pause has ended, Hinata gives a small, natural nod as though she has heard the visitor's greeting.</code></pre>
+<p>침묵을 메우려고 잦은 끄덕임·반복적인 시선 이동·손짓을 요구하지 않습니다.
+조용한 미소와 이따금의 눈 깜빡임으로 충분합니다.</p>
+
+<h3>⑦ 모든 동작에 시작·접촉·끝을 준다</h3>
+<p>«그녀가 안에서 기다린다» 는 <strong>도착지</strong>를 말할 뿐, 어떻게 갔는지를 설명하지 않습니다.</p>
+<pre><code>Keeping one hand on the door, she extends her free hand toward the hallway with an open, gently upward-facing palm.
+
+Hinata releases the front door, which remains open.
+She turns partly toward the interior and visibly takes two or three small steps across the tiled entrance, then steps onto the raised wooden floor.
+
+The visitor parks the suitcase upright beside their left leg, clear of the front door's swing and the path onto the wooden floor, and releases the handle.</code></pre>
+<p>중요한 위치 변화는 <strong>보이게</strong> 둡니다. 인물이 이동하는 바로 그 순간에
+카메라를 아래로 틸트해 가리지 않습니다. 그리고 <strong>무엇이 남는지</strong>를 정합니다 —
+방문자가 손잡이를 놓으면 캐리어는 타일 위에 남지, 카메라를 따라오지 않습니다.</p>
+
+<h3>⑧ 필요하면 동작을 겹친다</h3>
+<pre><code>Do not insert a pause between blocking the paper and beginning the line. The movement, head turn, and start of speech overlap naturally.</code></pre>
+<p>말은 고개를 돌리는 도중이나 발을 딛는 끝에서 시작할 수 있습니다. 이게 과장 없이 급박함을 만듭니다.
+다만 이 종이 씬 지시는 <strong>아직 성공이 확인되지 않았습니다.</strong>
+겹치기는 <em>분명한 의도</em>를 표현할 때 쓰고, 무관한 동작 여러 개를 불가능한 시간에 밀어넣는 데 쓰지 않습니다.</p>
+
+<h3>⑨ 카메라 움직임에 «물리적 이유» 를 준다</h3>
+<pre><code>The upward look and left-right glances are small physical head rotations.
+
+Keep them compact and human, not sweeping cinematic pans.
+
+Frame only what is naturally visible from the visitor's position.
+Do not widen the lens to fit everything into one image.</code></pre>
+<p>무언가를 살피려는 작은 고개 돌림, 들어가려는 짧은 전진, 마루에 오르는 완만한 상승.
+<strong>«시네마틱» 이라는 이유만으로 카메라를 움직이지 않습니다.</strong></p>
+
+<div class="box note">
+  <span class="tag">실측 — 화각과 눈높이를 숫자로</span>
+  <p>렌즈를 mm 가 아니라 <strong>대각 화각(도)</strong>과 <strong>눈높이(m)</strong>로 지정했습니다.</p>
+  <pre style="margin:.6rem 0 0"><code>LENS - 65 degree diagonal field of view, eye level 1.55 m, axis level unless the beat
+says otherwise. NO zoom, NO push-in, NO pull-out, NO focus pull. Shot size comes from
+DISTANCE only.</code></pre>
+  <p style="margin-top:.7rem">«숏 크기는 오직 거리로 정해진다» 가 핵심입니다. 줌으로 크기를 만들면 1인칭이 깨집니다.</p>
+</div>
+
+<div class="box note">
+  <span class="tag">실측 — 프레이밍을 비율로 못 박는다</span>
+  <p>«미디엄 숏» 같은 말 대신 화면에서 차지하는 비율로 지정했습니다.</p>
+  <pre style="margin:.6rem 0 0"><code>HER SHOULDERS SPAN ABOUT FORTY PERCENT OF THE FRAME WIDTH and her head fills about
+one seventh of the frame height, from the very first frame to the very last.
+THE BOTTOM EDGE OF THE PICTURE CROSSES HER LEGS JUST BELOW THE KNEE.
+If her whole body from head to toe comes into the picture, the shot is wrong.</code></pre>
+</div>
+
+<div class="box note">
+  <span class="tag">실측 — 1인칭에서 손은 따로 규격을 준다</span>
+  <p>화면에 들어오는 손은 매번 같아야 합니다. 손가락 붕괴도 여기서 막습니다.</p>
+  <pre style="margin:.6rem 0 0"><code>THE HAND IS THE SAME HAND IN EVERY SHOT: a young woman's right hand, slim
+medium-length fingers, narrow wrist, small narrow back of the hand, tapered fingertips,
+short bare nails, smooth skin, no standing tendons. No ring, polish, watch or bracelet.
+FIVE SEPARATE FINGERS with clear shadow gaps - four fingers plus one thumb, correct
+anatomy, no fused or melted fingers.</code></pre>
+</div>
+
+<h3>⑩ 된 것은 지키고, 문제는 한 번에 하나씩 고친다</h3>
+<p>클립을 채택하면 그 <strong>실제 마지막 상태</strong>를 다음 시작 조건으로 씁니다.
+작은 문제를 고칠 때 성공한 대사와 동선은 그대로 둡니다.
+소스에서 문이 닫혀 있으면, 연결본에서 열려 있다고 <strong>슬쩍 바꿔 쓰지 않습니다.</strong></p>
+<ol>
+<li>보이는 실패를 <strong>정확히</strong> 짚습니다 — 걷는 동작이 빠졌다, 미소가 너무 크다, 물건이 문턱을 넘었다, 문틀이 휘었다.</li>
+<li>원인일 <em>수 있는</em> 지시나 빠진 전환을 찾습니다. <strong>가설로 다룹니다.</strong></li>
+<li>해당 지시를 고치고 <strong>모순되는 문구를 지웁니다.</strong></li>
+<li>다른 설정과 레퍼런스 역할은 <strong>가능한 한 그대로</strong> 둡니다.</li>
+<li>새 결과에서 <strong>고쳐진 것과 의도치 않게 바뀐 것</strong>을 함께 봅니다.</li>
+</ol>
+<p>프롬프트가 길다고 좋거나 나쁘지 않습니다. 이 프로젝트에는 긴 프롬프트에서 나온 채택본도 있습니다.
+<strong>일관된 지시, 명확한 물리적 순서, 가능한 타이밍</strong>이 글자 수보다 중요합니다.</p>
+
+<h2 id="k-limits">10. 제외한 것과 한계</h2>
+<p>채택된 프롬프트에 있었다는 이유만으로 낡은 씬 설정을 재사용하지 않습니다.
+이전 프롬프트에는 <strong>방문자의 음성 대답</strong>, <strong>“breathing sway”</strong>,
+<strong>옛 문 방향</strong>이 들어 있었고, 이것들은 현재 제작 규칙과 충돌해 고정 블록에서 뺐습니다.</p>
+<p>이전 프롬프트에 <code>40mm</code> 지시가 있었지만 <strong>왜곡 문제의 검증된 해법이 아닙니다.</strong>
+재사용 블록은 특정 초점거리를 강제하지 않고 프레이밍과 직선 유지 지시만 남겼습니다.</p>
+<p>보존 문구는 <strong>모델에 대한 요청이지 픽셀 고정이 아닙니다.</strong>
+끝 구간이 반드시 그대로여야 하면, 그 원본 푸티지를 최종 편집에 남기고 이음매를 확인하세요.</p>
+<p>목적 있는 동작은 짧게 유지하되 <strong>움직임을 보여줄 시간은 줍니다.</strong>
+15초를 불필요한 정지로 채우지도, 인물이 순간이동해 보일 만큼 걷기를 압축하지도 않습니다.
+4초 상호작용 구간은 의도된 것이고, 그 밖의 정지는 씬에 기여해야 합니다.</p>
+
+<h2 id="k-log">11. 생성 기록 실측</h2>
+<p>Higgsfield 계정의 실제 생성 이력에서 이 프로젝트에 해당하는 구간을 추린 것입니다.</p>
+
+<h3>채택본과 규격</h3>
+<div class="tw"><table>
+<thead><tr><th>파일</th><th class="num">길이</th><th>해상도</th><th>비고</th></tr></thead>
+<tbody>
+<tr><td><code>01.mp4</code></td><td class="num">28.00초</td><td>480×854</td><td>가장 긴 채택본. 확장·편집 계열</td></tr>
+<tr><td><code>02_1.mp4</code></td><td class="num">11.04초</td><td>480×854</td><td>파라미터 11초로 생성</td></tr>
+<tr><td><code>02_2.mp4</code></td><td class="num">9.40초</td><td>480×854</td><td>생성 길이와 불일치 → <strong>편집에서 잘라낸 것</strong></td></tr>
+<tr><td><code>03_1.mp4</code></td><td class="num">15.00초</td><td>480×854</td><td>채택된 입장 씬. Forward 확장의 기준</td></tr>
+<tr><td><code>테스트1.mp4</code></td><td class="num">51.13초</td><td>480×854</td><td>이어붙인 편집 결과물</td></tr>
+</tbody></table></div>
+
+<h3>시도한 길이의 분포</h3>
+<p>5 · 7 · 8 · 11 · 12 · 15 · 19 · 22 · 24 · 28초를 시도했고,
+로컬에 남은 채택본은 <strong>11 · 15 · 28초</strong>입니다.
+«15초가 기준» 이라는 말은 규격이 아니라 <em>지금의 작업 단위</em>라는 뜻입니다.</p>
+
+<h3>모델 사용 흐름</h3>
+<div class="tw"><table>
+<thead><tr><th>모델</th><th>쓰인 자리</th></tr></thead>
+<tbody>
+<tr><td><code>seedance_2_5</code></td><td>주력. 채택본은 전부 여기서 나왔습니다</td></tr>
+<tr><td><code>seedance_2_0_mini</code></td><td>빠른 시안. 같은 프롬프트를 연속으로 돌려 방향만 확인</td></tr>
+<tr><td><code>seedance_2_0</code></td><td>초기 720p 시도</td></tr>
+</tbody></table></div>
+<p>기록을 보면 <strong>2.0 mini 로 7연속 시안 → 2.5 로 확정</strong> 하는 패턴이 반복됩니다.
+싼 모델로 «구성이 맞는지» 만 보고, 연기와 대사는 2.5 에서 잡는 방식입니다.</p>
+
+<h3>확장·편집 모드도 쓰였다</h3>
+<p>원 가이드는 Forward 확장만 다루지만, 기록에는 두 가지가 더 있습니다.</p>
+<ul>
+<li><strong>Backward 확장</strong> — 채택본의 첫 프레임으로 자연스럽게 이어지는 <em>앞부분</em>을 생성.
+<code>Extend the supplied video BACKWARD by creating a 28-second prequel that leads naturally into its first frame.</code></li>
+<li><strong>부분 편집</strong> — 영상 전체를 다시 만들지 않고 한 요소만 교체.
+<code>Edit only Hinata's facial expression in the supplied video. Make subtle adjustments while preserving the original performance, action sequence, dialogue…</code> /
+<code>Edit the supplied video with only these two visual changes: 1. INTERIOR BACKGROUND…</code></li>
+</ul>
+<p>연기는 좋은데 배경이나 표정만 어긋났을 때, <strong>처음부터 다시 뽑지 않아도 됩니다.</strong></p>
+
+<div class="box warn">
+  <span class="tag">확인 불가</span>
+  <p>«하트/좋아요» 표시는 <strong>API 응답에 들어오지 않습니다.</strong>
+  그래서 어떤 생성물에 하트를 눌렀는지는 이 문서로 특정하지 못했습니다.
+  위의 채택본 판정은 <strong>로컬 폴더에 저장된 파일</strong>과 그 길이·해상도를 근거로 한 것입니다.</p>
+</div>
+
+<hr>
+<h4>출처 메모</h4>
+<ul>
+<li>이전 채택 도입부 프롬프트: <code>Create a 19-second vertical 9:16 photorealistic Japanese live-action drama…</code></li>
+<li>왜곡이 적었던 채택본: <code>Create a 15-second…</code> + <code>Continue directly from the supplied starting frame.</code></li>
+<li>채택된 입장 워크플로: <code>03_1.mp4</code> 로 이어진 프롬프트들</li>
+<li>실측 항목: Higgsfield 생성 이력 40건 조회 + 로컬 <code>JAEN_STORY</code> 폴더의 영상 메타데이터</li>
+</ul>
+<p>이 문서는 <strong>프로젝트 회고</strong>이며, 범용 모델 벤치마크나 제품 사양이 아닙니다.</p>
+
+</div>
+
+<!-- ══════════════════════════ ENGLISH ══════════════════════════ -->
+<div class="en">
+
+<h1>First-Person Japanese Drama<br>Production Guide</h1>
+<p class="lede">How to make a first-person live-action Japanese drama that reads as natural,
+using Seedance 2.5 on Higgsfield. Assembled from roughly forty real generations run on the
+JAEN story project.</p>
+
+<div class="toc">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#e-status">Status and provenance</a></li>
+    <li><a href="#e-settings">Working settings</a></li>
+    <li><a href="#e-traps">Three traps found in the logs</a></li>
+    <li><a href="#e-assets">Asset checklist</a></li>
+    <li><a href="#e-block">Fixed first-person prompt block</a></li>
+    <li><a href="#e-open">Choose one opening block</a></li>
+    <li><a href="#e-move">Movement instructions</a></li>
+    <li><a href="#e-scene">Keep these scene-specific</a></li>
+    <li><a href="#e-acting">Directing natural acting</a></li>
+    <li><a href="#e-limits">Exclusions and practical limits</a></li>
+    <li><a href="#e-log">What the generation log shows</a></li>
+  </ol>
+</div>
+
+<h2 id="e-status">1. Status and provenance</h2>
+<p>All videos identified as preferred results were generated with <strong>Seedance 2.5</strong>.
+The settings below come from the working conversation and supplied screenshots, not from
+independently recovered generation metadata for every preferred clip. Asset-selection
+guidance is a synthesis of the workflow.</p>
+<p>Quoted instructions and reusable prompt blocks are <strong>excerpts assembled from
+previously used prompts</strong>. They are not a claim that every sentence was present in
+every preferred result.</p>
+<div class="box warn">
+  <span class="tag">Not validated</span>
+  <p>The yellow-paper scene is an <strong>unvalidated new direction</strong>, not an
+  established successful example.</p>
+</div>
+
+<h2 id="e-settings">2. Working settings</h2>
+<div class="tw"><table>
+<thead><tr><th>Setting</th><th>Working baseline</th></tr></thead>
+<tbody>
+<tr><td>Model</td><td><code>seedance_2_5</code></td></tr>
+<tr><td>Aspect ratio</td><td>9:16</td></tr>
+<tr><td>Resolution</td><td>480p</td></tr>
+<tr><td>Bitrate</td><td>High</td></tr>
+<tr><td>Audio</td><td>On</td></tr>
+<tr><td>Working segment length</td><td>15 seconds</td></tr>
+<tr><td>Starting from a still</td><td>Create Video with a Start frame</td></tr>
+<tr><td>Continuing footage</td><td>Extend Video → Sequel / Forward</td></tr>
+</tbody></table></div>
+<p>Earlier preferred scenes also used other durations, including 19 seconds. Fifteen seconds
+is the <strong>current working unit</strong>, not a universal requirement.</p>
+
+<h3>Two established workflows</h3>
+<ul>
+<li><strong>Start-frame generation</strong> — establish the composition with a still, then
+animate from that visual state. The prompt behind the preferred low-distortion example said
+explicitly: <em>“Continue directly from the supplied starting frame.”</em></li>
+<li><strong>Forward extension</strong> — continue from an accepted clip's actual ending.
+This produced the accepted entrance sequence, <code>03_1.mp4</code>.</li>
+</ul>
+<p>Neither workflow guarantees continuity. Inspect movement, dialogue, identity, and the join
+before accepting a clip. High bitrate reduces compression; it is not an acting or identity
+control.</p>
+
+<h2 id="e-traps">3. Three traps found in the logs</h2>
+<p>Found by querying the generation history directly. None of these are in the original guide.</p>
+
+<div class="box warn">
+  <span class="tag">Trap 1 — the parameter wins on duration</span>
+  <p>Writing <code>Create an 8-second…</code> in the prompt while <code>duration</code> is set
+  to 15 produces <strong>a 15-second clip</strong>. The reverse also happened: a prompt saying
+  <code>Create a 15-second…</code> with the parameter at 11 produced 11 seconds. Both cases
+  are in the log.</p>
+  <p>Every timestamp inside the prompt (<code>0.0–1.0</code>, <code>4.0–7.5</code>) must be
+  recomputed against the real length, or dialogue gets cut off and the tail runs empty.</p>
+  <p><strong>There are three places to change.</strong> ①the <code>duration</code> parameter
+  ②the “N-second” in the prompt's first line ③the beat timestamps. Always change all three.</p>
+</div>
+
+<div class="box warn">
+  <span class="tag">Trap 2 — aspect ratio is meaningless in extension mode</span>
+  <p>Forward / Backward extensions and video-edit jobs show <code>aspect_ratio</code> as
+  <code>16:9</code> in the log, yet the <strong>actual output is 480×854 (9:16)</strong>.
+  In extension and edit modes the source video's ratio wins and the parameter is ignored.</p>
+  <p>So a “16:9” reading in the parameters is not a problem. What actually matters is
+  <em>whether the source clip itself is 9:16</em>. A landscape source yields a landscape result.</p>
+</div>
+
+<div class="box warn">
+  <span class="tag">Trap 3 — conversation text leaking into the prompt field</span>
+  <p>The log contains <strong>three consecutive generations</strong> whose prompt body begins
+  with a Korean chat sentence — an explanation written for a person, pasted into the prompt
+  field by mistake.</p>
+  <p>The model reads it as instruction. Keep <strong>only English direction</strong> in the
+  prompt field, and check that the first line starts with <code>Create a…</code> or
+  <code>Extend the…</code> before submitting.</p>
+</div>
+
+<h2 id="e-assets">4. Asset checklist</h2>
+<div class="tw"><table>
+<thead><tr><th>Asset</th><th>What makes it useful</th><th>Instruction actually used</th></tr></thead>
+<tbody>
+<tr><td>Scene start frame</td><td>Intended viewpoint, straight architecture, correct character position, no unwanted hands or objects</td>
+<td><em>“Match the starting frame's camera position, framing, Hinata's facial identity, hairstyle, clothing, door opening angle, hand placement, lighting, and entrance layout.”</em></td></tr>
+<tr><td>Character identity</td><td>Clear facial portrait; full-body view for clothing and proportions</td>
+<td><em>“Use the detailed facial portrait for facial identity and the full-body view for clothing and proportions.”</em></td></tr>
+<tr><td>Expression reference</td><td>Restrained expression close to the intended performance</td>
+<td><em>“Do not hold the reference expression as a fixed pose or exaggerate the size of her eyes.”</em></td></tr>
+<tr><td>Interior reference</td><td>Consistent thresholds, floor levels, doors, stairs, furniture</td>
+<td><em>“Do not mirror or rearrange the layout.” / “This image defines the interior space, not a separate shot.”</em></td></tr>
+<tr><td>Exterior reference</td><td>Architecture relevant to this scene, without imposing a wide shot</td>
+<td><em>“Use the architecture as reference, not the photograph's wide composition.”</em></td></tr>
+<tr><td>Visitor clothing</td><td>Readable sleeve fabric, colour, cuffs</td>
+<td><em>“Use ONLY for the unseen first-person visitor's white cotton sweatshirt sleeves and ribbed cuffs.”</em></td></tr>
+<tr><td>Prop reference</td><td>Clear shape, colour, handle</td>
+<td><em>“Only the handle and a small portion of the case need to enter the lower-left edge.” / “Do not force the whole suitcase into view.”</em></td></tr>
+<tr><td>Accepted source video</td><td>Ending pose, camera position, movement, scene state worth continuing</td>
+<td><em>“Begin directly from the source video's actual final frame and continue its ongoing movement naturally.”</em></td></tr>
+</tbody></table></div>
+<p>Give references <strong>clear, separate roles</strong>. An expression portrait, a clothing
+image, and a room image must not compete to define the same subject. Include only what this
+scene needs — a full house exterior is unnecessary for a continuation that reveals only the interior.</p>
+
+<div class="box note">
+  <span class="tag">From the log</span>
+  <p>Reference count grew <strong>2 → 3 → 4 → 7 → 8</strong> over the project. More is not
+  better. Every added reference needs a matching <em>role-assignment sentence</em>.</p>
+</div>
+
+<h4>Reference separation — actual excerpts</h4>
+<pre><code>All three images depict ONE AND THE SAME woman. Show only one Hinata.
+
+Keep each reference assigned to its specified subject.
+Do not reproduce studio backgrounds, reference-sheet layouts, duplicate portraits, or split screens.
+
+Hinata's references apply ONLY to the woman inside the doorway.
+Do not transfer her pink sweater to the first-person visitor.
+
+Do not generate this reference person standing in the scene.
+Do not copy the reference person's face, hairstyle, or full-body pose into the video.</code></pre>
+<p>The first line assumes three Hinata images, and the doorway wording applies to that scene.
+<strong>Update these to match the actual reference count and scene rather than copying blindly.</strong></p>
+
+<h2 id="e-block">5. Fixed first-person prompt block</h2>
+<p>This block combines sentences actually used in earlier prompts. Add the scene's actions,
+exact dialogue, and timing <strong>separately</strong>. The share-house arrival description is
+specific to this project.</p>
+<pre><code>ONE uninterrupted take, entirely from the first-person viewpoint of a new resident arriving at a Japanese share house. The camera IS the visitor's eyes. All movement happens in real time within one continuous physical space.
+
+CAMERA AND FRAMING
+Strict eye-level first-person viewpoint.
+Maintain a fixed focal length throughout.
+
+Door frames, roof edges, wall corners, and tile lines remain straight across the image.
+Natural perspective convergence during head tilts is acceptable, but architectural lines must not bow or curve.
+
+Frame only what is naturally visible from the visitor's position.
+Allow the roof, ground, suitcase, and Hinata's lower body to extend outside the frame.
+Do not widen the lens to fit everything into one image.
+
+When stopped, retain very slight natural postural sway.
+Camera movement must not bend, stretch, or warp the environment.
+Never show the visitor's face or full body.
+
+Camera movement is visual only and must not produce audible breathing.
+
+CHARACTER PERFORMANCE
+Whenever she addresses the visitor, she looks directly into the camera lens.
+Play this with small, believable reactions rather than broad comedy.
+Preserve her normal facial proportions.
+No exaggerated wide eyes, stretched mouth, or theatrical shock.
+
+GLOBAL INTERACTIVE AUDIO RULE
+The visitor NEVER produces audible dialogue, breathing, sighs, gasps, humming, laughter, or other vocal sounds.
+Natural camera movement is visual only and must not be accompanied by breath noise.
+Footsteps, suitcase wheels, and physical interaction sounds are allowed.
+
+Whenever the script reaches a visitor response, replace the spoken response with approximately FOUR SECONDS of the other character looking into the lens and naturally waiting or listening.
+No audible visitor answer, subtitles, response text, or countdown.
+
+Use occasional natural blinking and tiny relaxed posture adjustments.
+Her mouth remains relaxed and still.
+She does not speak again or react as though an answer has already been confirmed.
+
+CONTINUOUS ACTION
+These timestamps are successive beats within ONE uninterrupted take, not separate shots.
+Preserve all actions in order.
+Use normal-speed movement with connected transitions between actions.
+
+FINAL CONSTRAINTS
+No cuts, hidden cuts, transitions, montage, reverse angles, inserts, time jumps, slow motion, or speed ramps.
+No subtitles, captions, speech bubbles, countdowns, logos, or text overlays.</code></pre>
+
+<div class="box warn">
+  <span class="tag">Scope warning</span>
+  <p>The relaxed-still-mouth and “no acknowledgment” instructions apply
+  <strong>during the response window only</strong>, not during dialogue.</p>
+  <p>If the next scripted action is an acknowledgment, place it <strong>explicitly after</strong>
+  those four seconds. The accepted entrance flow used a small nod and
+  <span lang="ja">「はい！あ、どうぞ。」</span> after the waiting interval.</p>
+</div>
+
+<h2 id="e-open">6. Choose one opening block</h2>
+
+<p class="prompt-label">Start image — actual excerpts</p>
+<pre><code>Create a 15-second vertical 9:16 photorealistic Japanese live-action drama with synchronized Japanese dialogue and realistic location sound.
+
+Continue directly from the supplied starting frame.
+
+Match the starting frame's camera position, framing, Hinata's facial identity, hairstyle, clothing, door opening angle, hand placement, lighting, and entrance layout.</code></pre>
+
+<p class="prompt-label">Extend Video — actual excerpts</p>
+<pre><code>Extend the uploaded video FORWARD with a 15-second continuation in vertical 9:16.
+
+Begin directly from the source video's actual final frame and continue its ongoing movement naturally. Preserve Hinata's position, pose, gaze direction, door angle, camera position, framing, lighting, and visible environment.
+
+Maintain one uninterrupted first-person shot from the visitor's eye level. Do not restart the scene, replay preceding actions, or repeat dialogue from the source video.
+
+All timestamps below refer only to the newly added 15-second continuation.</code></pre>
+<p>For forward extension, upload the accepted source video and <strong>omit</strong> separate
+Start and End images unless a specific endpoint is needed. An End reference does not guarantee
+that an entire ending interval stays identical to the original footage.</p>
+
+<div class="box note">
+  <span class="tag">From the log — wording that held</span>
+  <p>To pin the start frame hard, this line worked:</p>
+  <pre style="margin:.6rem 0 0"><code>@Image 1 IS THE FIRST FRAME. The shot begins exactly on it - same framing,
+same objects in the same places, same light. Nothing is re-staged or added at the start.</code></pre>
+</div>
+
+<h2 id="e-move">7. Movement instructions</h2>
+<p>Add these only when needed.</p>
+
+<p class="prompt-label">Stationary conversation — from the preferred low-distortion example</p>
+<pre><code>Maintain the same eye-level conversational viewpoint as the starting frame.
+
+No walking forward, zooming, deliberate nodding, or camera movement to follow Hinata's glances.
+
+Keep Hinata's face and upper body readable within the vertical frame.</code></pre>
+
+<p class="prompt-label">Walking and relocation — from the entrance prompts</p>
+<pre><code>Walking produces gentle footstep-induced bob and small irregular balance adjustments.
+
+Hinata must visibly walk whenever her location changes.
+Keep her in view throughout her movement from the doorway to the raised wooden floor. Show her crossing the tiled entrance and stepping onto the wood.
+Her position changes through continuous walking, without skipped movement or sudden relocation.</code></pre>
+<p><strong>Do not apply stationary-camera instructions to a walking segment.</strong>
+Replace the doorway-to-floor route with the actual route for later scenes.</p>
+
+<div class="box note">
+  <span class="tag">From the log — a walking camera is a person, not a rig</span>
+  <p>If the camera glides, it reads as equipment. The sentences actually used:</p>
+  <pre style="margin:.6rem 0 0"><code>Each footstep lands with a small whole-frame DIP of a few centimetres that rises back by
+the next step - once per step, the rhythm of a real person, not a shake. The frame
+SWAYS a little as the weight shifts, and the gaze LEADS: the eyes turn first, the camera
+follows a beat later. NOT a dolly, NOT a gimbal glide, NOT a steadicam drift.
+If the frame moves smoothly like camera equipment, the frame is wrong.</code></pre>
+  <p style="margin-top:.7rem">Note the last line's shape:
+  <strong><code>If X, the frame is wrong.</code></strong> Stating the failure condition lands
+  better than “don't do X.”</p>
+</div>
+
+<h2 id="e-scene">8. Keep these scene-specific</h2>
+<ul>
+<li>Exact spoken lines and their speakers. <strong>Exclude incorrect-answer branches</strong> from the default generation.</li>
+<li>Where the four-second response window occurs and what expression is held during it.</li>
+<li>Character starting and ending positions.</li>
+<li>Visible walking routes and hand–object contact.</li>
+<li>Door state, hinge location, permitted movement.</li>
+<li>Prop ownership and where props remain afterward.</li>
+<li>The final state needed for the next continuation.</li>
+</ul>
+
+<h3>Current project continuity</h3>
+<ul>
+<li>Visitor's <strong>left hand</strong> pulls the mint suitcase; <strong>right hand</strong> presses the exterior intercom.</li>
+<li>Visitor sleeves are <strong>white</strong>; Hinata's sweater is <strong>pink</strong>.</li>
+<li>The suitcase stays on the lower entrance tiles, toward the left, clear of the central path and door swing.</li>
+<li>Shoes are removed offscreen when scripted. <strong>Only the visitor</strong> steps onto the wooden floor; the suitcase stays behind.</li>
+<li>Preserve architecture already visible in the source. <strong>Do not invent another door</strong> to repair an inconsistent door state.</li>
+</ul>
+
+<h2 id="e-acting">9. Directing natural acting</h2>
+<p>The methods below describe how the prompts behind the natural-feeling results were
+constructed. They are <strong>practical directing principles</strong> inferred from this
+project, not experimentally isolated causes of model behaviour. No wording guarantees a result.</p>
+
+<h3>① Give the actor a reason to behave, then specify the visible response</h3>
+<p>An emotional label alone leaves most of the performance undefined. Establish
+<strong>what the character expects, what changes, and what they try to hide</strong>. Then
+describe a few small, observable reactions.</p>
+<pre><code>Hinata expected the visitor at six o'clock.
+She is surprised by the early arrival and is trying to remain polite while something unfinished inside the house distracts her.
+
+This recognition interrupts her movement: she briefly stops, her upper eyelids lift slightly, and her lips part gently.</code></pre>
+<p>The pattern is <strong>expectation → trigger → small physical reaction → social recovery</strong>.
+Avoid piling several strong emotions onto one moment. Mild embarrassment reads through a
+hesitant gaze and a restrained smile — it does not need a gasp, a flinch, and a large backward
+movement all at once.</p>
+
+<h3>② Write transitions between expressions, not a list of poses</h3>
+<pre><code>The smile develops across the movement rather than snapping on instantly.
+
+The movements flow together without rigidly stopping in separate poses.
+
+Her initial surprise softens into polite uncertainty.</code></pre>
+<p>Let a reaction have a cause: she notices the visitor <em>before</em> becoming surprised, and
+begins recovering her politeness <em>before</em> addressing them again. Do not require a smile
+to remain unchanged while the character processes new information.</p>
+
+<h3>③ Specify intensity through a few facial cues</h3>
+<pre><code>The smile is modest and a little effortful, not a broad grin.
+
+She is slightly flustered and self-conscious, not frightened, angry, or suspicious.
+
+Keep her cheeks relaxed and her smile restrained.</code></pre>
+<p>The useful instruction is <strong>the visible performance itself</strong>. A long list of
+prohibited expressions is not a substitute. If a portrait shows a broad toothy smile but the
+scene needs a faint one, <strong>omit that portrait</strong> or give it a narrowly defined role.</p>
+
+<h3>④ Direct Japanese delivery as conversation, not timed recitation</h3>
+<pre><code>Speak the exact Japanese sentence as one connected natural question.
+
+Do not slow the speech to fill the time or insert long pauses between words.
+
+The initial 「あ」 is a small realization. The rest is polite acknowledgment with a lightly questioning inflection.</code></pre>
+<p>Write the exact line and explain <strong>its conversational purpose</strong>: acknowledgment,
+cautious confirmation, a quiet aside, a quick attempt to change the subject. Allocate waiting
+time <strong>after</strong> the sentence rather than stretching syllables. When a line needs
+urgency, specify <strong>brisk conversational delivery</strong> instead of more volume.</p>
+
+<h3>⑤ Make gaze purposeful and listener reactions responsive</h3>
+<pre><code>When Hinata addresses the visitor, she looks directly into the camera lens.
+When she addresses the man inside, she turns toward the interior, then returns to the lens afterward.
+
+Her eyes shift toward the living-room direction inside, followed by a small head turn.
+
+The camera stays on Hinata; do not pan or cut to the suitcase or clock.</code></pre>
+<div class="box ok">
+  <span class="tag">From the log — separate the eyes from the head</span>
+  <p>This structure drew the strongest “that looks human” response. Pin the eyes to move
+  while the head explicitly does not follow.</p>
+  <pre style="margin:.6rem 0 0"><code>HER EYES ALONE travel downward toward the floor in front of you.
+HER HEAD DOES NOT FOLLOW - the chin stays put; only eyelids and pupils move.</code></pre>
+</div>
+
+<h3>⑥ Treat the response window as active listening</h3>
+<pre><code>Occasional natural blinking, a slight softening around the eyes, and tiny relaxed posture adjustments keep her alive.
+
+No freeze frame, slow motion, additional dialogue, silent mouthing, repeated nods, or exaggerated reactions.
+
+Once the full four-second pause has ended, Hinata gives a small, natural nod as though she has heard the visitor's greeting.</code></pre>
+<p>Do not ask for frequent nods, repeated glances, and gestures merely to fill silence. A quiet
+smile and an occasional blink are enough. The visitor stays vocally silent throughout.</p>
+
+<h3>⑦ Give each physical action a beginning, contact, and end</h3>
+<p>“She waits inside” describes a <strong>destination</strong>; it does not explain how she got there.</p>
+<pre><code>Keeping one hand on the door, she extends her free hand toward the hallway with an open, gently upward-facing palm.
+
+Hinata releases the front door, which remains open.
+She turns partly toward the interior and visibly takes two or three small steps across the tiled entrance, then steps onto the raised wooden floor.
+
+The visitor parks the suitcase upright beside their left leg, clear of the front door's swing and the path onto the wooden floor, and releases the handle.</code></pre>
+<p>Keep position changes <strong>visible</strong> when they matter. Do not hide the actor with a
+downward camera tilt at exactly the moment you ask them to relocate. Establish
+<strong>what stays behind</strong>: once the visitor releases the suitcase, it remains on the
+tiles instead of following the camera.</p>
+
+<h3>⑧ Overlap actions when the performance calls for it</h3>
+<pre><code>Do not insert a pause between blocking the paper and beginning the line. The movement, head turn, and start of speech overlap naturally.</code></pre>
+<p>Speech can begin during a head turn or as a step finishes. This communicates urgency without
+exaggeration. <strong>This particular paper-scene direction has not been confirmed successful.</strong>
+Use overlap to express a clear intention, not to squeeze unrelated actions into an impossible
+time window.</p>
+
+<h3>⑨ Keep the camera physically motivated</h3>
+<pre><code>The upward look and left-right glances are small physical head rotations.
+
+Keep them compact and human, not sweeping cinematic pans.
+
+Frame only what is naturally visible from the visitor's position.
+Do not widen the lens to fit everything into one image.</code></pre>
+<p>A small head turn to investigate, a short forward move to enter, a modest rise to step onto a
+raised floor. <strong>Do not add camera movement merely because a scene is described as cinematic.</strong></p>
+
+<div class="box note">
+  <span class="tag">From the log — angle and eye height as numbers</span>
+  <p>The lens was specified as a <strong>diagonal field of view in degrees</strong> and an
+  <strong>eye height in metres</strong>, not in mm.</p>
+  <pre style="margin:.6rem 0 0"><code>LENS - 65 degree diagonal field of view, eye level 1.55 m, axis level unless the beat
+says otherwise. NO zoom, NO push-in, NO pull-out, NO focus pull. Shot size comes from
+DISTANCE only.</code></pre>
+  <p style="margin-top:.7rem">“Shot size comes from DISTANCE only” is the operative clause.
+  Sizing a shot with zoom breaks the first-person illusion.</p>
+</div>
+
+<div class="box note">
+  <span class="tag">From the log — pin framing as a proportion</span>
+  <p>Instead of “medium shot,” the framing was pinned as a share of the frame.</p>
+  <pre style="margin:.6rem 0 0"><code>HER SHOULDERS SPAN ABOUT FORTY PERCENT OF THE FRAME WIDTH and her head fills about
+one seventh of the frame height, from the very first frame to the very last.
+THE BOTTOM EDGE OF THE PICTURE CROSSES HER LEGS JUST BELOW THE KNEE.
+If her whole body from head to toe comes into the picture, the shot is wrong.</code></pre>
+</div>
+
+<div class="box note">
+  <span class="tag">From the log — the hand needs its own spec</span>
+  <p>In first person, any hand that enters frame must be the same hand every time. This is also
+  where finger collapse gets blocked.</p>
+  <pre style="margin:.6rem 0 0"><code>THE HAND IS THE SAME HAND IN EVERY SHOT: a young woman's right hand, slim
+medium-length fingers, narrow wrist, small narrow back of the hand, tapered fingertips,
+short bare nails, smooth skin, no standing tendons. No ring, polish, watch or bracelet.
+FIVE SEPARATE FINGERS with clear shadow gaps - four fingers plus one thumb, correct
+anatomy, no fused or melted fingers.</code></pre>
+</div>
+
+<h3>⑩ Preserve what worked and revise one problem at a time</h3>
+<p>When a clip is accepted, use its <strong>actual final state</strong> as the next starting
+condition. Keep the successful dialogue and staging intact when fixing a small issue. If the
+source door is closed, <strong>do not silently describe it as already open</strong> in the
+continuation.</p>
+<ol>
+<li>Identify the visible failure <strong>precisely</strong>: missing walking steps, an overly broad smile, an object crossing the threshold, a bowed door frame.</li>
+<li>Find the instruction or omitted transition that could be contributing. <strong>Treat it as a hypothesis.</strong></li>
+<li>Change that direction and <strong>remove contradictory wording</strong>.</li>
+<li>Keep other settings and reference roles <strong>stable</strong> where practical.</li>
+<li>Inspect the new result for <strong>both</strong> the requested correction and unintended changes.</li>
+</ol>
+<p>Long prompts are not automatically better or worse — this project produced preferred results
+from detailed prompts. Prioritise <strong>consistent instructions, clear physical sequences, and
+achievable timing</strong> over word count.</p>
+
+<h2 id="e-limits">10. Exclusions and practical limits</h2>
+<p>Do not reuse outdated scene details simply because they appeared in a preferred prompt.
+Earlier prompts included an <strong>audible visitor reply</strong>, <strong>“breathing sway”</strong>,
+and an <strong>older door orientation</strong>. These conflict with current production rules and
+were excluded from the fixed block.</p>
+<p>A <code>40mm</code> instruction appeared in an earlier prompt, but it is
+<strong>not a verified solution to distortion</strong>. The reusable block keeps framing and
+straight-line instructions without making a focal length mandatory.</p>
+<p>Preservation language is <strong>a request to the model, not a pixel lock</strong>. If an
+ending must remain exactly unchanged, retain that original footage in the final edit and
+inspect the join.</p>
+<p>Keep purposeful actions brief, but <strong>allow enough time to show movement</strong>. Do
+not fill 15 seconds with unnecessary pauses, or compress walking until characters appear to
+teleport. The four-second interaction window is intentional; other pauses should serve the scene.</p>
+
+<h2 id="e-log">11. What the generation log shows</h2>
+<p>Drawn from the actual Higgsfield generation history for this project.</p>
+
+<h3>Accepted clips and their specs</h3>
+<div class="tw"><table>
+<thead><tr><th>File</th><th class="num">Length</th><th>Resolution</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td><code>01.mp4</code></td><td class="num">28.00 s</td><td>480×854</td><td>Longest accepted clip; extension/edit lineage</td></tr>
+<tr><td><code>02_1.mp4</code></td><td class="num">11.04 s</td><td>480×854</td><td>Generated with duration 11</td></tr>
+<tr><td><code>02_2.mp4</code></td><td class="num">9.40 s</td><td>480×854</td><td>No matching generation length → <strong>trimmed in the edit</strong></td></tr>
+<tr><td><code>03_1.mp4</code></td><td class="num">15.00 s</td><td>480×854</td><td>Accepted entrance scene; basis for forward extension</td></tr>
+<tr><td><code>테스트1.mp4</code></td><td class="num">51.13 s</td><td>480×854</td><td>Assembled edit</td></tr>
+</tbody></table></div>
+
+<h3>Durations attempted</h3>
+<p>5 · 7 · 8 · 11 · 12 · 15 · 19 · 22 · 24 · 28 seconds were tried; the clips kept locally are
+<strong>11 · 15 · 28 s</strong>. “15 seconds” is a <em>current working unit</em>, not a spec.</p>
+
+<h3>How the models were used</h3>
+<div class="tw"><table>
+<thead><tr><th>Model</th><th>Where it was used</th></tr></thead>
+<tbody>
+<tr><td><code>seedance_2_5</code></td><td>Primary. Every accepted clip came from here</td></tr>
+<tr><td><code>seedance_2_0_mini</code></td><td>Fast drafts — the same prompt run repeatedly just to check direction</td></tr>
+<tr><td><code>seedance_2_0</code></td><td>Early 720p attempts</td></tr>
+</tbody></table></div>
+<p>The log shows a repeating pattern: <strong>seven consecutive 2.0-mini drafts, then lock it in
+on 2.5</strong>. Use the cheap model to check that the blocking works; settle acting and
+dialogue on 2.5.</p>
+
+<h3>Extension and edit modes were used too</h3>
+<p>The original guide covers only forward extension. The log contains two more.</p>
+<ul>
+<li><strong>Backward extension</strong> — generating the part <em>before</em> an accepted clip:
+<code>Extend the supplied video BACKWARD by creating a 28-second prequel that leads naturally into its first frame.</code></li>
+<li><strong>Targeted edit</strong> — replacing one element without regenerating the whole clip:
+<code>Edit only Hinata's facial expression in the supplied video. Make subtle adjustments while preserving the original performance, action sequence, dialogue…</code> /
+<code>Edit the supplied video with only these two visual changes: 1. INTERIOR BACKGROUND…</code></li>
+</ul>
+<p>When the acting is good but the background or expression is off,
+<strong>you do not have to start over</strong>.</p>
+
+<div class="box warn">
+  <span class="tag">Could not verify</span>
+  <p>Heart / like markings <strong>are not returned by the API</strong>, so this document could
+  not identify which generations were hearted. The accepted-clip determinations above are based
+  on <strong>which files were saved to the local folder</strong> and their length and resolution.</p>
+</div>
+
+<hr>
+<h4>Source notes</h4>
+<ul>
+<li>Preferred earlier opening prompt: <code>Create a 19-second vertical 9:16 photorealistic Japanese live-action drama…</code></li>
+<li>Preferred low-distortion example: <code>Create a 15-second…</code> + <code>Continue directly from the supplied starting frame.</code></li>
+<li>Accepted entrance workflow: the prompts leading to <code>03_1.mp4</code></li>
+<li>Measured items: 40 generation-history records queried from Higgsfield, plus video metadata from the local <code>JAEN_STORY</code> folder</li>
+</ul>
+<p>This guide is a <strong>project-specific retrospective</strong>, not a universal model
+benchmark or a live product specification.</p>
+
+</div>
+
+</main>
+
+<footer>
+  <span class="ko">JAEN 스토리 프로젝트 · 1인칭 일본 드라마 제작 가이드</span>
+  <span class="en">JAEN story project · First-person Japanese drama production guide</span>
+</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var bKo = document.getElementById('btn-ko');
+  var bEn = document.getElementById('btn-en');
+
+  function setLang(l){
+    root.setAttribute('data-lang', l);
+    root.setAttribute('lang', l === 'ko' ? 'ko' : 'en');
+    bKo.setAttribute('aria-pressed', String(l === 'ko'));
+    bEn.setAttribute('aria-pressed', String(l === 'en'));
+    try { localStorage.setItem('jaen-guide-lang', l); } catch(e){}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem('jaen-guide-lang'); } catch(e){}
+  setLang(saved === 'en' ? 'en' : 'ko');
+
+  bKo.addEventListener('click', function(){ setLang('ko'); });
+  bEn.addEventListener('click', function(){ setLang('en'); });
+})();
+</script>
+
+</body>
+</html>

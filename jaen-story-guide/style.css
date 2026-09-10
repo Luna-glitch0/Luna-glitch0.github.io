@@ -252,12 +252,16 @@ td code{font-size:.85em}
 .shell.solo{display:block; max-width:880px}
 .shell.solo article{max-width:none}
 
-/* 「이렇게 쓰면 → 이렇게 나온다 → 대신」 */
-.miss table{min-width:560px; font-size:.9rem}
-.miss td:first-child{white-space:nowrap; font-weight:600}
+/* 「이렇게 쓰면 → 이렇게 나온다 → 이렇게 고친다」 */
+.miss table{min-width:660px; font-size:.895rem}
+.miss td{padding-top:.7rem; padding-bottom:.7rem}
+.miss td:first-child{white-space:nowrap}
+.miss td:first-child code{
+  background:var(--code-bg); border:1px solid var(--line); border-radius:5px;
+  padding:.16em .45em; font-size:.845em; color:var(--fg);
+}
 .miss td:nth-child(2){color:var(--muted)}
-.miss td:last-child{font-weight:600}
-.miss .arrow{color:var(--faint); padding:0 .1rem}
+.miss td:last-child code{font-size:.845em; color:var(--accent); background:var(--code-bg)}
 
 /* 요약의 원칙 항목 */
 .pick{border-top:1px solid var(--line); padding:1.25rem 0 .3rem; margin:0}

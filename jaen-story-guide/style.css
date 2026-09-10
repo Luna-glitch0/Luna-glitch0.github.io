@@ -204,6 +204,26 @@ details[open] summary::before{transform:rotate(90deg)}
 summary:hover{color:var(--fg)}
 details pre{margin:0; border:0; border-top:1px solid var(--line); border-radius:0}
 
+/* ── 복사 버튼 (app.js 가 pre 마다 만들어 넣는다) ── */
+.pre-wrap{position:relative; margin:1rem 0}
+.pre-wrap pre{margin:0; padding-right:4.6rem}
+details .pre-wrap{margin:0}
+.copy{
+  position:absolute; top:.45rem; right:.45rem;
+  appearance:none; cursor:pointer; font:inherit;
+  font-size:.72rem; font-weight:700; letter-spacing:.02em;
+  padding:.24rem .55rem; border-radius:6px;
+  border:1px solid var(--line); background:var(--card); color:var(--muted);
+  transition:color .14s, border-color .14s, background .14s;
+}
+.copy:hover{color:var(--accent); border-color:var(--accent)}
+.copy:active{transform:translateY(1px)}
+.copy.done{color:#fff; background:var(--accent); border-color:var(--accent)}
+.copy .lbl-done{display:none}
+.copy.done .lbl-idle{display:none}
+.copy.done .lbl-done{display:inline}
+@media print{.copy{display:none}}
+
 /* ═══════════ 표 ═══════════ */
 .tw{overflow-x:auto; margin:1.1rem 0; -webkit-overflow-scrolling:touch;
   border:1px solid var(--line); border-radius:10px}

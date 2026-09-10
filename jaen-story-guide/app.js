@@ -71,6 +71,54 @@
     targets.forEach(function (t) { observer.observe(t); });
   }
 
+  /* ── 코드블록마다 복사 버튼 ──
+     프롬프트는 복사해서 쓰라고 있는 것이므로 모든 pre 에 붙인다. */
+  (function addCopyButtons() {
+    document.querySelectorAll('pre').forEach(function (pre) {
+      if (pre.parentNode.classList.contains('pre-wrap')) return;
+
+      var wrap = document.createElement('div');
+      wrap.className = 'pre-wrap';
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy';
+      btn.innerHTML =
+        '<span class="lbl-idle"><span class="ko">복사</span><span class="en">Copy</span></span>' +
+        '<span class="lbl-done"><span class="ko">복사됨</span><span class="en">Copied</span></span>';
+
+      var timer = null;
+      btn.addEventListener('click', function () {
+        var text = (pre.querySelector('code') || pre).textContent;
+        var mark = function () {
+          btn.classList.add('done');
+          clearTimeout(timer);
+          timer = setTimeout(function () { btn.classList.remove('done'); }, 1600);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(mark, function () { fallback(text, mark); });
+        } else {
+          fallback(text, mark);
+        }
+      });
+
+      wrap.appendChild(btn);
+    });
+
+    function fallback(text, done) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  })();
+
   /* 목차 링크를 누르면 상단 바에 가리지 않게 여유를 둔다 */
   document.addEventListener('click', function (ev) {
     var a = ev.target.closest && ev.target.closest('.sidetoc a[href^="#"]');

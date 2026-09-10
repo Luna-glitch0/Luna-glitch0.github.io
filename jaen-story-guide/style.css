@@ -313,6 +313,34 @@ td code{font-size:.85em}
 }
 .spec li b{color:var(--fg); font-weight:650}
 
+/* ═══════════ 결과물 — 세로 영상 ═══════════ */
+.reel{margin:1.4rem 0 0}
+.reel.feature{max-width:340px}
+.reel video{
+  width:100%; display:block; border-radius:11px; background:#000;
+  border:1px solid var(--line); aspect-ratio:480/854;
+}
+.reel .cap{margin:.6rem 0 0}
+.reel .nm{font-size:.98rem; font-weight:650; margin:0 0 .12rem}
+.reel .dim{font-size:.735rem; color:var(--faint); margin:0 0 .45rem;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+.reel .role{font-size:.885rem; color:var(--muted); margin:0; line-height:1.62}
+.reel .tag{display:inline-block; font-size:.665rem; font-weight:800; letter-spacing:.05em;
+  color:var(--accent); border:1px solid currentColor; border-radius:4px;
+  padding:.03rem .32rem; margin-bottom:.38rem; text-transform:uppercase}
+
+.reels{display:grid; gap:1.5rem; margin:1.4rem 0 0;
+  grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
+.reels .reel{margin:0}
+
+/* 이 클립에서 볼 수 있는 원칙 */
+.seein{margin:.55rem 0 0; padding:0; list-style:none;
+  display:flex; flex-wrap:wrap; gap:.3rem}
+.seein li{font-size:.755rem; color:var(--muted);
+  border:1px solid var(--line); border-radius:5px; padding:.1rem .42rem;
+  background:var(--code-bg)}
+
 hr{border:0; border-top:1px solid var(--line); margin:3.6rem 0 0}
 
 /* ═══════════ 언어 전환 ═══════════ */

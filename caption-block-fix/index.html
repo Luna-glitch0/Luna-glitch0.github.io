@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자막 하나가 엉뚱한 자리에 간 이유</title>
+<style>
+  :root{
+    --paper:#EDF1F6; --card:#FFFFFF; --ink:#0D2033; --dim:#5A6D82;
+    --rule:#C7D3E0; --wrong:#D9512C; --right:#0E8C7F; --loop:#94A7BC;
+    --wrongbg:#FBEAE3; --rightbg:#E0F2EF; --hi:#F5C518;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0E1723; --card:#17222F; --ink:#DDE7F3; --dim:#8CA0B8;
+      --rule:#2C3B4D; --wrong:#F2714A; --right:#2CC0AC; --loop:#54687F;
+      --wrongbg:#38201A; --rightbg:#12332F; --hi:#F5C518;
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#EDF1F6; --card:#FFFFFF; --ink:#0D2033; --dim:#5A6D82;
+    --rule:#C7D3E0; --wrong:#D9512C; --right:#0E8C7F; --loop:#94A7BC;
+    --wrongbg:#FBEAE3; --rightbg:#E0F2EF;
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1723; --card:#17222F; --ink:#DDE7F3; --dim:#8CA0B8;
+    --rule:#2C3B4D; --wrong:#F2714A; --right:#2CC0AC; --loop:#54687F;
+    --wrongbg:#38201A; --rightbg:#12332F;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard",
+                "Segoe UI","Noto Sans KR",sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:56px 20px 100px}
+  .mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+        font-variant-numeric:tabular-nums}
+
+  header{margin-bottom:52px; padding-bottom:32px; border-bottom:3px solid var(--ink)}
+  .kicker{font-size:.78rem; letter-spacing:.16em; text-transform:uppercase;
+          color:var(--dim); font-weight:700; margin-bottom:14px}
+  h1{font-size:clamp(1.9rem,5.2vw,3rem); line-height:1.18; margin:0 0 18px;
+     letter-spacing:-.025em; font-weight:800; text-wrap:balance}
+  .lede{font-size:1.13rem; color:var(--dim); margin:0; max-width:60ch}
+
+  .step{margin:0 0 44px}
+  .step-head{display:flex; align-items:baseline; gap:14px; margin-bottom:16px}
+  .num{flex:none; font-size:.82rem; font-weight:800; letter-spacing:.06em;
+       color:var(--paper); background:var(--ink); border-radius:999px;
+       padding:3px 12px; line-height:1.6}
+  h2{font-size:clamp(1.25rem,3.2vw,1.6rem); margin:0; letter-spacing:-.02em;
+     font-weight:800; text-wrap:balance}
+  .step p{margin:0 0 16px; max-width:64ch}
+
+  .card{background:var(--card); border:1px solid var(--rule); border-radius:14px;
+        padding:24px; margin:20px 0}
+
+  /* 대본 vs 실제 말 */
+  .say{display:grid; gap:14px; margin:4px 0}
+  .say-row{display:grid; grid-template-columns:96px 1fr; gap:14px; align-items:center}
+  .say-tag{font-size:.8rem; font-weight:700; color:var(--dim); text-align:right}
+  .words{display:flex; flex-wrap:wrap; gap:7px}
+  .w{padding:6px 12px; border-radius:8px; border:1px solid var(--rule);
+     font-size:.95rem; font-weight:600; background:var(--paper)}
+  .w.gone{background:var(--wrongbg); border-color:var(--wrong); color:var(--wrong);
+          text-decoration:line-through; text-decoration-thickness:2px}
+  .w.same{background:var(--rightbg); border-color:var(--right); color:var(--right)}
+
+  /* 타임라인 */
+  .tl{margin:22px 0 6px}
+  .tl-label{font-size:.82rem; font-weight:700; color:var(--dim); margin-bottom:9px;
+            display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap}
+  .track{position:relative; height:54px; background:var(--paper);
+         border:1px solid var(--rule); border-radius:8px; overflow:hidden}
+  .seg{position:absolute; top:0; bottom:0; display:flex; align-items:center;
+       justify-content:center; font-size:.74rem; font-weight:700; overflow:hidden;
+       white-space:nowrap; border-right:1px solid var(--card)}
+  .seg.talk{background:var(--card); color:var(--dim)}
+  .seg.loop{background:var(--loop); color:var(--card)}
+  .seg.bad{background:var(--wrong); color:#fff}
+  .seg.good{background:var(--right); color:#fff}
+  .ticks{position:relative; height:22px; margin-top:5px; font-size:.72rem; color:var(--dim)}
+  .tick{position:absolute; transform:translateX(-50%); white-space:nowrap}
+
+  /* 후보 그물 */
+  .net{position:relative; height:34px; margin-top:9px}
+  .netbar{position:absolute; top:6px; height:22px; border-radius:6px;
+          display:flex; align-items:center; padding:0 9px; font-size:.72rem;
+          font-weight:700; white-space:nowrap}
+  .netbar.a{background:var(--wrongbg); border:2px solid var(--wrong); color:var(--wrong)}
+  .netbar.b{background:var(--rightbg); border:2px solid var(--right); color:var(--right)}
+  .room{position:absolute; top:0; bottom:0; border-left:2px dashed var(--ink);
+        border-right:2px dashed var(--ink); opacity:.45}
+
+  /* 점수 */
+  .score{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:6px}
+  @media (max-width:560px){.score{grid-template-columns:1fr}}
+  .sc{border:2px solid var(--rule); border-radius:12px; padding:18px}
+  .sc.win{border-color:var(--wrong); background:var(--wrongbg)}
+  .sc.lose{border-color:var(--right); background:var(--rightbg)}
+  .sc-t{font-size:.8rem; font-weight:800; letter-spacing:.04em; margin-bottom:10px}
+  .sc-math{font-size:.9rem; color:var(--dim); margin-bottom:8px}
+  .sc-n{font-size:2.1rem; font-weight:800; letter-spacing:-.03em}
+  .verdict{text-align:center; font-weight:800; font-size:1.05rem; margin-top:18px;
+           padding:14px; border-radius:10px; background:var(--wrongbg); color:var(--wrong)}
+
+  table{width:100%; border-collapse:collapse; font-size:.94rem; margin-top:6px}
+  th,td{text-align:left; padding:11px 10px; border-bottom:1px solid var(--rule)}
+  th{font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--dim)}
+  tr.hit td{background:var(--wrongbg); font-weight:700}
+  .pill{display:inline-block; padding:2px 10px; border-radius:999px;
+        font-size:.76rem; font-weight:800}
+  .pill.in{background:var(--rightbg); color:var(--right)}
+  .pill.out{background:var(--wrongbg); color:var(--wrong)}
+  .scroller{overflow-x:auto}
+
+  .fix{border-left:5px solid var(--right); background:var(--rightbg);
+       padding:20px 22px; border-radius:0 12px 12px 0; margin:20px 0}
+  .fix h3{margin:0 0 10px; font-size:1.02rem}
+  .fix p{margin:0; max-width:none}
+
+  .metrics{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+           gap:14px; margin-top:6px}
+  .m{background:var(--card); border:1px solid var(--rule); border-radius:12px;
+     padding:16px; text-align:center}
+  .m-l{font-size:.76rem; color:var(--dim); font-weight:700; margin-bottom:7px}
+  .m-v{font-size:1.35rem; font-weight:800; letter-spacing:-.02em}
+  .m-v .from{color:var(--dim); font-weight:600}
+  .m-v .to{color:var(--right)}
+
+  footer{margin-top:56px; padding-top:24px; border-top:1px solid var(--rule);
+         font-size:.86rem; color:var(--dim)}
+  .note{font-size:.88rem; color:var(--dim); margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">JEL2103 · I like gaming too</div>
+  <h1>자막 하나가 엉뚱한 자리에 간 이유</h1>
+  <p class="lede">마커 6개 중 진짜 문제는 1개였습니다. 그 1개가 왜 틀렸는지,
+     그리고 나머지 5개는 왜 알릴 필요가 없었는지를 그림으로 풀었습니다.</p>
+</header>
+
+<section class="step">
+  <div class="step-head"><span class="num">1</span><h2>무슨 일이 있었나</h2></div>
+  <p>선생님이 <strong>「한 번 더 해봐요!」</strong>라고 말한 자막이, 실제로 그 말을 한 자리보다
+     <strong>8초 앞</strong>에 붙었습니다. 게다가 화면 전환에 잘려서 <strong>0.5초</strong>만 반짝
+     나타났다 사라졌습니다.</p>
+
+  <div class="card">
+    <div class="tl">
+      <div class="tl-label"><span>고치기 전</span><span class="mono">149.9초 → 169.4초</span></div>
+      <div class="track" aria-label="고치기 전 타임라인">
+        <div class="seg talk" style="left:0%;width:17.9%">따라 해보세요</div>
+        <div class="seg talk" style="left:17.9%;width:12.1%">시범</div>
+        <div class="seg bad"  style="left:30.0%;width:2.6%"></div>
+        <div class="seg loop" style="left:32.6%;width:39.8%">학생이 따라 말하는 시간</div>
+        <div class="seg talk" style="left:72.4%;width:12.9%">Now one more</div>
+        <div class="seg talk" style="left:85.3%;width:14.7%">시범</div>
+      </div>
+      <div class="ticks">
+        <span class="tick mono" style="left:31.3%; color:var(--wrong); font-weight:800">
+          ↑ 여기 0.5초</span>
+        <span class="tick mono" style="left:78%">↑ 진짜 말한 자리</span>
+      </div>
+    </div>
+    <p class="note">주황색 칸이 <span class="mono">Squeeze out one more rep!</span> 자막입니다.
+       시범과 학생 따라 말하기 사이의 <strong>틈</strong>에 끼어 있습니다. 그리고 정작 그 말을 한
+       자리(오른쪽)에는 대본에 없는 <span class="mono">Now one more</span> 라는 글자가
+       들어가 있었습니다.</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">2</span><h2>먼저, 선생님이 대본과 다르게 말했습니다</h2></div>
+  <p>이게 모든 일의 출발점입니다. 대본에 적힌 말과 실제로 한 말의 <strong>앞 두 단어가 통째로
+     달랐습니다.</strong></p>
+
+  <div class="card">
+    <div class="say">
+      <div class="say-row">
+        <div class="say-tag">대본</div>
+        <div class="words">
+          <span class="w gone">Squeeze</span><span class="w gone">out</span>
+          <span class="w same">one</span><span class="w same">more</span>
+          <span class="w same">rep!</span>
+        </div>
+      </div>
+      <div class="say-row">
+        <div class="say-tag">실제 발음</div>
+        <div class="words">
+          <span class="w">Now</span>
+          <span class="w same">one</span><span class="w same">more</span>
+          <span class="w same">rep.</span>
+        </div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:16px">컴퓨터는 <strong>녹음된 말을 글자로 받아 적은 것</strong>과
+       대본을 맞춰 보며 자리를 찾습니다. 그런데 <span class="mono">Squeeze out</span> 이 아예 없으니
+       「이 문장 어디서 말했지?」를 확신할 수 없게 됐습니다.</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">3</span><h2>컴퓨터가 그물을 두 개 던졌습니다</h2></div>
+  <p>확신이 없을 때 컴퓨터는 <strong>후보 자리</strong>를 여러 개 만들어 놓고 점수로 고릅니다.
+     이번에는 두 개가 나왔습니다.</p>
+
+  <div class="card">
+    <div class="tl">
+      <div class="tl-label"><span>후보 두 개와 「방」</span><span class="mono">점선 = 이 문장이 들어가야 할 방</span></div>
+      <div class="track" aria-label="후보 비교 타임라인">
+        <div class="seg talk" style="left:0%;width:17.9%">따라 해보세요</div>
+        <div class="seg talk" style="left:17.9%;width:12.1%">시범</div>
+        <div class="seg loop" style="left:32.6%;width:39.8%">학생이 따라 말하는 시간</div>
+        <div class="seg talk" style="left:72.4%;width:12.9%">Now one more</div>
+        <div class="seg talk" style="left:85.3%;width:14.7%">시범</div>
+        <div class="room" style="left:72.4%;right:0%"></div>
+      </div>
+      <div class="net">
+        <div class="netbar a" style="left:27.4%;width:53.7%">후보 A · 넓은 그물 10.5초</div>
+      </div>
+      <div class="net">
+        <div class="netbar b" style="left:73.9%;width:6.5%">B</div>
+        <span class="mono" style="position:absolute;left:82%;top:9px;font-size:.75rem;
+              color:var(--right);font-weight:700">후보 B · 좁은 그물 1.3초 &nbsp;← 정답</span>
+      </div>
+    </div>
+    <p class="note">후보 A는 그물이 너무 넓어서 <strong>정답 자리까지 통째로 삼켰습니다.</strong>
+       안에 맞는 단어가 들어 있으니 점수는 높게 나옵니다 — 하지만 자막을 <strong>그물 맨 앞</strong>에
+       붙이기 때문에, 실제로는 8초나 앞에 놓이게 됩니다.</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">4</span><h2>0.002점 차이로 틀린 쪽이 이겼습니다</h2></div>
+  <p>컴퓨터는 이미 <strong>「후보 A는 방 밖이다」</strong>라는 걸 알고 있었습니다. 그래서 벌점을 줘서
+     점수를 <strong>3분의 1로 깎았습니다.</strong> 그런데도 — 깎인 점수가 여전히 더 높았습니다.</p>
+
+  <div class="card">
+    <div class="score">
+      <div class="sc win">
+        <div class="sc-t">후보 A · 방 밖 ✕</div>
+        <div class="sc-math mono">0.65 × 0.35 (벌점)</div>
+        <div class="sc-n mono">0.227</div>
+      </div>
+      <div class="sc lose">
+        <div class="sc-t">후보 B · 방 안 ✓</div>
+        <div class="sc-math mono">0.225 (벌점 없음)</div>
+        <div class="sc-n mono">0.225</div>
+      </div>
+    </div>
+    <div class="verdict">0.227 &gt; 0.225 → 틀린 자리가 이겼다 (차이 0.002)</div>
+    <p class="note" style="margin-top:16px">벌점 제도 자체는 잘 돌아가고 있었습니다. 다만
+       <strong>벌점만으로는 아슬아슬하게 질 수 있다</strong>는 것이 이번에 드러났습니다.
+       그물이 넓을수록 점수가 잘 나오기 때문입니다.</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">5</span><h2>핵심 — 답을 알고도 쓰지 않았습니다</h2></div>
+  <p>대본에는 <span class="mono">(5초)</span> 표시가 있어서 「여기서 학생이 따라 말한다」를 알 수 있고,
+     그 표시로 레슨이 <strong>방(구간)</strong>으로 나뉩니다. 컴퓨터는 이 문장이
+     <strong class="mono">164.0~169.4초 방</strong>에 속한다는 걸 <strong>정확히 알고 있었습니다.</strong></p>
+  <p>문제는 그 방 번호를 <strong>점수 계산에만 쓰고, 결과를 검사하는 데는 쓰지 않았다</strong>는 것입니다.
+     그래서 점수 싸움에서 진 순간 방 번호는 그냥 버려졌습니다.</p>
+
+  <div class="fix">
+    <h3>고친 방법 — 한 줄로 말하면</h3>
+    <p><strong>「자막을 놓고 나서, 그 자리가 방 밖이면 방 안에서 다시 찾는다.」</strong><br>
+       방 안에 근거가 있으면 그리로 옮기고, 없으면 <strong>억지로 옮기지 않고</strong> 그대로 둔 채
+       마커로 알립니다. 즉 이 검사는 자리를 <em>빼앗지</em> 않고 <em>되돌리기만</em> 합니다.</p>
+  </div>
+  <p class="note">왜 「점수를 더 깎자」가 아니라 이 방식인가 — 예전에 방 밖 후보를 아예 잘라 봤다가
+     세 번 실패한 기록이 코드에 남아 있습니다. 자르면 그 문장이 <strong>갈 곳을 잃어서</strong>
+     엉뚱한 데로 밀려나며 옆 자막까지 찌그러뜨렸습니다. 그래서 후보를 고르는 단계는 그대로 두고,
+     <strong>결과가 나온 뒤에만</strong> 검사합니다.</p>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">6</span><h2>고친 뒤</h2></div>
+  <div class="card">
+    <div class="tl">
+      <div class="tl-label"><span>고친 후</span><span class="mono">149.9초 → 169.4초</span></div>
+      <div class="track" aria-label="고친 후 타임라인">
+        <div class="seg talk" style="left:0%;width:17.9%">따라 해보세요</div>
+        <div class="seg talk" style="left:17.9%;width:12.1%">시범</div>
+        <div class="seg loop" style="left:32.6%;width:39.8%">학생이 따라 말하는 시간</div>
+        <div class="seg good" style="left:72.4%;width:12.9%">Squeeze out one more rep!</div>
+        <div class="seg talk" style="left:85.3%;width:14.7%">시범</div>
+      </div>
+      <div class="ticks">
+        <span class="tick mono" style="left:78%; color:var(--right); font-weight:800">
+          ↑ 말한 자리에, 대본 글자로</span>
+      </div>
+    </div>
+    <p class="note">0.5초짜리 조각이 사라지고, 실제로 말한 자리에 <strong>대본 그대로</strong>
+       들어갔습니다. 덤으로 그 자리에 있던 <span class="mono">Now one more</span>(받아 적은 글자)도
+       함께 정리됐습니다 — 원래 그건 대본 문장이 비운 자리를 메우던 것이었습니다.</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">7</span><h2>그래서 마커가 6개 → 1개</h2></div>
+  <p>「마커가 너무 많다」고 하신 것도 같은 뿌리였습니다. 마커를 남길지 정할 때
+     <strong>소리가 맞는지만 보고, 방 번호는 보지 않았습니다.</strong></p>
+  <p>짧은 감탄사(<span class="mono">I see!</span>, <span class="mono">How fun!</span>)는 글자가 짧아서
+     소리로는 <strong>원리적으로</strong> 확신할 수 없습니다. 그래서 매번 마커가 붙었습니다. 하지만
+     그 자막들은 <strong>전부 자기 방 안에</strong> 잘 앉아 있었습니다.</p>
+
+  <div class="card scroller">
+    <table>
+      <thead><tr><th>자막</th><th>방 안에 앉았나</th><th>마커</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">Try it</td><td><span class="pill in">방 안</span></td><td>남기지 않음</td></tr>
+        <tr><td class="mono">I see!</td><td><span class="pill in">방 안</span></td><td>남기지 않음</td></tr>
+        <tr><td class="mono">How fun!</td><td><span class="pill in">방 안</span></td><td>남기지 않음</td></tr>
+        <tr class="hit"><td class="mono">Squeeze out one more rep!</td>
+            <td><span class="pill out">방 밖</span></td><td>남긴다 — 진짜 문제</td></tr>
+        <tr><td class="mono">All right!</td><td><span class="pill in">방 안</span></td><td>남기지 않음</td></tr>
+        <tr><td class="mono">Say it like someone's threatening you…</td>
+            <td><span class="pill in">방 안</span></td><td>남기지 않음</td></tr>
+      </tbody>
+    </table>
+    <p class="note" style="margin-top:14px">「방 안인가」라는 <strong>한 줄</strong>이 6건 중 1건을
+       정확히 골라냈습니다 — 확인해 주신 결과와 똑같이 갈렸습니다.
+       ★방이 <strong>없는</strong> 구간(따라 말하기가 없는 설명 구간)은 그대로 마커를 남깁니다.
+       확인해 준 것이 없는데 조용히 넘기면 「안 본 것」이 되기 때문입니다.</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">8</span><h2>측정값</h2></div>
+  <div class="metrics">
+    <div class="m"><div class="m-l">확인 마커</div>
+      <div class="m-v mono"><span class="from">6</span> → <span class="to">1</span></div></div>
+    <div class="m"><div class="m-l">자막 늦게 뜸</div>
+      <div class="m-v mono"><span class="from">1건</span> → <span class="to">0건</span></div></div>
+    <div class="m"><div class="m-l">0.5초 조각 자막</div>
+      <div class="m-v mono"><span class="from">1개</span> → <span class="to">0개</span></div></div>
+    <div class="m"><div class="m-l">대본 순서 거꾸로</div>
+      <div class="m-v mono"><span class="from">1건</span> → <span class="to">0건</span></div></div>
+  </div>
+  <p class="note">자막 개수·65자 초과(0)·대본 문장 누락(0)은 그대로이고, 나빠진 지표는 없습니다.
+     JEL2103 은 심각 지적이 <strong class="mono">0</strong>이 됐습니다.</p>
+
+  <div class="card" style="margin-top:26px">
+    <h3 style="margin:0 0 10px; font-size:1.02rem">덤 — 다른 레슨에서도 같은 일이 있었습니다</h3>
+    <p style="margin:0 0 14px">같은 유닛 <strong>JEL2101</strong> 에서 <span class="mono">All right!</span>
+       이 <strong>학생이 따라 말하는 시간보다 앞</strong>(50.3초)에 붙어 있었습니다. 대본에서는
+       따라 말하기가 끝난 <em>뒤</em>에 나오는 칭찬인데 말이죠. 이번 수정으로 <strong>59.0초</strong>,
+       바로 뒤 문장 <span class="mono">Nicely asked!</span> 앞으로 돌아왔습니다.</p>
+    <div class="tl" style="margin:0">
+      <div class="track" style="height:44px" aria-label="JEL2101 고친 후">
+        <div class="seg talk" style="left:0%;width:24%">다시 물어보세요</div>
+        <div class="seg loop" style="left:24%;width:37%">학생이 따라 말하는 시간</div>
+        <div class="seg good" style="left:61%;width:12%">All right!</div>
+        <div class="seg talk" style="left:73%;width:27%">Nicely asked! →</div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:12px">덕분에 <span class="mono">All right!</span> 이 9초나 차지하며
+       가리고 있던 자리가 풀려, 가려져 있던 <strong>자막 2개가 되살아났습니다.</strong></p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-head"><span class="num">9</span><h2>다른 코스는 하나도 안 건드렸는지 확인</h2></div>
+  <p>고친 자리가 <strong>레슨 전체에 영향을 주는 곳</strong>이라, 기존 5개 코스를 다시 돌려
+     자막이 한 글자라도 달라지는지 검사했습니다.</p>
+  <div class="card scroller">
+    <table>
+      <thead><tr><th>검사</th><th>결과</th></tr></thead>
+      <tbody>
+        <tr><td>ESEN 15 · KOJA 24 · FREN 1 · ESEN 16 · KOES 2 자막</td>
+            <td><span class="pill in">전부 그대로</span></td></tr>
+        <tr><td>코스 5종 매트릭스 (444개 검사)</td><td><span class="pill in">실패 0</span></td></tr>
+        <tr><td>레슨 컷편집 · 프로젝트 읽기 · 가상대화</td><td><span class="pill in">전부 일치</span></td></tr>
+        <tr class="hit"><td>JAEN 21 자막</td><td>바뀜 — <strong>위에 적은 개선만</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  JEL2103 실측 · 2026-09-14 · 고친 파일 <span class="mono">captions.py</span>
+  (배치 되돌리기 + 마커 판정)
+</footer>
+
+</div>
+</body>
+</html>

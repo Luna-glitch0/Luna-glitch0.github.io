@@ -163,6 +163,16 @@
   .gform-done{background:var(--green-soft);border:1px solid var(--green);border-radius:12px;
     padding:18px 20px;font-size:13px;line-height:1.75;white-space:pre-wrap}
 
+  /* 복사 버튼 */
+  .copywrap{position:relative}
+  .copybtn{position:absolute;top:8px;right:8px;z-index:2;
+    border:1px solid var(--line);background:var(--panel);color:var(--muted);
+    font-family:inherit;font-size:11.5px;font-weight:700;padding:5px 11px;
+    border-radius:7px;cursor:pointer;opacity:.75;transition:.15s}
+  .copywrap:hover .copybtn{opacity:1}
+  .copybtn:hover{color:var(--accent);border-color:var(--accent)}
+  .copybtn.done{color:var(--green);border-color:var(--green);opacity:1}
+
   /* 흐름 */
   .flow{position:relative;padding-left:0}
   .fl{display:grid;grid-template-columns:132px 1fr;gap:18px;padding:16px 0;border-bottom:1px solid var(--line)}
@@ -226,7 +236,8 @@
 
 <div class="wrap">
 
-  <p class="intro">전부 <b>한국어 초안</b>이고, 확정 후 일본어로 번역합니다. <b>[  ]</b> 는 아직 정해지지 않은 항목(행사 시간 · 부스 번호 · 링크)이 들어갈 자리입니다.</p>
+  <p class="intro">전부 <b>한국어 초안</b>이고, 확정 후 일본어로 번역합니다. <b>[  ]</b> 는 아직 정해지지 않은 항목(부스 번호 · 시간 등)이 들어갈 자리입니다.<br>
+  각 문안 블록 오른쪽 위의 <b>「복사」</b> 버튼을 누르면 그대로 가져갈 수 있습니다.</p>
 
   <div class="tabs">
     <button class="tab active" data-pane="pane-flow">전체 흐름</button>
@@ -369,7 +380,7 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
 　 신청 페이지에서 순서대로 안내해 드릴게요!
 
 궁금한 점은 댓글 또는 메일로 편하게 물어봐 주세요.
-✉️ [문의 메일 주소]
+✉️ gekang@teuida.net
 여러분을 만날 날을 기다리고 있겠습니다 🙌
 — 트이다 팀 드림</div>
               </div>
@@ -411,7 +422,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
 　 신청 페이지에서 순서대로 안내해 드릴게요!
 
 궁금한 점은 댓글 또는 메일로 편하게 물어봐 주세요.
-✉️ [문의 메일 주소]
+✉️ gekang@teuida.net
 여러분을 만날 날을 기다리고 있겠습니다 🙌
 — 트이다 팀 드림</div>
 
@@ -446,6 +457,42 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
             </div>
           </div>
         </div>
+
+        <p class="mock-label" style="margin-top:22px">폼 설명란 — 제목 아래에 붙여넣기</p>
+        <div class="srcbox">10월 8일(목), 후쿠오카에서 트이다 팀이 기다리고 있을게요 🍜
+
+📌 접수 : 9월 19일(토) ~ 9월 21일(월)
+　 티셔츠를 미리 제작해야 해서 일찍 마감합니다.
+※ 트이다 앱을 사용 중인 분만 신청하실 수 있어요.
+
+━━━━━━━━━━━━━━━
+
+📅 행사
+2026년 10월 8일(목) 9:30~18:20
+大名カンファレンス 3·4F
+福岡市中央区大名2-6-50
+지하철 아카사카역 도보 3분 · 텐진역 도보 2분
+입장 무료
+
+🎁 드리는 것
+· 트이다 오리지널 키링
+· 트이다 오리지널 티셔츠
+　(선착순 50분)
+
+━━━━━━━━━━━━━━━
+
+⚠️ 신청 전에 사전 등록을 먼저 해주세요
+행사장 입장에 필요합니다. (무료 · 1분)
+👉 https://luma.com/td74qqz9
+등록 확인 메일은 당일 입장에 쓰이니 지우지 마세요.
+
+📩 부스 운영 시간과 위치는 10월 5일(월)에 메일로 안내드립니다.
+　 신청 직후에는 접수 확인만 발송돼요.
+
+🔒 성함은 부스 접수와 굿즈 전달 확인에만 사용하며,
+　 행사 후 30일 이내에 모두 삭제합니다.
+
+❓ 문의 : gekang@teuida.net</div>
       </div>
 
       <div>
@@ -583,7 +630,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
 
 ■ 당일 연락처
 　부스를 못 찾으시거나 궁금한 점이 있으시면 연락 주세요.
-　✉️ [문의 메일 주소]
+　✉️ gekang@teuida.net
 　※ 당일에는 답장이 늦어질 수 있습니다.
 　　 회장에서는 안내 데스크에 「트이다 부스」를 물어봐 주세요!
 
@@ -706,6 +753,30 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
 </footer>
 
 <script>
+// 복사 버튼 자동 삽입
+(function(){
+  var sel = '.srcbox, .gform-done, .mail-body, .app-post .app-body';
+  document.querySelectorAll(sel).forEach(function(el){
+    if (el.dataset.nocopy) return;
+    if (el.innerText.trim().length < 30) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'copywrap';
+    el.parentNode.insertBefore(wrap, el);
+    wrap.appendChild(el);
+    var btn = document.createElement('button');
+    btn.className = 'copybtn';
+    btn.textContent = '복사';
+    btn.addEventListener('click', function(){
+      navigator.clipboard.writeText(el.innerText).then(function(){
+        btn.textContent = '복사됨 ✓';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent='복사'; btn.classList.remove('done'); }, 1600);
+      });
+    });
+    wrap.appendChild(btn);
+  });
+})();
+
 document.querySelectorAll('.tab').forEach(function(t){
   t.addEventListener('click', function(){
     document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});

@@ -173,18 +173,23 @@
   .copybtn:hover{color:var(--accent);border-color:var(--accent)}
   .copybtn.done{color:var(--green);border-color:var(--green);opacity:1}
 
-  /* 흐름 */
-  .flow{position:relative;padding-left:0}
-  .fl{display:grid;grid-template-columns:132px 1fr;gap:18px;padding:16px 0;border-bottom:1px solid var(--line)}
-  .fl:last-child{border-bottom:none}
-  @media(max-width:640px){.fl{grid-template-columns:1fr;gap:6px}}
-  .fl-when{font-size:13px;font-weight:800;color:var(--accent);letter-spacing:-.01em;padding-top:1px}
-  .fl-when small{display:block;color:var(--muted);font-weight:600;font-size:11.5px;margin-top:2px}
-  .fl-what{font-size:14.5px;font-weight:700;letter-spacing:-.01em;margin-bottom:5px}
-  .fl-desc{font-size:13px;color:var(--muted);line-height:1.7}
-  .fl-desc b{color:var(--ink);font-weight:600}
-  .ch{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;
-    background:var(--blue-soft);color:var(--blue);margin-right:5px;margin-bottom:3px}
+  /* 가로 타임라인 */
+  .tline{display:flex;overflow-x:auto;padding:26px 0 12px;margin-bottom:24px}
+  .tstep{flex:1 0 152px;position:relative;padding:0 12px}
+  .tstep::before{content:"";position:absolute;top:-14px;left:0;right:0;height:2px;background:var(--line)}
+  .tstep:first-child::before{left:50%}
+  .tstep:last-child::before{right:50%}
+  .tdot{position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+    width:13px;height:13px;border-radius:50%;background:var(--panel);border:2.5px solid var(--accent)}
+  .tstep.gap .tdot{border-color:var(--line);background:var(--line)}
+  .tstep.big .tdot{background:var(--accent)}
+  .tdate{font-size:13.5px;font-weight:800;color:var(--accent);letter-spacing:-.01em;text-align:center}
+  .tstep.gap .tdate{color:var(--muted);font-size:12px}
+  .tdate span{font-weight:600;opacity:.75;font-size:12px}
+  .ttitle{font-size:13.5px;font-weight:700;margin:7px 0 6px;text-align:center;line-height:1.4;letter-spacing:-.01em}
+  .tch{text-align:center}
+  .ch{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;
+    background:var(--blue-soft);color:var(--blue);margin:0 2px 3px}
   .ch.o{background:var(--accent-soft);color:var(--accent)}
   .ch.g{background:var(--green-soft);color:var(--green)}
   .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:26px}
@@ -225,7 +230,7 @@
     <p class="sub">일본 유저에게 실제로 보이는 화면입니다. 앱 공지 · 신청 폼 · 푸시 · 메일 · SNS 다섯 가지입니다. 신청 폼은 이미 만들어져 있습니다.</p>
     <div class="facts">
       <div class="fact">행사일<b>10/8 (목)</b></div>
-      <div class="fact">모집 기간<b>9/19 ~ 9/21</b></div>
+      <div class="fact">모집 기간<b>9/18 ~ 9/21</b></div>
       <div class="fact">굿즈<b>선착순 50명</b></div>
       <div class="fact">신청 문항<b>9개 · 1분</b></div>
       <div class="fact">신청 폼<b>공개 중</b></div>
@@ -251,87 +256,57 @@
   <!-- ── 탭 0 : 전체 흐름 ── -->
   <div class="pane active" id="pane-flow">
     <div class="sum">
-      <div class="box"><div class="v">3일</div><div class="k">모집 기간</div><div class="d">9/19(토) ~ 9/21(월)</div></div>
+      <div class="box"><div class="v">4일</div><div class="k">모집 기간</div><div class="d">9/18(금) ~ 9/21(월)</div></div>
       <div class="box"><div class="v">80명</div><div class="k">접수 목표</div><div class="d">정원 도달 시 자동 마감</div></div>
       <div class="box"><div class="v">50명</div><div class="k">현장 방문 목표</div><div class="d">무료 이벤트 참가율 65% 기준</div></div>
       <div class="box"><div class="v">15~20</div><div class="k">인터뷰 목표</div><div class="d">신청 시 희망하신 분</div></div>
       <div class="box"><div class="v">2통</div><div class="k">행사 전 메일</div><div class="d">신청 직후 · D-3</div></div>
     </div>
 
-    <div class="flow">
-      <div class="fl">
-        <div class="fl-when">9/19 (토)<small>D-19</small></div>
-        <div>
-          <div class="fl-what">모집 오픈 — 전 채널 동시</div>
-          <div class="fl-desc">
-            <span class="ch o">앱 공지</span><span class="ch o">푸시</span><span class="ch o">SNS</span><br>
-            앱 커뮤니티 공지 게시(상단 고정) · 푸시 발송 · 인스타/X 포스트를 <b>같은 날 저녁에 한꺼번에</b> 내보냅니다.
-            마감이 이틀 뒤라 채널을 나눠 집행할 여유가 없습니다.
-          </div>
-        </div>
-      </div>
+    <div class="tline">
+      <div class="tstep big"><div class="tdot"></div>
+        <div class="tdate">9/18 <span>금</span></div>
+        <div class="ttitle">모집 오픈</div>
+        <div class="tch"><span class="ch o">앱 공지</span><span class="ch o">푸시</span></div></div>
+      <div class="tstep"><div class="tdot"></div>
+        <div class="tdate">9/19 <span>토</span></div>
+        <div class="ttitle">SNS 확산</div>
+        <div class="tch"><span class="ch o">인스타</span><span class="ch o">X</span></div></div>
+      <div class="tstep"><div class="tdot"></div>
+        <div class="tdate">9/20 <span>일</span></div>
+        <div class="ttitle">마감 예고</div>
+        <div class="tch"><span class="ch o">푸시</span></div></div>
+      <div class="tstep big"><div class="tdot"></div>
+        <div class="tdate">9/21 <span>월</span></div>
+        <div class="ttitle">신청 마감</div>
+        <div class="tch"><span class="ch g">자동</span></div></div>
+      <div class="tstep gap"><div class="tdot"></div>
+        <div class="tdate">9/22~10/4</div>
+        <div class="ttitle">준비 기간</div>
+        <div class="tch"><span class="ch g">연락 없음</span></div></div>
+      <div class="tstep big"><div class="tdot"></div>
+        <div class="tdate">10/5 <span>월</span></div>
+        <div class="ttitle">방문 안내</div>
+        <div class="tch"><span class="ch">메일</span></div></div>
+      <div class="tstep"><div class="tdot"></div>
+        <div class="tdate">10/6 <span>화</span></div>
+        <div class="ttitle">참석 확인 집계</div>
+        <div class="tch"><span class="ch g">내부</span></div></div>
+    </div>
 
-      <div class="fl">
-        <div class="fl-when">9/20 (일)<small>D-18</small></div>
-        <div>
-          <div class="fl-what">마감 예고 푸시</div>
-          <div class="fl-desc">
-            <span class="ch o">푸시</span><span class="ch o">SNS 스토리</span><br>
-            「신청 마감, 내일까지예요」. <b>일요일 저녁은 앱 체류 시간이 가장 긴 시간대</b>입니다.<br>
-            이날 오전 접수가 저조하면 <b>SNS 광고 소액 집행</b>을 판단합니다.
-          </div>
-        </div>
-      </div>
-
-      <div class="fl">
-        <div class="fl-when">9/21 (월) 23:59<small>D-17</small></div>
-        <div>
-          <div class="fl-what">신청 마감 — 자동</div>
-          <div class="fl-desc">
-            <span class="ch g">자동 처리</span><br>
-            <b>9/21 자정</b> 또는 <b>응답 80건</b> 중 먼저 오는 쪽에서 폼이 자동으로 닫힙니다. 사람이 대기할 필요가 없습니다.<br>
-            마감 후에도 <b>부스는 누구나 올 수 있습니다</b> — 「신청 마감」이지 「입장 마감」이 아닙니다.
-          </div>
-        </div>
-      </div>
-
-      <div class="fl">
-        <div class="fl-when">9/22 ~ 10/4<small>준비 기간</small></div>
-        <div>
-          <div class="fl-what">명단 정리 · 현장 준비</div>
-          <div class="fl-desc">
-            신청 명단 정리(히라가나순 · 인터뷰 희망자 구분) · 부스 배포물과 데모 기기 준비 ·
-            주최 측에서 <b>부스 운영 시간과 위치</b>를 받아 안내 메일을 준비합니다.<br>
-            이 기간에는 <b>유저에게 나가는 연락이 없습니다.</b> 그래서 신청 직후 안내에 「다음 연락은 10/5」를 미리 적어 둡니다.
-          </div>
-        </div>
-      </div>
-
-      <div class="fl">
-        <div class="fl-when">10/5 (월)<small>D-3</small></div>
-        <div>
-          <div class="fl-what">방문 안내 메일 — 행사 전 유일한 연락</div>
-          <div class="fl-desc">
-            <span class="ch">메일</span><br>
-            한 통에 전부 담습니다 → ① <b>참석 확인 링크(30초)</b> ② 부스 운영 시간·정확한 위치
-            ③ 아카사카역에서 오는 길 ④ 지참물 ⑤ 문의처.<br>
-            인터뷰 희망자에게는 <b>시간을 따로</b> 안내합니다.
-          </div>
-        </div>
-      </div>
-
-      <div class="fl">
-        <div class="fl-when">10/6 (화)<small>D-2</small></div>
-        <div>
-          <div class="fl-what">참석 확인 집계</div>
-          <div class="fl-desc">
-            <span class="ch g">내부</span><br>
-            <b>답이 없는 사람이 노쇼 후보 명단</b>입니다. 굿즈 여유분을 여기서 계산합니다.<br>
-            「못 간다」고 알려주신 분의 몫은 현장 방문객용으로 돌립니다.
-          </div>
-        </div>
-      </div>
-
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:15%">시점</th><th style="width:20%">채널</th><th>하는 일</th></tr></thead>
+        <tbody>
+          <tr><td><b>9/18 (금)</b></td><td>앱 커뮤니티 · 푸시</td><td>공지 게시(상단 고정) + 푸시 발송. 저녁 20~21시</td></tr>
+          <tr><td><b>9/19 (토)</b></td><td>인스타 · X</td><td>피드 포스트 + 스토리. 주말이라 도달이 넓습니다</td></tr>
+          <tr><td><b>9/20 (일)</b></td><td>푸시</td><td>「신청 마감, 내일까지」. 접수가 저조하면 이날 광고 집행을 판단합니다</td></tr>
+          <tr><td><b>9/21 (월)</b></td><td>—</td><td><b>23:59 자동 마감.</b> 응답 80건에 먼저 도달하면 그 전에 닫힙니다</td></tr>
+          <tr><td><b>9/22~10/4</b></td><td>—</td><td>명단 정리 · 현장 준비. <b>유저 연락이 없는 구간</b>이라, 접수 안내에 「다음 연락은 10/5」를 미리 적어 둡니다</td></tr>
+          <tr><td><b>10/5 (월)</b></td><td>메일</td><td><b>행사 전 유일한 연락.</b> 참석 확인 링크 + 부스 시간·위치 + 오시는 길 + 지참물</td></tr>
+          <tr><td><b>10/6 (화)</b></td><td>—</td><td>참석 확인 집계. <b>무응답자가 노쇼 후보</b>이고, 여기서 굿즈 여유분을 계산합니다</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -348,7 +323,7 @@
               <div class="app-post">
                 <div class="app-meta">
                   <div class="app-avatar">T</div>
-                  <div><div class="who">트이다 공식</div><div class="when">📌 고정됨 · 9월 22일</div></div>
+                  <div><div class="who">트이다 공식</div><div class="when">📌 고정됨 · 9월 18일</div></div>
                 </div>
                 <div class="app-body">🍜 트이다가 후쿠오카에 갑니다!
 
@@ -450,7 +425,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
                  style="color:var(--blue);word-break:break-all;font-size:12.5px">https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4Y2jtoDUZ4w/viewform</a>
               <br><br>
               <span style="color:var(--muted);font-size:12.5px">
-              📌 접수 기간 : 9월 19일(토) ~ 9월 21일(월)<br>
+              📌 접수 기간 : 9월 18일(금) ~ 9월 21일(월)<br>
               📌 자동 마감 : 9/21 23:59 또는 응답 80건 중 먼저 오는 쪽<br>
               📌 문항 : 9개 (필수 7 · 선택 2) · 작성 1분
               </span>
@@ -461,7 +436,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
         <p class="mock-label" style="margin-top:22px">폼 설명란 — 제목 아래에 붙여넣기</p>
         <div class="srcbox">10월 8일(목), 후쿠오카에서 트이다 팀이 기다리고 있을게요 🍜
 
-📌 접수 : 9월 19일(토) ~ 9월 21일(월)
+📌 접수 : 9월 18일(금) ~ 9월 21일(월)
 　 티셔츠를 미리 제작해야 해서 일찍 마감합니다.
 ※ 트이다 앱을 사용 중인 분만 신청하실 수 있어요.
 
@@ -533,7 +508,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
       <div>
         <p class="mock-label">잠금화면 미리보기</p>
         <div class="lock">
-          <div class="lock-time"><div class="t">20:31</div><div class="d">9월 19일 토요일</div></div>
+          <div class="lock-time"><div class="t">20:31</div><div class="d">9월 18일 금요일</div></div>
           <div class="push">
             <div class="ico">T</div>
             <div class="pc">
@@ -555,7 +530,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4
 
       <div>
         <p class="mock-label">전체 원문</p>
-        <p class="srclabel">푸시 #1 — 오픈<span class="m">9/19(토) 20~21시대</span></p>
+        <p class="srclabel">푸시 #1 — 오픈<span class="m">9/18(금) 20~21시대</span></p>
         <div class="srcbox">제목 : 트이다가 후쿠오카에 갑니다 🍜
 
 본문 : 10/8 RamenTech Summit 부스에서 만나요! 선착순 50분께 키링과 티셔츠를 드립니다. 신청 방법 확인하기 →</div>

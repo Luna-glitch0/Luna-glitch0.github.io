@@ -163,6 +163,26 @@
   .gform-done{background:var(--green-soft);border:1px solid var(--green);border-radius:12px;
     padding:18px 20px;font-size:13px;line-height:1.75;white-space:pre-wrap}
 
+  /* 흐름 */
+  .flow{position:relative;padding-left:0}
+  .fl{display:grid;grid-template-columns:132px 1fr;gap:18px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .fl:last-child{border-bottom:none}
+  @media(max-width:640px){.fl{grid-template-columns:1fr;gap:6px}}
+  .fl-when{font-size:13px;font-weight:800;color:var(--accent);letter-spacing:-.01em;padding-top:1px}
+  .fl-when small{display:block;color:var(--muted);font-weight:600;font-size:11.5px;margin-top:2px}
+  .fl-what{font-size:14.5px;font-weight:700;letter-spacing:-.01em;margin-bottom:5px}
+  .fl-desc{font-size:13px;color:var(--muted);line-height:1.7}
+  .fl-desc b{color:var(--ink);font-weight:600}
+  .ch{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;
+    background:var(--blue-soft);color:var(--blue);margin-right:5px;margin-bottom:3px}
+  .ch.o{background:var(--accent-soft);color:var(--accent)}
+  .ch.g{background:var(--green-soft);color:var(--green)}
+  .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:26px}
+  .sum .box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .sum .v{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--accent);line-height:1.15}
+  .sum .k{font-size:12.5px;font-weight:700;margin-top:5px}
+  .sum .d{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+
   /* 메일 */
   .mail{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:20px}
   .mail-head{padding:13px 18px;border-bottom:1px solid var(--line);background:var(--bg)}
@@ -192,12 +212,13 @@
   <div class="inner">
     <p class="eyebrow">RamenTech Global Summit 2026 · Fukuoka</p>
     <h1>유저 모집 콘텐츠 미리보기</h1>
-    <p class="sub">일본 유저에게 실제로 보이는 화면입니다. 앱 공지 · 신청 폼 · 푸시 · 메일 · SNS 다섯 가지를 화면 그대로 만들었습니다.</p>
+    <p class="sub">일본 유저에게 실제로 보이는 화면입니다. 앱 공지 · 신청 폼 · 푸시 · 메일 · SNS 다섯 가지입니다. 신청 폼은 이미 만들어져 있습니다.</p>
     <div class="facts">
       <div class="fact">행사일<b>10/8 (목)</b></div>
       <div class="fact">모집 기간<b>9/19 ~ 9/21</b></div>
       <div class="fact">굿즈<b>선착순 50명</b></div>
       <div class="fact">신청 문항<b>9개 · 1분</b></div>
+      <div class="fact">신청 폼<b>공개 중</b></div>
       <div class="fact">메일<b>신청 직후 + D-3</b></div>
     </div>
   </div>
@@ -208,15 +229,139 @@
   <p class="intro">전부 <b>한국어 초안</b>이고, 확정 후 일본어로 번역합니다. <b>[  ]</b> 는 아직 정해지지 않은 항목(행사 시간 · 부스 번호 · 링크)이 들어갈 자리입니다.</p>
 
   <div class="tabs">
-    <button class="tab active" data-pane="pane-app">앱 커뮤니티 공지<span class="badge">1</span></button>
+    <button class="tab active" data-pane="pane-flow">전체 흐름</button>
+    <button class="tab" data-pane="pane-app">앱 커뮤니티 공지<span class="badge">1</span></button>
     <button class="tab" data-pane="pane-form">신청 페이지 · 폼<span class="badge">2</span></button>
     <button class="tab" data-pane="pane-push">푸시 알림<span class="badge">3</span></button>
-    <button class="tab" data-pane="pane-mail">메일 · 리마인드<span class="badge">4</span></button>
+    <button class="tab" data-pane="pane-mail">메일<span class="badge">4</span></button>
     <button class="tab" data-pane="pane-sns">SNS<span class="badge">5</span></button>
   </div>
 
+  <!-- ── 탭 0 : 전체 흐름 ── -->
+  <div class="pane active" id="pane-flow">
+    <div class="sum">
+      <div class="box"><div class="v">3일</div><div class="k">모집 기간</div><div class="d">9/19(토) ~ 9/21(월)</div></div>
+      <div class="box"><div class="v">80명</div><div class="k">접수 목표</div><div class="d">정원 도달 시 자동 마감</div></div>
+      <div class="box"><div class="v">50명</div><div class="k">현장 방문 목표</div><div class="d">무료 이벤트 참가율 65% 기준</div></div>
+      <div class="box"><div class="v">15~20</div><div class="k">인터뷰 목표</div><div class="d">신청 시 희망하신 분</div></div>
+      <div class="box"><div class="v">2통</div><div class="k">행사 전 메일</div><div class="d">신청 직후 · D-3</div></div>
+    </div>
+
+    <div class="flow">
+      <div class="fl">
+        <div class="fl-when">9/19 (토)<small>D-19</small></div>
+        <div>
+          <div class="fl-what">모집 오픈 — 전 채널 동시</div>
+          <div class="fl-desc">
+            <span class="ch o">앱 공지</span><span class="ch o">푸시</span><span class="ch o">SNS</span><br>
+            앱 커뮤니티 공지 게시(상단 고정) · 푸시 발송 · 인스타/X 포스트를 <b>같은 날 저녁에 한꺼번에</b> 내보냅니다.
+            마감이 이틀 뒤라 채널을 나눠 집행할 여유가 없습니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">9/20 (일)<small>D-18</small></div>
+        <div>
+          <div class="fl-what">마감 예고 푸시</div>
+          <div class="fl-desc">
+            <span class="ch o">푸시</span><span class="ch o">SNS 스토리</span><br>
+            「신청 마감, 내일까지예요」. <b>일요일 저녁은 앱 체류 시간이 가장 긴 시간대</b>입니다.<br>
+            이날 오전 접수가 저조하면 <b>SNS 광고 소액 집행</b>을 판단합니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">9/21 (월) 23:59<small>D-17</small></div>
+        <div>
+          <div class="fl-what">신청 마감 — 자동</div>
+          <div class="fl-desc">
+            <span class="ch g">자동 처리</span><br>
+            <b>9/21 자정</b> 또는 <b>응답 80건</b> 중 먼저 오는 쪽에서 폼이 자동으로 닫힙니다. 사람이 대기할 필요가 없습니다.<br>
+            마감 후에도 <b>부스는 누구나 올 수 있습니다</b> — 「신청 마감」이지 「입장 마감」이 아닙니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">9/22 ~ 10/4<small>준비 기간</small></div>
+        <div>
+          <div class="fl-what">명단 정리 · 현장 준비</div>
+          <div class="fl-desc">
+            신청 명단 정리(히라가나순 · 인터뷰 희망자 구분) · 부스 배포물과 데모 기기 준비 ·
+            주최 측에서 <b>부스 운영 시간과 위치</b>를 받아 안내 메일을 준비합니다.<br>
+            이 기간에는 <b>유저에게 나가는 연락이 없습니다.</b> 그래서 신청 직후 안내에 「다음 연락은 10/5」를 미리 적어 둡니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">10/5 (월)<small>D-3</small></div>
+        <div>
+          <div class="fl-what">방문 안내 메일 — 행사 전 유일한 연락</div>
+          <div class="fl-desc">
+            <span class="ch">메일</span><br>
+            한 통에 전부 담습니다 → ① <b>참석 확인 링크(30초)</b> ② 부스 운영 시간·정확한 위치
+            ③ 아카사카역에서 오는 길 ④ 지참물 ⑤ 문의처.<br>
+            인터뷰 희망자에게는 <b>시간을 따로</b> 안내합니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">10/6 (화)<small>D-2</small></div>
+        <div>
+          <div class="fl-what">참석 확인 집계</div>
+          <div class="fl-desc">
+            <span class="ch g">내부</span><br>
+            <b>답이 없는 사람이 노쇼 후보 명단</b>입니다. 굿즈 여유분을 여기서 계산합니다.<br>
+            「못 간다」고 알려주신 분의 몫은 현장 방문객용으로 돌립니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">10/7 (수)<small>D-1</small></div>
+        <div>
+          <div class="fl-what">현지 입국 · 사전 답사</div>
+          <div class="fl-desc">
+            <span class="ch o">커뮤니티 공지</span><br>
+            부스 위치 확인 · 인터뷰할 조용한 자리 확보 · 역에서 오는 길 실측 · 데모 기기 세팅.<br>
+            밤에 커뮤니티 공지로 <b>「내일 만나요」</b>를 올립니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">10/8 (목)<small>D-DAY</small></div>
+        <div>
+          <div class="fl-what">행사 당일 · 9:30 ~ 18:20</div>
+          <div class="fl-desc">
+            <span class="ch o">SNS 스토리</span><span class="ch o">커뮤니티</span><br>
+            <b>大名カンファレンス</b> 3·4F (아카사카역 도보 3분)<br>
+            유저 응대 · 굿즈 배포 · 앱 체험 · 인터뷰. 실시간 스토리로 현장 관람객도 유입합니다.<br>
+            <b>점심시간(12:20~13:20)이 가장 붐비고, 13:20 이후가 여유롭습니다.</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl">
+        <div class="fl-when">10/9 (금) ~<small>사후</small></div>
+        <div>
+          <div class="fl-what">감사 인사 · 정리</div>
+          <div class="fl-desc">
+            <span class="ch">메일</span><span class="ch o">커뮤니티</span><br>
+            방문하신 분께 감사 메일 + 현장 사진 · 커뮤니티 후기글 · 인터뷰 인사이트 정리.<br>
+            행사 후 30일 이내에 <b>신청자 개인정보를 파기</b>합니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── 탭 1 ── -->
-  <div class="pane active" id="pane-app">
+  <div class="pane" id="pane-app">
     <div class="mock-row">
       <div>
         <p class="mock-label">앱 화면 미리보기</p>
@@ -254,7 +399,7 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
 　 적어주세요.</div>
                 <div class="app-body">
 ▼ 참가 신청은 이쪽에서 (9월 21일(월) 마감)
-<span style="color:var(--blue);text-decoration:underline">https://forms.gle/xxxxxxxx</span>
+<span style="color:var(--blue);word-break:break-all">https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4Y2jtoDUZ4w/viewform</span>
 </div>
                 <div class="app-body" style="font-size:12px;color:var(--muted)">※ 행사장 입장에는 주최 측의 사전 등록이 필요합니다.
 　 신청 페이지에서 순서대로 안내해 드릴게요!
@@ -296,7 +441,7 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
 　 적어주세요.
 
 ▼ 참가 신청은 이쪽에서 (9월 21일(월) 마감)
-[신청 페이지 링크]
+https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4Y2jtoDUZ4w/viewform
 
 ※ 행사장 입장에는 주최 측의 사전 등록이 필요합니다.
 　 신청 페이지에서 순서대로 안내해 드릴게요!
@@ -314,137 +459,27 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
   <div class="pane" id="pane-form">
     
 
-    <div class="mock-row" style="grid-template-columns:minmax(300px,620px) 1fr">
+    <div class="mock-row" style="grid-template-columns:1fr 1fr">
       <div>
-        <p class="mock-label">신청 페이지 미리보기</p>
+        <p class="mock-label">신청 페이지</p>
         <div class="gform">
           <div class="gform-top"></div>
           <div class="gform-hero">
             <div class="h1">🍜 트이다 부스 참가 신청</div>
-            <div class="h2">RamenTech Global Summit · 10.08 THU · FUKUOKA</div>
+            <div class="h2">RAMEN TECH GLOBAL SUMMIT 2026 · 10.08 THU · FUKUOKA</div>
           </div>
-          <div class="gform-sec">
-            <div class="gform-title">트이다 부스 참가 신청</div>
-            <div class="gform-desc">10월 8일(목), 후쿠오카에서 트이다 팀이 여러분을 기다립니다 🍜
-신청은 1분이면 끝나요.
-
-📌 접수 기간 : 9월 19일(토) ~ 9월 21일(월)
-　 티셔츠를 사이즈별로 미리 제작해야 해서
-　 신청을 일찍 마감합니다. 서둘러 주세요!
-
-※ 트이다 앱을 사용 중인 분만 신청하실 수 있습니다.
-
-━━━━━━━━━━━━━━━
-📅 행사 정보
-━━━━━━━━━━━━━━━
-일시 : 2026년 10월 8일(목) 9:30~18:20 (9:00 개장)
-장소 : 大名カンファレンス
-　　　 福岡市中央区大名2-6-50
-　　　 福岡大名ガーデンシティ・タワー 3·4F
-가는 길 : 지하철 공항선 아카사카역 도보 3분
-　　　　 텐진역 도보 2분 / 니시테츠 후쿠오카역 도보 5분
-입장료 : 무료
-
-📩 트이다 부스의 운영 시간과 정확한 위치는
-　 10월 5일(월)에 메일로 안내드립니다.
-　 신청 직후에는 접수 확인 메일만 발송됩니다.
-　 꼭 연락 가능한 메일 주소를 적어주세요!
-
-━━━━━━━━━━━━━━━
-🎁 부스에 오시면
-━━━━━━━━━━━━━━━
-① 트이다 오리지널 키링 + 티셔츠 (선착순 50분)
-② 최신 트이다 앱 현장 체험
-③ 트이다 팀과 이야기 나누기 (희망하시는 분만)
-
-━━━━━━━━━━━━━━━
-⚠️ 신청 전에 먼저 해주세요
-━━━━━━━━━━━━━━━
-행사장에 들어가려면 주최 측의 사전 등록이 필요합니다.
-아래에서 먼저 등록해 주세요. (무료 · 1분)
-
-👉 ramentech-summit.com
-
-등록을 마치면 확인 메일이 옵니다.
-당일 입장에 필요하니 지우지 마세요!
-
-━━━━━━━━━━━━━━━
-🔒 개인정보에 대하여
-━━━━━━━━━━━━━━━
-성함은 당일 부스 접수와 굿즈 전달 확인에만 사용합니다.
-수집한 정보는 행사 종료 후 30일 이내에 모두 삭제합니다.
-
-❓ 문의
-신청에 대해 궁금한 점이 있으시면 편하게 연락 주세요.
-✉️ [문의 메일 주소]
-
-등록을 마치신 뒤, 아래 문항을 작성해 주세요 ⬇️</div>
-          </div>
-
-          <div class="q">
-            <div class="qnum">Q1 · 필수</div>
-            <div class="qt">행사 사전 등록을 마쳤습니다<span class="req">*</span></div>
-            <div class="qd">위 링크에서 등록을 마치신 뒤 체크해 주세요.</div>
-            <div class="opt"><div class="box"></div><div>네, 등록을 마쳤습니다</div></div>
-          </div>
-          <div class="q">
-            <div class="qnum">Q2 · 필수</div>
-            <div class="qt">트이다 계정 이메일<span class="req">*</span></div>
-            <div class="qd"><b>이번 이벤트는 트이다 앱을 사용 중인 분만 참여하실 수 있습니다.</b><br>
-            트이다 앱에 가입하실 때 사용하신 주소를 적어주세요.</div>
-            <div class="qin">내 답변</div>
-          </div>
-          <div class="q" style="background:var(--blue-soft)">
-            <div class="qnum">Q3 · 필수 · 중요</div>
-            <div class="qt">안내 메일을 어느 주소로 받으시겠어요?<span class="req">*</span></div>
-            <div class="qd"><b>부스 운영 시간과 정확한 위치를 메일로 보내드립니다.</b><br>
-            행사 당일까지 확인하실 수 있는 주소로 받아주세요!</div>
-            <div class="opt"><div class="radio"></div><div><b>위(트이다 계정)와 같은 주소로 받을게요</b></div></div>
-            <div class="opt"><div class="radio"></div><div>다른 주소로 받고 싶어요 → 아래에 적어주세요</div></div>
-          </div>
-          <div class="q opt-q">
-            <div class="qnum">Q4 · 선택</div>
-            <div class="qt">연락받으실 이메일 <span style="color:var(--muted);font-weight:400">(위에서 「다른 주소」를 고르신 분만)</span></div>
-            <div class="qd">같은 주소로 받으시는 분은 <b>비워두셔도 됩니다.</b><br><br>
-            ※ 휴대전화 캐리어 메일(docomo · au · softbank)을 쓰시는 분은 <b>@teuida.net</b> 에서 오는 메일을 받을 수 있도록 <b>수신 설정을 꼭 확인해 주세요!</b></div>
-            <div class="qin">내 답변</div>
-          </div>
-          <div class="q">
-            <div class="qnum">Q5 · 필수</div>
-            <div class="qt">성함 (한자)<span class="req">*</span></div>
-            <div class="qd">한자 표기가 없으시면 평소 쓰시는 표기로 적어주세요.</div>
-            <div class="qin">내 답변</div>
-          </div>
-          <div class="q">
-            <div class="qnum">Q6 · 필수</div>
-            <div class="qt">성함 (히라가나)<span class="req">*</span></div>
-            <div class="qd">현장에서 이름을 정확히 불러 드리기 위해 여쭤봅니다.</div>
-            <div class="qin">내 답변</div>
-          </div>
-          <div class="q">
-            <div class="qnum">Q7 · 필수</div>
-            <div class="qt">티셔츠 사이즈<span class="req">*</span></div>
-            <div class="qd">일본 사이즈 기준입니다. (S 가슴둘레 88 / M 96 / L 104 / XL 112cm)</div>
-            <div class="opt"><div class="radio"></div><div>S　　<span style="color:var(--muted)">M　　L　　XL　　잘 모르겠어요</span></div></div>
-          </div>
-          <div class="q opt-q" style="background:var(--accent-soft)">
-            <div class="qnum">Q8 · 선택 · 인터뷰</div>
-            <div class="qt">트이다 팀과 이야기 나누는 시간에 참여하고 싶어요 <span style="color:var(--muted);font-weight:400">(선택)</span></div>
-            <div class="qd">여러분이 들려주시는 이야기는 <b>트이다 콘텐츠와 앱을 개선하는 데 큰 도움이 됩니다.</b><br>
-            10~15분 정도이고, 어려운 질문은 없어요. 일본어로 편하게 말씀해 주시면 됩니다.<br>
-            <b>참여가 어려우시면 체크하지 않으셔도 괜찮습니다.</b> 부스에는 편하게 와주세요!<br>
-            체크해 주신 분께는 <b>메일로 시간을 따로 안내</b>드립니다.</div>
-            <div class="opt"><div class="box"></div><div>네, 참여하고 싶어요</div></div>
-          </div>
-          <div class="q">
-            <div class="qnum">Q9 · 필수</div>
-            <div class="qt">개인정보 수집·이용에 동의합니다<span class="req">*</span></div>
-            <div class="qd">수집 항목 : 성명 · 이메일 · 티셔츠 사이즈 / 이용 목적 : 부스 접수 및 굿즈 전달 확인 / 보관 기간 : 행사 종료 후 30일 이내 파기. 당일 부스에서는 사진 촬영이 있을 수 있으며, 촬영 시 현장에서 다시 여쭤봅니다.</div>
-            <div class="opt"><div class="box"></div><div>동의합니다</div></div>
-          </div>
-          <div class="gform-submit">
-            <div class="gform-btn">제출</div>
-            <div style="font-size:11.5px;color:var(--muted)">비밀번호를 입력하지 마세요</div>
+          <div class="gform-sec" style="border-bottom:none">
+            <div style="font-size:13px;line-height:1.9">
+              <b>폼이 만들어졌습니다.</b> 아래 링크를 공지 · SNS에 사용하세요.<br><br>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4Y2jtoDUZ4w/viewform" target="_blank" rel="noopener"
+                 style="color:var(--blue);word-break:break-all;font-size:12.5px">https://docs.google.com/forms/d/e/1FAIpQLSf9ZtF1orp0uiZWr5vNc05h0PGpsfBUm6-Nq0F4Y2jtoDUZ4w/viewform</a>
+              <br><br>
+              <span style="color:var(--muted);font-size:12.5px">
+              📌 접수 기간 : 9월 19일(토) ~ 9월 21일(월)<br>
+              📌 자동 마감 : 9/21 23:59 또는 응답 80건 중 먼저 오는 쪽<br>
+              📌 문항 : 9개 (필수 7 · 선택 2) · 작성 1분
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -468,7 +503,7 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
 
 ※ 굿즈는 선착순 50분께 드립니다.
 
-📩 연락은 이 메일 주소와 트이다 앱 알림으로 드립니다.
+📩 연락은 이 메일 주소로만 드립니다.
 　 메일이 보이지 않으면 스팸함도 확인해 주세요!
 
 🙏 오실 수 없게 되면 알려주세요
@@ -504,14 +539,6 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
               <div class="pb">후쿠오카 트이다 부스 참가 신청은 9/21(월) 마감입니다. 서둘러 주세요!</div>
             </div>
           </div>
-          <div class="push" style="opacity:.40">
-            <div class="ico">T</div>
-            <div class="pc">
-              <div class="ph"><span>트이다</span><span>10월 7일</span></div>
-              <div class="pt">내일 후쿠오카에서 만나요!</div>
-              <div class="pb">부스 위치와 지참물을 다시 한번 확인해 주세요.</div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -527,10 +554,7 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
 
 본문 : 후쿠오카 트이다 부스 참가 신청은 9/21(월) 마감입니다. 굿즈는 선착순 50분! 서둘러 주세요 →</div>
 
-        <p class="srclabel">푸시 #3 — 전날 리마인드<span class="m">10/7(수) 저녁 · 신청자 대상</span></p>
-        <div class="srcbox">제목 : 내일 후쿠오카에서 만나요!
-
-본문 : 부스 위치와 지참물을 다시 한번 확인해 주세요. 사전 등록 확인 메일(QR)도 잊지 마세요 →</div>
+        
 
       </div>
     </div>
@@ -547,7 +571,7 @@ RamenTech Global Summit에 트이다 부스를 엽니다.
           <div class="mail-head">
             <div class="mail-when">10/5 (월) · D-3 · 행사 전 유일한 연락</div>
             <div class="mail-subj">【트이다】10/8(목) 부스 방문 안내 — 참석 여부를 알려주세요</div>
-            <div class="mail-from">트이다 팀 · 동시에 앱 푸시도 발송</div>
+            <div class="mail-from">트이다 팀 · 메일로만 발송</div>
           </div>
           <div class="mail-body">[성함]님, 안녕하세요. 트이다 팀입니다.
 이번 주 목요일, 드디어 후쿠오카에서 만나 뵙게 되었습니다!

@@ -183,11 +183,11 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 
 <nav class="toc">
   <div class="tabbar" role="tablist">
-    <button role="tab" data-tab="venue" aria-selected="true">전시장·출전사</button>
-    <button role="tab" data-tab="prep" aria-selected="false">부스 준비</button>
+    <button role="tab" data-tab="prep" aria-selected="true">부스 준비</button>
+    <button role="tab" data-tab="venue" aria-selected="false">전시장·출전사</button>
     <button role="tab" data-tab="phr" aria-selected="false">자주 쓰는 표현</button>
   </div>
-  <div class="navlinks" data-for="prep" hidden><a href="#r-role">담당별 체크리스트</a><a href="#r-goods">굿즈 수량</a></div>
+  <div class="navlinks" data-for="prep"><a href="#r-role">담당별 체크리스트</a><a href="#r-goods">굿즈 수량</a></div>
   <div class="navlinks" data-for="phr" hidden><a href="#p-about">트이다 소개</a><a href="#p-open">말 걸기</a><a href="#p-intro">자기소개</a><a href="#p-card">명함·이름</a><a href="#p-goal">목적</a><a href="#p-user">유저</a><a href="#p-talk">스몰토크</a><a href="#p-interview">인터뷰</a><a href="#p-unknown">못 알아들었을 때</a><a href="#p-close">마무리</a></div>
   <div class="navlinks" data-for="venue" hidden><a href="#v-booth">우리 부스</a><a href="#v-sessions">당일 세션</a><a href="#v-investors">참가 투자자·기업</a><a href="#v-picks">들러 볼 곳</a><a href="#v-all">전체 출전사</a></div>
   <div class="langs" role="group" aria-label="언어 보기">
@@ -197,7 +197,7 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
     <button data-show="en" aria-pressed="false">EN</button>
   </div>
 </nav>
-<div id="tab-venue">
+<div id="tab-venue" hidden>
 
 <section id="v-booth">
   <h2><span class="num">A</span>우리 부스</h2>
@@ -268,7 +268,7 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 </section>
 
 </div>
-<div id="tab-prep" hidden>
+<div id="tab-prep">
 
 <section id="r-role">
   <h2><span class="num">1</span>담당별 체크리스트</h2>
@@ -490,10 +490,10 @@ const esc=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
   ["venue","prep","phr"].forEach(k=>document.getElementById("tab-"+k).hidden=t!==k);
   document.querySelectorAll(".navlinks").forEach(n=>n.hidden=n.dataset.for!==t);
   document.querySelector(".langs").hidden=t!=="phr";
-  try{localStorage.setItem("rt-tab",t)}catch(e){}};
+  try{localStorage.setItem("rt-tab2",t)}catch(e){}};
  tabs.forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);window.scrollTo({top:0})}));
- let t0="venue";try{t0=localStorage.getItem("rt-tab")||"venue"}catch(e){}
- if(!["venue","prep","phr"].includes(t0))t0="venue";
+ let t0="prep";try{t0=localStorage.getItem("rt-tab2")||"prep"}catch(e){}
+ if(!["venue","prep","phr"].includes(t0))t0="prep";
  if(location.hash.startsWith("#v-"))t0="venue";if(location.hash.startsWith("#p-"))t0="phr";if(location.hash.startsWith("#r-"))t0="prep";
  show(t0);
 })();

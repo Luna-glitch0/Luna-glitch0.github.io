@@ -160,6 +160,9 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 .farrow{align-self:center;color:var(--accent);font-weight:800}
 @media (max-width:640px){.farrow{display:none}}
 .card.memo{background:var(--accent-soft);border-color:transparent}
+.check.tasks{gap:12px}
+.due{display:inline-block;font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:0 6px;margin-right:2px}
+.tmemo{margin:6px 0 0 26px;padding:8px 10px;border-radius:8px;background:var(--bg);font-size:13px;color:var(--muted);display:grid;gap:3px}
 @media print{nav.toc,.copy{display:none}details.qa{break-inside:avoid}details.qa .rows{display:block}}
 </style>
 </head>
@@ -169,7 +172,7 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 <header class="hero">
   <div class="eyebrow">RAMEN TECH Global Summit 2026 · 10.8 (목) · 다이묘 컨퍼런스 4F</div>
   <h1>TEUIDA × RAMEN TECH 2026</h1>
-  <p class="sub">전시장·출전사 정보, 부스 준비(일정·담당·굿즈), 현장에서 쓸 표현(한국어·일본어·영어)을 모았습니다. 노란 칸은 <span class="todo">확인 필요</span> 자리입니다.</p>
+  <p class="sub">전시장·출전사 정보, 부스 준비(담당별 체크리스트·굿즈), 현장에서 쓸 표현(한국어·일본어·영어)을 모았습니다. 노란 칸은 <span class="todo">확인 필요</span> 자리입니다.</p>
   <div class="facts">
     <span class="fact">누적 <b>5M+</b> 학습자</span>
     <span class="fact">평점 <b>4.8</b></span>
@@ -184,7 +187,7 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
     <button role="tab" data-tab="prep" aria-selected="false">부스 준비</button>
     <button role="tab" data-tab="phr" aria-selected="false">자주 쓰는 표현</button>
   </div>
-  <div class="navlinks" data-for="prep" hidden><a href="#r-time">일정</a><a href="#r-role">담당별 할 일</a><a href="#r-flow">체험·설문 이벤트</a><a href="#r-video">체험용 영상</a><a href="#r-print">인쇄물</a><a href="#r-goods">굿즈</a><a href="#r-goods2">챙길 물건</a></div>
+  <div class="navlinks" data-for="prep" hidden><a href="#r-role">담당별 체크리스트</a><a href="#r-goods">굿즈 수량</a></div>
   <div class="navlinks" data-for="phr" hidden><a href="#p-about">트이다 소개</a><a href="#p-open">말 걸기</a><a href="#p-intro">자기소개</a><a href="#p-card">명함·이름</a><a href="#p-goal">목적</a><a href="#p-user">유저</a><a href="#p-talk">스몰토크</a><a href="#p-interview">인터뷰</a><a href="#p-unknown">못 알아들었을 때</a><a href="#p-close">마무리</a></div>
   <div class="navlinks" data-for="venue" hidden><a href="#v-booth">우리 부스</a><a href="#v-sessions">당일 세션</a><a href="#v-investors">참가 투자자·기업</a><a href="#v-picks">들러 볼 곳</a><a href="#v-all">전체 출전사</a></div>
   <div class="langs" role="group" aria-label="언어 보기">
@@ -267,98 +270,14 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 </div>
 <div id="tab-prep" hidden>
 
-<section id="r-time">
-  <h2><span class="num">1</span>일정</h2>
-  <div class="card tbl"><table>
-    <thead><tr><th>언제</th><th>할 일</th><th>담당</th></tr></thead>
-    <tbody>
-      <tr><td><b>10/4 (일)</b></td><td>신청한 유저들에게 알림 메일 발송</td><td>루나</td></tr>
-      <tr><td><b>10/7 (수) 행사 전날</b></td><td>체험용 핸드폰 충전&amp;세팅 · 유저 선물 준비</td><td>공통</td></tr>
-      <tr><td><b>10/8 (목) 행사</b></td><td>개장 9:00 · 프로그램 9:30–18:20 · 다이묘 컨퍼런스 4층<br>부스 운영 시간 외 인터뷰</td><td>공통<br>루나</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
 <section id="r-role">
-  <h2><span class="num">2</span>담당별 할 일</h2>
-  <div class="grid g3">
-    <div class="card"><h3>루나</h3><ul class="plain">
-      <li>10월 4일 → 신청한 유저들에게 알림 메일 발송</li>
-      <li>인터뷰 준비 (구글폼&amp;QR코드 생성) → 미아 전달</li>
-      <li>부스 운영 시간 외 인터뷰 유저 모집</li>
-      <li>인쇄물 내용 준비 (5번)</li>
-    </ul></div>
-    <div class="card"><h3>미아</h3><ul class="plain">
-      <li>굿즈&amp;준비물 챙겨오기
-        <ul><li>체험용 핸드폰 기기 준비</li><li>QR 종이 인쇄&amp;투명 스탠드 챙기기</li></ul></li>
-      <li>체험용 레슨 영상 편집&amp;업로드 (4번)</li>
-      <li>투명 스탠드 2개 추가 구매</li>
-    </ul></div>
-    <div class="card"><h3>공통 · 행사 전날</h3><ul class="plain">
-      <li>체험용 핸드폰 충전&amp;세팅</li>
-      <li>유저 선물 준비</li>
-    </ul></div>
-  </div>
-</section>
-
-<section id="r-flow">
-  <h2><span class="num">3</span>부스 체험 · 설문 이벤트</h2>
-  <p class="lead">인쇄물 문구: <b>"체험 후 짧은 설문 하시면 굿즈 선물 드려요!"</b></p>
-  <div class="card">
-    <div class="flowline">
-      <div class="fstep"><b>① 체험</b><span>iOS 핸드폰으로 체험용 레슨 (40초~1분)</span></div>
-      <div class="farrow">→</div>
-      <div class="fstep"><b>② 설문</b><span>설문조사 QR → 현장 설문조사용 구글폼</span></div>
-      <div class="farrow">→</div>
-      <div class="fstep"><b>③ 굿즈</b><span>굿즈 선물 (6번)</span></div>
-    </div>
-  </div>
-  <div class="grid g2" style="margin-top:14px">
-    <div class="card"><h3>일반 방문자</h3><ul class="plain">
-      <li>체험 → 짧은 설문 → 굿즈</li>
-    </ul></div>
-    <div class="card"><h3>유저 (미리 신청한 유저 포함)</h3><ul class="plain">
-      <li>간단한 설문조사(체크) + 인터뷰</li>
-      <li>신청한 유저 선물은 투명 봉투에 미리 담아 두기 (30개)</li>
-      <li>부스 운영 시간 외 인터뷰 유저 모집 (루나)</li>
-    </ul></div>
-  </div>
-</section>
-
-<section id="r-video">
-  <h2><span class="num">4</span>체험용 레슨 영상 편집&amp;업로드 <span class="count" style="font-weight:400">담당 미아</span></h2>
-  <div class="grid g2">
-    <div class="card"><h3>편집할 레슨</h3><ul class="plain">
-      <li>KJL2101</li>
-      <li>KJL2505</li>
-      <li>JEL2101</li>
-    </ul></div>
-    <div class="card memo"><h3>메모</h3><ul class="plain">
-      <li><b>편집 방향:</b> 대표 문장(문법 설명), 따라말하기 1, 가상대화 구간</li>
-      <li><b>체험 시간:</b> 40초~1분</li>
-      <li><b>업로드:</b> 테스트서버에 세팅 (유닛1 제일 상단에 추가해두기)</li>
-    </ul></div>
-  </div>
-</section>
-
-<section id="r-print">
-  <h2><span class="num">5</span>인쇄물</h2>
-  <div class="grid g2">
-    <div class="card"><h3>들어갈 내용 (루나)</h3><ul class="plain">
-      <li>로고</li>
-      <li>앱 설명 (짧게)</li>
-      <li>이벤트 설명 ("체험 후 짧은 설문 하시면 굿즈 선물 드려요!")</li>
-      <li>설문조사 QR</li>
-    </ul></div>
-    <div class="card"><h3>출력 · 거치 (미아)</h3><ul class="plain">
-      <li>QR 종이 인쇄</li>
-      <li>투명 스탠드 챙기기 + 2개 추가 구매</li>
-    </ul></div>
-  </div>
+  <h2><span class="num">1</span>담당별 체크리스트</h2>
+  <p class="lead">행사: <b>10/8 (목)</b> 개장 9:00 · 프로그램 9:30–18:20 · 다이묘 컨퍼런스 4층. 할 일은 한 사람에 한 번씩만 적었고, 필요한 내용은 할 일 아래 메모로 붙였습니다. 체크 상태는 이 브라우저에만 저장됩니다.</p>
+  <div class="grid g3" id="taskGrid"></div>
 </section>
 
 <section id="r-goods">
-  <h2><span class="num">6</span>굿즈</h2>
+  <h2><span class="num">2</span>굿즈 수량</h2>
   <div class="card tbl"><table>
     <thead><tr><th>품목</th><th>수량</th><th>메모</th></tr></thead>
     <tbody>
@@ -368,22 +287,6 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
       <tr><td><b>투명 봉투</b></td><td>30개</td><td>신청한 유저 것만 미리 담아놓기</td></tr>
     </tbody>
   </table></div>
-</section>
-
-<section id="r-goods2">
-  <h2><span class="num">7</span>챙길 물건</h2>
-  <div class="grid g2">
-    <div class="card"><h3>부스 운영</h3><ul class="plain">
-      <li>QA 가능한 핸드폰 : iOS 핸드폰 (최소 2개)</li>
-      <li>와이파이 도시락</li>
-      <li>돼지코, 멀티탭, 충전기</li>
-    </ul></div>
-    <div class="card"><h3>개인</h3><ul class="plain">
-      <li>개인 명함</li>
-      <li>저희가 쓸 볼펜</li>
-      <li>트이다 검은색 티셔츠 (우리 입을 거)</li>
-    </ul></div>
-  </div>
 </section>
 
 </div>
@@ -402,6 +305,35 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 </div>
 
 <script>
+const TASKS=[
+ {who:"루나",items:[
+  {d:"10/4",t:"신청한 유저들에게 알림 메일 발송"},
+  {t:"인터뷰 준비 (구글폼&QR코드 생성) → 미아 전달"},
+  {t:"부스 운영 시간 외 인터뷰 유저 모집"},
+  {t:"인쇄물 준비",memo:["로고","앱 설명 (짧게)","이벤트 설명 (\"체험 후 짧은 설문 하시면 굿즈 선물 드려요!\")","설문조사 QR"]}
+ ]},
+ {who:"미아",items:[
+  {t:"굿즈&준비물 챙겨오기",sub:["체험용 핸드폰 기기 준비","QR 종이 인쇄&투명 스탠드 챙기기"],memo:["굿즈: 아래 2번 표","부스 운영 준비물: QA 가능한 핸드폰 : iOS 핸드폰 (최소 2개) · 와이파이 도시락 · 돼지코, 멀티탭, 충전기"]},
+  {t:"체험용 레슨 영상 편집&업로드",sub:["KJL2101","KJL2505","JEL2101"],memo:["편집 방향: 대표 문장(문법 설명), 따라말하기 1, 가상대화 구간","체험 시간 40초~1분","테스트서버에 세팅 (유닛1 제일 상단에 추가해두기)"]},
+  {t:"투명 스탠드 2개 추가 구매"}
+ ]},
+ {who:"공통",items:[
+  {d:"10/7 행사 전날",t:"체험용 핸드폰 충전&세팅"},
+  {d:"10/7 행사 전날",t:"유저 선물 준비"},
+  {t:"개인 준비물",memo:["개인 명함","저희가 쓸 볼펜","트이다 검은색 티셔츠 (우리 입을 거)"]}
+ ]}
+];
+(function(){
+ let saved={};try{saved=JSON.parse(localStorage.getItem("rt-prep3")||"{}")}catch(e){}
+ const e=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+ const box=(k,t)=>`<label><input type="checkbox" data-k="${k}" ${saved[k]?"checked":""}><span>${t}</span></label>`;
+ const el=document.getElementById("taskGrid");
+ el.innerHTML=TASKS.map((g,gi)=>`<div class="card"><h3>${g.who}</h3><ul class="check tasks">${g.items.map((it,ii)=>{const k=gi+"-"+ii;
+  return `<li>${box(k,(it.d?`<span class="due">${e(it.d)}</span> `:"")+e(it.t))}
+   ${it.sub?`<ul class="check" style="margin:6px 0 0 26px">${it.sub.map((x,si)=>`<li>${box(k+"-"+si,e(x))}</li>`).join("")}</ul>`:""}
+   ${it.memo?`<div class="tmemo">${it.memo.map(m=>`<div>${e(m)}</div>`).join("")}</div>`:""}</li>`}).join("")}</ul></div>`).join("");
+ el.addEventListener("change",ev=>{if(!ev.target.dataset.k)return;saved[ev.target.dataset.k]=ev.target.checked;try{localStorage.setItem("rt-prep3",JSON.stringify(saved))}catch(err){}});
+})();
 document.querySelectorAll(".langs button").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll(".langs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
  document.body.classList.remove("only-ko","only-ja","only-en");

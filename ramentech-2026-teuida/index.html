@@ -159,6 +159,7 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 .fstep span{font-size:13.5px;color:var(--muted)}
 .farrow{align-self:center;color:var(--accent);font-weight:800}
 @media (max-width:640px){.farrow{display:none}}
+.card.memo{background:var(--accent-soft);border-color:transparent}
 @media print{nav.toc,.copy{display:none}details.qa{break-inside:avoid}details.qa .rows{display:block}}
 </style>
 </head>
@@ -325,15 +326,18 @@ ul.plain ul{margin:4px 0 0;padding-left:16px;color:var(--muted);font-size:13.5px
 </section>
 
 <section id="r-video">
-  <h2><span class="num">4</span>체험용 레슨 영상</h2>
-  <div class="card">
-    <dl class="kv">
-      <dt>대상 레슨</dt><dd><span class="chip">KJL2101</span> <span class="chip">KJL2505</span> <span class="chip">JEL2101</span></dd>
-      <dt>편집 구성</dt><dd>대표 문장(문법 설명) → 따라말하기 1 → 가상대화 구간</dd>
-      <dt>체험 시간</dt><dd>40초~1분</dd>
-      <dt>세팅</dt><dd>테스트서버에 세팅 (유닛1 제일 상단에 추가해두기)</dd>
-      <dt>담당</dt><dd>미아</dd>
-    </dl>
+  <h2><span class="num">4</span>체험용 레슨 영상 편집&amp;업로드 <span class="count" style="font-weight:400">담당 미아</span></h2>
+  <div class="grid g2">
+    <div class="card"><h3>편집할 레슨</h3><ul class="plain">
+      <li>KJL2101</li>
+      <li>KJL2505</li>
+      <li>JEL2101</li>
+    </ul></div>
+    <div class="card memo"><h3>메모</h3><ul class="plain">
+      <li><b>편집 방향:</b> 대표 문장(문법 설명), 따라말하기 1, 가상대화 구간</li>
+      <li><b>체험 시간:</b> 40초~1분</li>
+      <li><b>업로드:</b> 테스트서버에 세팅 (유닛1 제일 상단에 추가해두기)</li>
+    </ul></div>
   </div>
 </section>
 

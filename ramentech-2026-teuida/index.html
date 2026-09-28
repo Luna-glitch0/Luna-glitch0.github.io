@@ -176,7 +176,7 @@ body.only-ja .s-ja,body.only-en .s-en{display:inline}
     <button role="tab" data-tab="prep" aria-selected="false">부스 준비</button>
     <button role="tab" data-tab="phr" aria-selected="false">자주 쓰는 표현</button>
   </div>
-  <div class="navlinks" data-for="prep" hidden><a href="#r-role">담당별 할 일</a><a href="#r-print">인쇄물</a><a href="#r-video">체험용 레슨 영상</a><a href="#r-goods">굿즈·준비물</a><a href="#r-survey">당일 방문자</a></div>
+  <div class="navlinks" data-for="prep" hidden><a href="#r-time">일정</a><a href="#r-role">담당별 할 일</a><a href="#r-print">인쇄물</a><a href="#r-video">체험용 레슨 영상</a><a href="#r-goods">굿즈·준비물</a><a href="#r-survey">당일 방문자</a></div>
   <div class="navlinks" data-for="phr" hidden><a href="#p-about">트이다 소개</a><a href="#p-open">말 걸기</a><a href="#p-intro">자기소개</a><a href="#p-card">명함·이름</a><a href="#p-goal">목적</a><a href="#p-user">유저</a><a href="#p-talk">스몰토크</a><a href="#p-interview">인터뷰</a><a href="#p-unknown">못 알아들었을 때</a><a href="#p-close">마무리</a></div>
   <div class="navlinks" data-for="venue" hidden><a href="#v-booth">우리 부스</a><a href="#v-sessions">당일 세션</a><a href="#v-investors">참가 투자자·기업</a><a href="#v-picks">들러 볼 곳</a><a href="#v-all">전체 출전사</a></div>
   <div class="langs" role="group" aria-label="언어 보기">
@@ -259,29 +259,41 @@ body.only-ja .s-ja,body.only-en .s-en{display:inline}
 </div>
 <div id="tab-prep" hidden>
 
+<section id="r-time">
+  <h2><span class="num">1</span>일정</h2>
+  <div class="card tbl"><table>
+    <thead><tr><th>언제</th><th>할 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>10/4 (일)</b></td><td>신청한 유저들에게 알림 메일 발송 (루나)</td></tr>
+      <tr><td><b>10/7 (수) 행사 전날</b></td><td>체험용 핸드폰 충전&amp;세팅 · 유저 선물 준비 (공통)</td></tr>
+      <tr><td><b>10/8 (목) 행사</b></td><td>개장 9:00 · 프로그램 9:30–18:20 · 다이묘 컨퍼런스 4층 · 부스 운영 시간 외 인터뷰 (루나)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
 <section id="r-role">
-  <h2><span class="num">1</span>담당별 할 일</h2>
+  <h2><span class="num">2</span>담당별 할 일</h2>
   <p class="lead">체크 상태는 이 브라우저에만 저장됩니다.</p>
   <div class="grid g3" id="roleGrid"></div>
 </section>
 
 <section id="r-print">
-  <h2><span class="num">2</span>루나가 준비할 QA (인쇄물)</h2>
+  <h2><span class="num">3</span>루나가 준비할 QA (인쇄물)</h2>
   <div class="grid g2" id="printGrid"></div>
 </section>
 
 <section id="r-video">
-  <h2><span class="num">3</span>체험용 레슨 영상 편집&amp;업로드</h2>
+  <h2><span class="num">4</span>체험용 레슨 영상 편집&amp;업로드</h2>
   <div class="grid g2" id="videoGrid"></div>
 </section>
 
 <section id="r-goods">
-  <h2><span class="num">4</span>굿즈 · 준비물</h2>
+  <h2><span class="num">5</span>굿즈 · 준비물</h2>
   <div class="grid g3" id="goodsGrid"></div>
 </section>
 
 <section id="r-survey">
-  <h2><span class="num">5</span>당일 방문자</h2>
+  <h2><span class="num">6</span>당일 방문자</h2>
   <div class="grid g2" id="surveyGrid"></div>
 </section>
 

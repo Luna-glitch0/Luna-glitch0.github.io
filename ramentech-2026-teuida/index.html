@@ -490,11 +490,10 @@ const esc=t=>String(t||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
   ["venue","prep","phr"].forEach(k=>document.getElementById("tab-"+k).hidden=t!==k);
   document.querySelectorAll(".navlinks").forEach(n=>n.hidden=n.dataset.for!==t);
   document.querySelector(".langs").hidden=t!=="phr";
-  try{localStorage.setItem("rt-tab2",t)}catch(e){}};
+  };
  tabs.forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);window.scrollTo({top:0})}));
- let t0="prep";try{t0=localStorage.getItem("rt-tab2")||"prep"}catch(e){}
- if(!["venue","prep","phr"].includes(t0))t0="prep";
- if(location.hash.startsWith("#v-"))t0="venue";if(location.hash.startsWith("#p-"))t0="phr";if(location.hash.startsWith("#r-"))t0="prep";
+ let t0="prep";
+ if(location.hash)history.replaceState(null,"",location.pathname+location.search);
  show(t0);
 })();
 </script>

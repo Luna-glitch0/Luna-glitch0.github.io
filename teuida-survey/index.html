@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TEUIDA 体験アンケート</title>
+<style>
+  :root{--mint:#0F9988;--mint-l:#D5F1E3;--ink:#1C1D1C;--line:#e6e4df;
+        --muted:#6b6b76;--bg:#F5F4F0;--red:#E5484D}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",-apple-system,
+      BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;padding:18px 18px 140px}
+
+  /* 민트 헤더 */
+  .top{background:var(--mint);color:#fff;padding:0 0 28px;
+    border-radius:0 0 22px 22px}
+  .lang{display:flex;gap:6px;justify-content:flex-end;
+    max-width:480px;margin:0 auto;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 36px 0}
+  .lang button{font-family:inherit;font-size:12.5px;font-weight:700;
+    padding:7px 15px;border-radius:999px;cursor:pointer;
+    border:none;background:rgba(255,255,255,.18);color:rgba(255,255,255,.8)}
+  .lang button.on{background:#fff;color:var(--mint)}
+  .hd{max-width:480px;margin:0 auto;padding:20px 36px 0}
+  .hd img.logo{height:25px;width:auto;display:block;margin-bottom:20px;opacity:.95}
+  .hd h1{font-size:27px;font-weight:900;letter-spacing:-.025em;
+    line-height:1.35;margin-bottom:11px}
+  .hd p{font-size:13px;line-height:1.75;color:rgba(255,255,255,.92)}
+
+  .q{background:#fff;border-radius:16px;padding:20px 18px;margin-bottom:12px}
+  .q .qh{margin-bottom:11px;display:flex;align-items:center;gap:9px}
+  .q .n{display:inline-block;background:var(--mint-l);color:var(--mint);
+    border-radius:999px;padding:3px 11px;font-size:11px;font-weight:900;
+    letter-spacing:.04em;flex:none;transition:.15s}
+  .q .need{display:none;font-size:12px;font-weight:800;color:var(--red)}
+  .q.miss{box-shadow:0 0 0 2px var(--red)}
+  .q.miss .n{background:#FDE8E8;color:var(--red)}
+  .q.miss .need{display:block}
+  .q h2{font-size:16px;font-weight:800;line-height:1.5;letter-spacing:-.01em;
+    margin-bottom:3px}
+  .q .mode{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:14px}
+
+  label.opt{display:flex;align-items:flex-start;gap:11px;padding:13px 2px;
+    border-top:1px solid #f2f1ed;cursor:pointer}
+  label.opt:first-of-type{border-top:none}
+  label.opt input{position:absolute;opacity:0;pointer-events:none}
+  label.opt .box{width:21px;height:21px;flex:none;border:2px solid #cfcdc7;
+    border-radius:6px;margin-top:1px;position:relative;transition:.12s}
+  label.opt.radio .box{border-radius:50%}
+  label.opt input:checked + .box{background:var(--mint);border-color:var(--mint)}
+  label.opt input:checked + .box::after{content:"";position:absolute;
+    left:6px;top:2px;width:6px;height:11px;border:solid #fff;
+    border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+  label.opt.radio input:checked + .box::after{left:5px;top:5px;width:7px;height:7px;
+    border:none;border-radius:50%;background:#fff;transform:none}
+  label.opt .tx{font-size:14.5px;font-weight:600;line-height:1.5;padding-top:1px}
+
+  .sub{margin:0 0 4px 32px}
+  .sub input[type=text]{width:100%;border:none;border-bottom:1.5px solid var(--line);
+    background:transparent;font-family:inherit;font-size:14px;padding:7px 2px;
+    color:var(--ink)}
+  .sub input[type=text]:focus{outline:none;border-bottom-color:var(--mint)}
+
+  textarea{width:100%;border:1.5px solid var(--line);border-radius:11px;
+    background:#fff;font-family:inherit;font-size:14.5px;line-height:1.7;
+    padding:13px;color:var(--ink);resize:vertical;min-height:96px}
+  textarea:focus{outline:none;border-color:var(--mint)}
+  .ph{font-size:12px;color:#9a9aa2;margin-top:8px;line-height:1.6}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(245,244,240,.94);
+    backdrop-filter:blur(10px);border-top:1px solid var(--line);
+    padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px))}
+  .bar .inner{max-width:480px;margin:0 auto}
+  .bar button{width:100%;border:none;border-radius:13px;background:var(--mint);
+    color:#fff;font-family:inherit;font-size:16.5px;font-weight:900;
+    padding:17px;cursor:pointer;letter-spacing:.01em}
+  .bar button:disabled{background:#c3c2bd}
+
+  /* 완료 화면 */
+  #done{display:none;position:fixed;inset:0;background:var(--mint);color:#fff;
+    z-index:50;text-align:center;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #done.on{display:block}
+  #done .in{min-height:100%;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:calc(44px + env(safe-area-inset-top,0px)) 28px
+            calc(44px + env(safe-area-inset-bottom,0px))}
+  #done .dl{margin-top:46px;padding-top:30px;width:100%;max-width:330px;
+    border-top:1px solid rgba(255,255,255,.28)}
+  #done .dl .dl-logo{height:38px;width:auto;display:block;margin:0 auto 22px;
+    opacity:.95}
+  #done .badges{display:flex;gap:10px;justify-content:center}
+  #done .badges a{flex:1;max-width:155px}
+  #done .badges img{width:100%;height:auto;border-radius:7px;display:block}
+  #done .mark{width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.2);
+    display:flex;align-items:center;justify-content:center;margin-bottom:26px}
+  #done .mark::after{content:"";width:26px;height:46px;border:solid #fff;
+    border-width:0 6px 6px 0;transform:rotate(45deg);margin-top:-10px}
+  #done h2{font-size:23px;font-weight:900;line-height:1.5;margin-bottom:34px}
+  #done .big{background:#fff;color:var(--mint);border-radius:16px;
+    padding:22px 24px;font-size:19px;font-weight:900;line-height:1.55;
+    letter-spacing:-.01em}
+  #done .gift{font-size:34px;margin-top:20px}
+
+  .err{display:none;background:#FFF3F3;border:1px solid #F3C9C9;color:#A33;
+    border-radius:11px;padding:12px 14px;font-size:12.5px;line-height:1.7;
+    margin-bottom:12px}
+  .err.on{display:block}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <nav class="lang">
+    <button data-l="ja" class="on">日本語</button>
+    <button data-l="en">English</button>
+    <button data-l="ko">한국어</button>
+  </nav>
+  <div class="hd">
+    <img class="logo" src="logo.svg" alt="TEUIDA">
+    <h1 id="h-title"></h1>
+    <p id="h-sub"></p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="err" id="err"></div>
+  <form id="form"></form>
+</div>
+
+<div class="bar"><div class="inner">
+  <button id="send" type="button"></button>
+</div></div>
+
+<div id="done"><div class="in">
+  <div class="mark"></div>
+  <h2 id="d-thanks"></h2>
+  <div class="big" id="d-show"></div>
+  <div class="gift">🎁</div>
+  <div class="dl">
+    <img class="dl-logo" src="logo.svg" alt="TEUIDA">
+    <div class="badges">
+      <a href="https://apps.apple.com/jp/app/id1457532562" target="_blank" rel="noopener">
+        <img src="appstore.png" alt="App Store"></a>
+      <a href="https://play.google.com/store/apps/details?id=net.teuida.teuida"
+         target="_blank" rel="noopener">
+        <img src="googleplay.png" alt="Google Play"></a>
+    </div>
+  </div>
+</div></div>
+
+<script>
+/* ===== 응답을 보낼 곳 — Apps Script 웹앱 URL로 바꾸세요 ===== */
+var ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+
+var T = {
+  ja:{
+    title:'体験アンケート',
+    sub:'ブースの端末で体験したあと、ご回答ください。',
+    submit:'送信する', sending:'送信中…',
+    multi:'複数選択可', single:'1つ選択',
+    thanks:'ご回答ありがとうございました！',
+    show:'この画面をスタッフにお見せください',
+    need:'未回答の設問があります。', needOne:'回答してください'
+  },
+  ko:{
+    title:'체험 설문',
+    sub:'부스 기기로 체험하신 후 응답해주세요.',
+    submit:'제출하기', sending:'전송 중…',
+    multi:'복수 선택 가능', single:'하나만 선택',
+    thanks:'응답해주셔서 감사합니다!',
+    show:'이 화면을 스태프에게 보여주세요',
+    need:'답하지 않은 문항이 있습니다.', needOne:'답해주세요'
+  },
+  en:{
+    title:'Experience Survey',
+    sub:'Please try the app on our booth device before answering.',
+    submit:'Submit', sending:'Sending…',
+    multi:'Select all that apply', single:'Select one',
+    thanks:'Thank you for your feedback!',
+    show:'Please show this screen to our staff',
+    need:'Some questions are unanswered.', needOne:'Please answer'
+  }
+};
+
+var QS = [
+  { id:'q1', type:'multi',
+    ja:'学んだことのある外国語を教えてください', en:'Please tell us which foreign languages you have studied', ko:'배운 적 있는 외국어를 알려주세요',
+    opts:[
+      {v:'english',  ja:'英語',      en:null,        ko:'영어'},
+      {v:'japanese', ja:null,        en:'Japanese',  ko:'일본어'},
+      {v:'chinese',  ja:'中国語',    en:'Chinese',   ko:'중국어'},
+      {v:'korean',   ja:'韓国語',    en:'Korean',    ko:null},
+      {v:'french',   ja:'フランス語', en:'French',    ko:'프랑스어'},
+      {v:'spanish',  ja:'スペイン語', en:'Spanish',   ko:'스페인어'},
+      {v:'german',   ja:'ドイツ語',   en:'German',    ko:'독일어'},
+      {v:'italian',  ja:'イタリア語', en:'Italian',   ko:'이탈리아어'},
+      {v:'other',    ja:'その他',    en:'Other',     ko:'기타', input:true},
+      {v:'none',     ja:'ない',      en:'None',      ko:'없음'}
+    ]},
+  { id:'q2', type:'single',
+    ja:'語学アプリを使ったことはありますか？', en:'Have you used a language-learning app?', ko:'어학 앱을 사용해본 적이 있나요?',
+    opts:[
+      {v:'using', ja:'今も使っている', en:'I still use one', ko:'지금도 쓰고 있다', input:true,
+        ja_ph:'アプリ名', en_ph:'App name', ko_ph:'앱 이름'},
+      {v:'used',  ja:'以前使っていた',  en:'I used to', ko:'예전에 썼다', input:true,
+        ja_ph:'アプリ名', en_ph:'App name', ko_ph:'앱 이름'},
+      {v:'never', ja:'使ったことがない', en:'Never', ko:'써본 적 없다'}
+    ]},
+  { id:'q3', type:'multi',
+    ja:'実際に声に出して話してみて、どうでしたか？',
+    en:'How was it to actually speak out loud?',
+    ko:'실제로 소리 내어 말해보니 어땠나요?',
+    opts:[
+      {v:'natural', ja:'自然に話せた',                en:'It felt natural', ko:'자연스럽게 말할 수 있었다'},
+      {v:'whatsay', ja:'何を言えばいいか迷った',       en:'I was unsure what to say', ko:'뭘 말해야 할지 망설였다'},
+      {v:'timing',  ja:'話すタイミングがわかりにくかった', en:'The timing to speak was unclear', ko:'말할 타이밍을 알기 어려웠다'},
+      {v:'shy',     ja:'声に出すのが少し恥ずかしかった',  en:'I felt a little shy speaking out loud', ko:'소리 내는 게 조금 부끄러웠다'},
+      {v:'asr',     ja:'うまく音声認識されなかった',     en:'My voice was not recognised well', ko:'음성 인식이 잘 되지 않았다'}
+    ]},
+  { id:'q4', type:'multi',
+    ja:'改善してほしいところは、どこですか？', en:'What would you like us to improve?', ko:'개선했으면 하는 곳은 어디인가요?',
+    opts:[
+      {v:'flow',    ja:'進め方（次に何をするか）', en:'The flow (what to do next)', ko:'진행 방법 (다음에 뭘 할지)'},
+      {v:'ui',      ja:'操作方法',               en:'How it is operated', ko:'조작 방법'},
+      {v:'speak',   ja:'話すタイミング・難しさ',   en:'Speaking timing / difficulty', ko:'말하는 타이밍·난이도'},
+      {v:'tempo',   ja:'動画のテンポ・間',        en:'Video pacing', ko:'영상의 템포·여백'},
+      {v:'script',  ja:'セリフ・表現',           en:'Lines and expressions', ko:'대사·표현'},
+      {v:'scoring', ja:'発音の採点',             en:'Pronunciation scoring', ko:'발음 채점'},
+      {v:'nothing', ja:'特にない',               en:'Nothing in particular', ko:'특별히 없다'},
+      {v:'other',   ja:'その他',                 en:'Other', ko:'기타', input:true}
+    ]},
+  { id:'q5', type:'single',
+    ja:'AIで生成した動画を使った語学アプリに、抵抗はありますか？',
+    en:'How would you feel about a language app that uses AI-generated video?',
+    ko:'AI로 생성한 영상을 사용하는 어학 앱에 거부감이 있나요?',
+    opts:[
+      {v:'none',   ja:'まったく抵抗はない',        en:'No hesitation at all', ko:'전혀 거부감이 없다'},
+      {v:'little', ja:'あまり抵抗はない',          en:'Not much hesitation', ko:'별로 거부감이 없다'},
+      {v:'some',   ja:'少し抵抗がある',            en:'A little hesitant', ko:'조금 꺼려진다'},
+      {v:'quite',  ja:'かなり抵抗がある',          en:'Quite hesitant', ko:'꽤 꺼려진다'},
+      {v:'no',     ja:'使いたくないほど抵抗がある', en:'Enough that I would not use it', ko:'사용하고 싶지 않을 정도로 거부감이 있다'}
+    ]},
+  { id:'q6', type:'text',
+    ja:'体験してみて、印象に残ったことを教えてください',
+    en:'Anything that stood out during the experience?',
+    ko:'체험해보고 인상에 남은 것을 알려주세요',
+    ja_ph:'例）○○が意外だった／○○がむずかしかった／○○がよかった',
+    en_ph:'e.g. “The scoring surprised me” / “Speaking was harder than I expected”',
+    ko_ph:'예) ○○가 의외였다 / ○○가 어려웠다 / ○○가 좋았다' }
+];
+
+var L = 'ja';
+var A = {};   // 응답 { q1:['korean'], q1_other:'...', ... }
+
+function render(){
+  var t = T[L];
+  document.documentElement.lang = L;
+  document.getElementById('h-title').textContent = t.title;
+  document.getElementById('h-sub').textContent   = t.sub;
+  document.getElementById('send').textContent    = t.submit;
+  document.getElementById('d-thanks').textContent= t.thanks;
+  document.getElementById('d-show').textContent  = t.show;
+
+  var f = document.getElementById('form');
+  f.innerHTML = '';
+  QS.forEach(function(q, i){
+    var box = document.createElement('div');
+    box.className = 'q';
+    var mode = q.type === 'multi' ? t.multi : (q.type === 'single' ? t.single : '');
+    var html = '<div class="qh"><span class="n">Q' + (i+1) + '</span>'
+             + '<span class="need">' + t.needOne + '</span></div>'
+             + '<h2>' + q[L] + '</h2>'
+             + (mode ? '<div class="mode">（' + mode + '）</div>'
+                     : '<div style="height:10px"></div>');
+
+    if (q.type === 'text'){
+      html += '<textarea id="' + q.id + '" rows="3"></textarea>'
+            + '<div class="ph">' + q[L + '_ph'] + '</div>';
+      box.innerHTML = html;
+      f.appendChild(box);
+      var ta = box.querySelector('textarea');
+      ta.value = A[q.id] || '';
+      ta.addEventListener('input', function(){
+        A[q.id] = ta.value;
+        if (ta.value.trim()) box.classList.remove('miss');
+      });
+      return;
+    }
+
+    q.opts.forEach(function(o){
+      if (o[L] === null) return;                 // 그 언어에서는 숨김
+      var sel = q.type === 'multi'
+        ? (A[q.id] || []).indexOf(o.v) >= 0
+        : A[q.id] === o.v;
+      html += '<label class="opt' + (q.type==='single' ? ' radio' : '') + '">'
+            + '<input type="' + (q.type==='multi' ? 'checkbox' : 'radio') + '"'
+            + ' name="' + q.id + '" value="' + o.v + '"' + (sel ? ' checked' : '') + '>'
+            + '<span class="box"></span><span class="tx">' + o[L] + '</span></label>';
+      if (o.input){
+        var ph = o[L + '_ph'] || '';
+        html += '<div class="sub"><input type="text" data-for="' + q.id + '_' + o.v + '"'
+              + ' placeholder="' + ph + '"></div>';
+      }
+    });
+    box.innerHTML = html;
+    f.appendChild(box);
+  });
+
+  f.querySelectorAll('input[type=checkbox],input[type=radio]').forEach(function(el){
+    el.addEventListener('change', function(){
+      var id = el.name;
+      el.closest('.q').classList.remove('miss');
+      if (el.type === 'checkbox'){
+        A[id] = A[id] || [];
+        var k = A[id].indexOf(el.value);
+        if (el.checked){ if (k < 0) A[id].push(el.value); }
+        else if (k >= 0) A[id].splice(k, 1);
+      } else {
+        A[id] = el.value;
+      }
+    });
+  });
+  f.querySelectorAll('input[type=text]').forEach(function(el){
+    var key = el.dataset.for;
+    el.value = A[key] || '';
+    el.addEventListener('input', function(){ A[key] = el.value; });
+  });
+}
+
+document.querySelectorAll('.lang button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.lang button').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    L = b.dataset.l;
+    render();
+    window.scrollTo({top:0});
+  });
+});
+
+/* 저장은 항상 일본어 라벨로 — 두 언어 응답을 합쳐서 집계할 수 있게 */
+function label(q, v){
+  var hit = (q.opts || []).filter(function(x){ return x.v === v; })[0];
+  return hit ? (hit.ja || hit.en) : v;
+}
+function payload(){
+  var o = { ts:new Date().toISOString(), lang:L };
+  QS.forEach(function(q){
+    var v = A[q.id];
+    if (q.type === 'text')      o[q.id] = v || '';
+    else if (Array.isArray(v))  o[q.id] = v.map(function(x){ return label(q, x); }).join(' / ');
+    else                        o[q.id] = v ? label(q, v) : '';
+    q.opts && q.opts.forEach(function(x){
+      if (x.input){
+        var k = q.id + '_' + x.v;
+        if (A[k]) o[k] = A[k];
+      }
+    });
+  });
+  return o;
+}
+
+function queued(){ try { return JSON.parse(localStorage.getItem('teuida_q') || '[]'); } catch(e){ return []; } }
+function enqueue(p){ try { var q = queued(); q.push(p); localStorage.setItem('teuida_q', JSON.stringify(q)); } catch(e){} }
+function clearQueue(){ try { localStorage.removeItem('teuida_q'); } catch(e){} }
+
+document.getElementById('send').addEventListener('click', function(){
+  var btn = document.getElementById('send'), err = document.getElementById('err');
+  // Q1~Q5 는 필수
+  var miss = QS.filter(function(q){
+    var v = A[q.id];
+    if (q.type === 'text') return !v || !v.trim();
+    return !v || (Array.isArray(v) && !v.length);
+  });
+  var cards = document.querySelectorAll('.q');
+  cards.forEach(function(el){ el.classList.remove('miss'); });
+  if (miss.length){
+    miss.forEach(function(q){ cards[QS.indexOf(q)].classList.add('miss'); });
+    err.textContent = T[L].need;
+    err.classList.add('on');
+    cards[QS.indexOf(miss[0])].scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  document.querySelectorAll('.q').forEach(function(el){ el.classList.remove('miss'); });
+  err.classList.remove('on');
+  btn.disabled = true;
+  btn.textContent = T[L].sending;
+
+  var batch = queued().concat([payload()]);
+  var finish = function(){
+    document.getElementById('done').classList.add('on');
+    document.body.style.overflow = 'hidden';
+  };
+
+  if (!ENDPOINT || ENDPOINT.indexOf('PASTE_') === 0){ enqueue(payload()); finish(); return; }
+
+  var body = JSON.stringify(batch);
+
+  // keepalive: 응답을 기다리지 않고 탭을 닫아도 전송이 끝까지 간다.
+  // text/plain 이라 preflight 가 없다(Apps Script 는 OPTIONS 에 응답하지 않는다).
+  function post(){
+    return fetch(ENDPOINT, {
+      method:'POST', mode:'no-cors', keepalive:true,
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: body
+    });
+  }
+
+  // 실패하면 1.5초 뒤 한 번 더. 그래도 안 되면 sendBeacon(브라우저가 보장 전송),
+  // 그마저 거부되면 기기에 쌓아 둔다. 어느 경로든 완료 화면은 반드시 뜬다.
+  post()
+    .then(function(){ clearQueue(); finish(); })
+    .catch(function(){
+      setTimeout(function(){
+        post()
+          .then(function(){ clearQueue(); finish(); })
+          .catch(function(){
+            var sent = false;
+            try {
+              sent = navigator.sendBeacon(
+                ENDPOINT, new Blob([body], {type:'text/plain;charset=utf-8'}));
+            } catch(e){}
+            if (sent) clearQueue(); else enqueue(payload());
+            finish();
+          });
+      }, 1500);
+    });
+});
+
+render();
+</script>
+</body>
+</html>

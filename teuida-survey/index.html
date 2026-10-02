@@ -372,7 +372,9 @@ function nb(el, s){
   String(s).split('|').forEach(function(part){
     var sp = document.createElement('span');
     sp.className = 'nb';
-    sp.textContent = part;
+    // inline-block 은 조각 끝 공백을 지운다. 한국어·영어는 그 공백이 단어 사이라
+    // 사라지면 붙어 버린다. 지워지지 않는 공백으로 바꾼다.
+    sp.textContent = part.replace(/ +$/, '\u00a0');
     el.appendChild(sp);
   });
 }

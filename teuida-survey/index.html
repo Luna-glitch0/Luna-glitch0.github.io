@@ -99,11 +99,14 @@
     display:flex;align-items:center;justify-content:center;margin-bottom:26px}
   #done .mark::after{content:"";width:26px;height:46px;border:solid #fff;
     border-width:0 6px 6px 0;transform:rotate(45deg);margin-top:-10px}
-  #done h2{font-size:23px;font-weight:900;line-height:1.5;margin-bottom:34px}
+  #done h2{font-size:22px;font-weight:900;line-height:1.5;margin-bottom:34px}
   #done .big{background:#fff;color:var(--mint);border-radius:16px;
-    padding:22px 24px;font-size:19px;font-weight:900;line-height:1.55;
+    padding:22px 22px;font-size:18px;font-weight:900;line-height:1.55;
     letter-spacing:-.01em}
   #done .gift{font-size:34px;margin-top:20px}
+  /* 일본어는 기본적으로 아무 글자 사이에서나 줄이 바뀐다.
+     「ございまし / た！」 같은 끊김을 막으려고 조각을 통글자로 묶는다. */
+  #done .nb{display:inline-block}
 
   .err{display:none;background:#FFF3F3;border:1px solid #F3C9C9;color:#A33;
     border-radius:11px;padding:12px 14px;font-size:12.5px;line-height:1.7;
@@ -162,8 +165,8 @@ var T = {
     sub:'ブースの端末で体験したあと、ご回答ください。',
     submit:'送信する', sending:'送信中…',
     multi:'複数選択可', single:'1つ選択',
-    thanks:'ご回答ありがとうございました！',
-    show:'この画面をスタッフにお見せください',
+    thanks:'ご回答|ありがとうございました！',
+    show:'この画面を|スタッフにお見せください',
     need:'未回答の設問があります。', needOne:'回答してください'
   },
   ko:{
@@ -171,8 +174,8 @@ var T = {
     sub:'부스 기기로 체험하신 후 응답해주세요.',
     submit:'제출하기', sending:'전송 중…',
     multi:'복수 선택 가능', single:'하나만 선택',
-    thanks:'응답해주셔서 감사합니다!',
-    show:'이 화면을 스태프에게 보여주세요',
+    thanks:'응답해주셔서 |감사합니다!',
+    show:'이 화면을 |스태프에게 보여주세요',
     need:'답하지 않은 문항이 있습니다.', needOne:'답해주세요'
   },
   en:{
@@ -180,8 +183,8 @@ var T = {
     sub:'Please try the app on our booth device before answering.',
     submit:'Submit', sending:'Sending…',
     multi:'Select all that apply', single:'Select one',
-    thanks:'Thank you for your feedback!',
-    show:'Please show this screen to our staff',
+    thanks:'Thank you |for your feedback!',
+    show:'Please show this screen |to our staff',
     need:'Some questions are unanswered.', needOne:'Please answer'
   }
 };
@@ -262,8 +265,8 @@ function render(){
   document.getElementById('h-title').textContent = t.title;
   document.getElementById('h-sub').textContent   = t.sub;
   document.getElementById('send').textContent    = t.submit;
-  document.getElementById('d-thanks').textContent= t.thanks;
-  document.getElementById('d-show').textContent  = t.show;
+  nb(document.getElementById('d-thanks'), t.thanks);
+  nb(document.getElementById('d-show'),   t.show);
 
   var f = document.getElementById('form');
   f.innerHTML = '';
@@ -361,6 +364,17 @@ function payload(){
     });
   });
   return o;
+}
+
+// '|' 로 나뉜 조각을 각각 통글자로 만든다. 조각 안에서는 줄이 안 바뀐다.
+function nb(el, s){
+  el.innerHTML = '';
+  String(s).split('|').forEach(function(part){
+    var sp = document.createElement('span');
+    sp.className = 'nb';
+    sp.textContent = part;
+    el.appendChild(sp);
+  });
 }
 
 function queued(){ try { return JSON.parse(localStorage.getItem('teuida_q') || '[]'); } catch(e){ return []; } }

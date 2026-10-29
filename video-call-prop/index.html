@@ -139,6 +139,10 @@
     font: inherit; font-size: 16px; outline: none; -webkit-user-select: text; user-select: text;
   }
   .item input[type=number] { max-width: 80px; }
+  .item select {
+    background: transparent; border: 0; color: var(--sub); font: inherit; font-size: 16px;
+    text-align: right; text-align-last: right; outline: none; -webkit-appearance: none; appearance: none;
+  }
   .item .val { color: var(--sub); font-size: 15px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .item label.file { color: #0a84ff; cursor: pointer; }
   .item input[type=file] { display: none; }
@@ -172,6 +176,17 @@
 
     <div class="group-title">수신 화면</div>
     <div class="group">
+      <div class="item">
+        <span>통화 화면 언어</span>
+        <select id="f-lang">
+          <option value="ko">한국어</option>
+          <option value="ja">일본어</option>
+          <option value="en">영어</option>
+          <option value="zh">중국어</option>
+          <option value="es">스페인어</option>
+          <option value="fr">프랑스어</option>
+        </select>
+      </div>
       <div class="item"><span>이름</span><input id="f-name" type="text" value="엄마"></div>
       <div class="item"><span>윗줄 문구</span><input id="f-label" type="text" value="영상 통화"></div>
       <div class="item"><span>자동 수신(초, 0=탭)</span><input id="f-delay" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
@@ -223,21 +238,21 @@
     <div class="small-row">
       <div class="small-btn">
         <div class="circ"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
-        <span>나중에 알림</span>
+        <span data-t="remind"></span>
       </div>
       <div class="small-btn">
         <div class="circ"><svg width="21" height="21" viewBox="0 0 24 24"><path fill="#fff" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
-        <span>메시지</span>
+        <span data-t="message"></span>
       </div>
     </div>
     <div class="big-row">
       <div class="big-btn decline" id="btn-decline">
         <div class="circ"><svg width="36" height="36" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
-        <span>거절</span>
+        <span data-t="decline"></span>
       </div>
       <div class="big-btn accept" id="btn-accept">
         <div class="circ"><svg width="36" height="36" viewBox="0 0 24 24"><path fill="#fff" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
-        <span>수락</span>
+        <span data-t="accept"></span>
       </div>
     </div>
   </div>
@@ -258,7 +273,7 @@
       <button class="p-btn end" id="b-end"><svg width="28" height="28" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></button>
     </div>
   </div>
-  <div id="ended">통화 종료</div>
+  <div id="ended" data-t="ended"></div>
 </section>
 
 <div id="corner"></div>
@@ -270,7 +285,7 @@
   const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
 
   // ---------- 설정 저장 (이 기기 브라우저에만) ----------
-  const FIELDS = ['name', 'label', 'delay', 'ring', 'sfx', 'loop', 'timer'];
+  const FIELDS = ['lang', 'name', 'label', 'delay', 'ring', 'sfx', 'loop', 'timer'];
   const load = () => {
     try {
       const saved = JSON.parse(localStorage.getItem('vcall-settings') || '{}');
@@ -288,6 +303,30 @@
     return out;
   };
   load();
+
+  // ---------- 통화 화면 언어 (설정 화면은 항상 한국어) ----------
+  const TEXT = {
+    ko: { label: '영상 통화', remind: '나중에 알림', message: '메시지', decline: '거절', accept: '수락', ended: '통화 종료' },
+    ja: { label: 'ビデオ通話', remind: '後で通知', message: 'メッセージ', decline: '拒否', accept: '応答', ended: '通話終了' },
+    en: { label: 'Video Call', remind: 'Remind Me', message: 'Message', decline: 'Decline', accept: 'Accept', ended: 'Call Ended' },
+    zh: { label: '视频通话', remind: '稍后提醒', message: '信息', decline: '拒绝', accept: '接听', ended: '通话结束' },
+    es: { label: 'Videollamada', remind: 'Recordar', message: 'Mensaje', decline: 'Rechazar', accept: 'Aceptar', ended: 'Llamada finalizada' },
+    fr: { label: 'Appel vidéo', remind: 'Me rappeler', message: 'Message', decline: 'Refuser', accept: 'Accepter', ended: 'Appel terminé' },
+  };
+  const t = () => TEXT[$('f-lang').value] || TEXT.ko;
+  const applyLang = () => {
+    const lang = $('f-lang').value;
+    ['incoming', 'call'].forEach((id) => $(id).setAttribute('lang', lang === 'zh' ? 'zh-CN' : lang));
+    document.querySelectorAll('[data-t]').forEach((el) => { el.textContent = t()[el.dataset.t]; });
+  };
+  // 언어를 바꾸면 윗줄 문구도 그 언어 기본값으로 (직접 고친 문구는 그대로 둔다)
+  let prevLang = $('f-lang').value;
+  $('f-lang').addEventListener('change', () => {
+    if ($('f-label').value === (TEXT[prevLang] || TEXT.ko).label) $('f-label').value = t().label;
+    prevLang = $('f-lang').value;
+    applyLang();
+  });
+  applyLang();
 
   // ---------- 상대 영상: 기기 안 IndexedDB 에 보관 ----------
   let remoteURL = null;
@@ -435,7 +474,7 @@
     callStart = Date.now();
     const tick = () => {
       const s = Math.floor((Date.now() - callStart) / 1000);
-      $('p-sub').textContent = cfg.timer ? fmt(s) : '영상 통화';
+      $('p-sub').textContent = cfg.timer ? fmt(s) : t().label;
     };
     tick(); clearInterval(clockTimer); clockTimer = setInterval(tick, 500);
     openPanel();

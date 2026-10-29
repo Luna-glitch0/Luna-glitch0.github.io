@@ -223,7 +223,7 @@
 <section id="setup" class="screen on">
   <div class="wrap">
     <h1>영상통화 촬영 소품</h1>
-    <p class="hint">설정 후 「시작」을 누르면 검은 화면이 됩니다. 정해 둔 시간이 지나거나 화면을 탭하면 전화가 걸려옵니다.</p>
+    <p class="hint">설정 후 「시작」을 누르면 검은 화면이 됩니다. 화면을 탭하면 전화가 걸려옵니다.</p>
 
     <div class="group-title">수신 화면</div>
     <div class="group">
@@ -260,7 +260,6 @@
         <label class="file" for="f-bg">선택</label>
         <input id="f-bg" type="file" accept="image/*">
       </div>
-      <div class="item"><span>자동 수신(초, 0=탭)</span><input id="f-delay" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
     </div>
 
     <div class="group-title">소리</div>
@@ -374,7 +373,7 @@
   const $ = (id) => document.getElementById(id);
 
   // ---------- 새 버전 자동 반영 (홈 화면 앱은 옛 페이지를 오래 붙잡고 있다) ----------
-  const BUILD = '2026-10-29-voice';
+  const BUILD = '2026-10-29-nodelay';
   (async () => {
     try {
       const res = await fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' });
@@ -390,7 +389,7 @@
   const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
 
   // ---------- 설정 저장 (이 기기 브라우저에만) ----------
-  const FIELDS = ['type', 'mode', 'lang', 'name', 'delay', 'sfx', 'loop'];
+  const FIELDS = ['type', 'mode', 'lang', 'name', 'sfx', 'loop'];
   const load = () => {
     try {
       const saved = JSON.parse(localStorage.getItem('vcall-settings') || '{}');
@@ -525,7 +524,7 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { lock = null; keepAwake(); } });
 
   // ---------- 흐름 ----------
-  let cfg = save(), delayTimer = null, hideTimer = null, clockTimer = null;
+  let cfg = save(), hideTimer = null, clockTimer = null;
   const isVoice = () => cfg.type === 'voice';
 
   const resetCall = () => {
@@ -538,14 +537,11 @@
   };
 
   const goStandby = () => {
-    clearTimeout(delayTimer); resetCall();
+    resetCall();
     show('standby');
-    const d = parseFloat(cfg.delay) || 0;
-    if (d > 0) delayTimer = setTimeout(ring, d * 1000);
   };
 
   const ring = () => {
-    clearTimeout(delayTimer);
     $('in-name').textContent = cfg.name;
     $('incoming').className = 'screen mode-' + (cfg.mode === 'slide' ? 'slide' : 'buttons') + ' type-' + (isVoice() ? 'voice' : 'video');
     $('in-label').textContent = isVoice() ? t().mobile : t().label;
@@ -657,7 +653,7 @@
   let pressTimer = null;
   const pressStart = () => {
     pressTimer = setTimeout(() => {
-      clearTimeout(delayTimer); resetCall();
+      resetCall();
       show('setup');
     }, 1000);
   };

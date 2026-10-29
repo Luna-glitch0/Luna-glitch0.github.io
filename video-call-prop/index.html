@@ -36,9 +36,6 @@
 
   /* ---------- 수신 화면 ---------- */
   #incoming { background: #111; }
-  #incoming .bg, #call .bg-self {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  }
   #incoming .bg-fallback {
     position: absolute; inset: 0;
     background: radial-gradient(120% 80% at 50% 20%, #4a4a52 0%, #1d1d22 55%, #0a0a0c 100%);
@@ -47,7 +44,6 @@
     position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 35%, rgba(0,0,0,.15) 60%, rgba(0,0,0,.6) 100%);
   }
-  .mirror { transform: scaleX(-1); }
   #incoming .who {
     position: absolute; left: 0; right: 0;
     top: calc(env(safe-area-inset-top, 44px) + 64px);
@@ -94,16 +90,6 @@
     background: linear-gradient(180deg, #a5a5ad, #6e6e76);
     display: grid; place-items: center; font-size: 48px; font-weight: 500; color: #fff;
   }
-  #self {
-    position: absolute; right: 14px;
-    top: calc(env(safe-area-inset-top, 44px) + 12px);
-    width: 104px; height: 156px; border-radius: 14px; overflow: hidden;
-    background: #2a2a2e; box-shadow: 0 4px 18px rgba(0,0,0,.35);
-    transition: top .3s ease;
-  }
-  #self video { width: 100%; height: 100%; object-fit: cover; }
-  #self .self-off { position: absolute; inset: 0; display: grid; place-items: center; background: #2a2a2e; }
-  body.panel-open #self { top: calc(env(safe-area-inset-top, 44px) + 150px); }
 
   #panel {
     position: absolute; left: 8px; right: 8px;
@@ -208,7 +194,6 @@
         <input id="f-video" type="file" accept="video/*">
       </div>
       <div class="item"><span>상대 영상 반복 재생</span><label class="toggle"><input id="f-loop" type="checkbox"><i></i></label></div>
-      <div class="item"><span>내 카메라(전면) 사용</span><label class="toggle"><input id="f-cam" type="checkbox" checked><i></i></label></div>
       <div class="item"><span>통화 시간 표시</span><label class="toggle"><input id="f-timer" type="checkbox" checked><i></i></label></div>
     </div>
 
@@ -229,7 +214,6 @@
 <!-- 수신 -->
 <section id="incoming" class="screen">
   <div class="bg-fallback"></div>
-  <video class="bg mirror" id="in-cam" playsinline muted autoplay></video>
   <div class="shade"></div>
   <div class="who">
     <div class="label" id="in-label"></div>
@@ -263,10 +247,6 @@
 <section id="call" class="screen">
   <div id="remote-empty"><div class="avatar" id="avatar"></div></div>
   <video id="remote" playsinline></video>
-  <div id="self">
-    <video id="self-cam" class="mirror" playsinline muted autoplay></video>
-    <div class="self-off" id="self-off"><svg width="28" height="28" viewBox="0 0 24 24"><path fill="rgba(255,255,255,.5)" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
-  </div>
   <div id="panel">
     <div class="p-name" id="p-name"></div>
     <div class="p-sub" id="p-sub"></div>
@@ -290,7 +270,7 @@
   const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
 
   // ---------- 설정 저장 (이 기기 브라우저에만) ----------
-  const FIELDS = ['name', 'label', 'delay', 'ring', 'sfx', 'loop', 'cam', 'timer'];
+  const FIELDS = ['name', 'label', 'delay', 'ring', 'sfx', 'loop', 'timer'];
   const load = () => {
     try {
       const saved = JSON.parse(localStorage.getItem('vcall-settings') || '{}');
@@ -365,23 +345,6 @@
     putFile('ring', f);
   });
 
-  // ---------- 전면 카메라 ----------
-  let camStream = null;
-  const startCam = async () => {
-    if (camStream || !navigator.mediaDevices) return;
-    try {
-      camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
-      $('in-cam').srcObject = camStream;
-      $('self-cam').srcObject = camStream;
-    } catch (e) { camStream = null; }
-  };
-  const stopCam = () => {
-    if (camStream) camStream.getTracks().forEach((t) => t.stop());
-    camStream = null;
-    $('in-cam').srcObject = null;
-    $('self-cam').srcObject = null;
-  };
-
   // ---------- 벨소리 (합성음) ----------
   let actx = null, ringTimer = null;
   const ringOnce = () => {
@@ -448,7 +411,6 @@
     clearTimeout(delayTimer);
     $('in-name').textContent = cfg.name;
     $('in-label').textContent = cfg.label;
-    $('in-cam').style.display = camStream ? 'block' : 'none';
     show('incoming');
     if (cfg.ring) startRing();
   };
@@ -468,8 +430,6 @@
     $('remote').style.display = hasRemote ? 'block' : 'none';
     $('remote').loop = !!cfg.loop;
     $('remote').muted = false;
-    $('self-off').style.display = camStream ? 'none' : 'grid';
-    $('b-camera').classList.toggle('active', !!camStream);
     show('call');
     if (hasRemote) { $('remote').currentTime = 0; $('remote').play().catch(() => {}); }
     callStart = Date.now();
@@ -498,7 +458,6 @@
     // 상대 영상 소리 재생 권한을 미리 풀어 둔다
     const rv = $('remote');
     if (rv.getAttribute('src')) { rv.muted = true; rv.play().then(() => { rv.pause(); rv.muted = false; }).catch(() => {}); }
-    if (cfg.cam) await startCam(); else stopCam();
     keepAwake();
     goStandby();
   });
@@ -508,12 +467,8 @@
   $('btn-decline').addEventListener('click', () => { stopRing(); goStandby(); });
   $('b-end').addEventListener('click', (e) => { e.stopPropagation(); endCall(); });
   $('panel').addEventListener('click', (e) => { e.stopPropagation(); openPanel(); });
-  ['b-speaker', 'b-mic', 'b-share'].forEach((id) => $(id).addEventListener('click', () => $(id).classList.toggle('active')));
-  $('b-camera').addEventListener('click', () => {
-    const on = !$('b-camera').classList.contains('active');
-    $('b-camera').classList.toggle('active', on);
-    $('self-off').style.display = on && camStream ? 'none' : 'grid';
-  });
+  ['b-speaker', 'b-camera', 'b-mic', 'b-share'].forEach((id) => $(id).addEventListener('click', () => $(id).classList.toggle('active')));
+
   $('call').addEventListener('click', () => {
     if (document.body.classList.contains('panel-open')) {
       clearTimeout(hideTimer); document.body.classList.remove('panel-open');

@@ -30,8 +30,12 @@
     -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   }
   .screen { position: fixed; inset: 0; display: none; }
-  /* 홈 화면 앱: iOS 가 알려 주는 높이가 상태 표시줄만큼 모자라 바닥이 빈다. 실제 화면 높이로 채운다 */
-  html.standalone .screen { bottom: auto; height: var(--full-h, 100%); }
+  /* iOS 26 홈 화면 앱 버그(WebKit 301108): 페이지가 화면보다 짧으면 화면 높이를 상태 표시줄만큼 줄인다.
+     페이지를 그만큼 길게 두면 화면 전체를 내 준다 */
+  @media (display-mode: standalone) {
+    html { min-height: min(100lvh, calc(100% + env(safe-area-inset-top))); }
+  }
+  html.standalone { min-height: min(100lvh, calc(100% + env(safe-area-inset-top))); }
   .screen.on { display: block; }
   svg { display: block; }
   .glass {
@@ -391,17 +395,8 @@
 (() => {
   const $ = (id) => document.getElementById(id);
 
-  // 홈 화면 앱으로 열렸으면 화면 전체 높이를 쓴다
-  const fitStandalone = () => {
-    const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
-    document.documentElement.classList.toggle('standalone', !!standalone);
-    if (!standalone) return;
-    const portrait = innerHeight >= innerWidth;
-    const full = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
-    document.documentElement.style.setProperty('--full-h', Math.max(full, innerHeight) + 'px');
-  };
-  fitStandalone();
-  addEventListener('resize', fitStandalone);
+  // 홈 화면 앱 표시 (display-mode 가 안 잡히는 경우 대비)
+  document.documentElement.classList.toggle('standalone', !!(navigator.standalone || matchMedia('(display-mode: standalone)').matches));
 
   // 설정 화면 맨 아래: 버전·화면 값 (문제 생기면 캡처로 바로 진단)
   const diag = () => {
@@ -414,13 +409,13 @@
     $('diag').textContent = `버전 ${BUILD} · 앱모드 ${document.documentElement.classList.contains('standalone') ? 'O' : 'X'}`
       + ` · 창 ${innerWidth}×${innerHeight} · 화면 ${screen.width}×${screen.height}`
       + ` · 보이는영역 ${vv ? Math.round(vv.height) : '-'} · 안전영역 위 ${Math.round(r.top)} 아래 ${Math.round(innerHeight - r.bottom)}`
-      + ` · 채움 ${getComputedStyle(document.documentElement).getPropertyValue('--full-h') || '-'}`;
+      + ` · 문서높이 ${document.documentElement.getBoundingClientRect().height}`;
   };
   setTimeout(diag, 300);
   addEventListener('resize', () => setTimeout(diag, 100));
 
   // ---------- 새 버전 자동 반영 (홈 화면 앱은 옛 페이지를 오래 붙잡고 있다) ----------
-  const BUILD = '2026-10-29-diag';
+  const BUILD = '2026-10-29-webkit301108';
   (async () => {
     try {
       const res = await fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' });

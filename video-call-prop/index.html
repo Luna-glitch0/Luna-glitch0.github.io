@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="영상통화">
+<meta name="theme-color" content="#000000">
+<title>영상통화 소품</title>
+<style>
+  :root {
+    --green: #34c759;
+    --red: #ff3b30;
+    --glass: rgba(60, 60, 67, 0.55);
+    --glass-strong: rgba(30, 30, 32, 0.72);
+    --text: #ffffff;
+    --sub: rgba(235, 235, 245, 0.72);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; height: 100%; background: #000; color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Apple SD Gothic Neo", system-ui, sans-serif;
+    overflow: hidden; overscroll-behavior: none;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+  }
+  .screen { position: fixed; inset: 0; display: none; }
+  .screen.on { display: block; }
+  svg { display: block; }
+
+  /* ---------- 대기 (검은 화면) ---------- */
+  #standby { background: #000; }
+  #corner { position: fixed; top: 0; left: 0; width: 90px; height: 90px; z-index: 50; }
+
+  /* ---------- 수신 화면 ---------- */
+  #incoming { background: #111; }
+  #incoming .bg, #call .bg-self {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
+  #incoming .bg-fallback {
+    position: absolute; inset: 0;
+    background: radial-gradient(120% 80% at 50% 20%, #4a4a52 0%, #1d1d22 55%, #0a0a0c 100%);
+  }
+  #incoming .shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 35%, rgba(0,0,0,.15) 60%, rgba(0,0,0,.6) 100%);
+  }
+  .mirror { transform: scaleX(-1); }
+  #incoming .who {
+    position: absolute; left: 0; right: 0;
+    top: calc(env(safe-area-inset-top, 44px) + 64px);
+    text-align: center; padding: 0 24px;
+    animation: fadeIn .45s ease-out both;
+  }
+  #incoming .label { font-size: 17px; color: var(--sub); letter-spacing: -.2px; }
+  #incoming .name {
+    font-size: 36px; font-weight: 500; margin-top: 6px; letter-spacing: -.6px;
+    text-shadow: 0 1px 8px rgba(0,0,0,.25);
+  }
+  #incoming .actions {
+    position: absolute; left: 0; right: 0;
+    bottom: calc(env(safe-area-inset-bottom, 20px) + 56px);
+    padding: 0 44px; animation: fadeIn .45s ease-out .1s both;
+  }
+  .small-row { display: flex; justify-content: space-between; margin-bottom: 48px; }
+  .small-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 78px; }
+  .small-btn .circ {
+    width: 46px; height: 46px; border-radius: 50%; background: var(--glass);
+    -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+    display: grid; place-items: center;
+  }
+  .small-btn span, .big-btn span { font-size: 14px; color: var(--text); }
+  .big-row { display: flex; justify-content: space-between; }
+  .big-btn { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 78px; }
+  .big-btn .circ {
+    width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center;
+    transition: transform .12s ease;
+  }
+  .big-btn:active .circ { transform: scale(.92); }
+  .decline .circ { background: var(--red); }
+  .accept .circ { background: var(--green); }
+
+  /* ---------- 통화 화면 ---------- */
+  #call { background: #000; }
+  #remote { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+  #remote-empty {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    background: radial-gradient(120% 80% at 50% 30%, #3a3a40 0%, #141417 70%);
+  }
+  #remote-empty .avatar {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: linear-gradient(180deg, #a5a5ad, #6e6e76);
+    display: grid; place-items: center; font-size: 48px; font-weight: 500; color: #fff;
+  }
+  #self {
+    position: absolute; right: 14px;
+    top: calc(env(safe-area-inset-top, 44px) + 12px);
+    width: 104px; height: 156px; border-radius: 14px; overflow: hidden;
+    background: #2a2a2e; box-shadow: 0 4px 18px rgba(0,0,0,.35);
+    transition: top .3s ease;
+  }
+  #self video { width: 100%; height: 100%; object-fit: cover; }
+  #self .self-off { position: absolute; inset: 0; display: grid; place-items: center; background: #2a2a2e; }
+  body.panel-open #self { top: calc(env(safe-area-inset-top, 44px) + 150px); }
+
+  #panel {
+    position: absolute; left: 8px; right: 8px;
+    top: calc(env(safe-area-inset-top, 44px) + 4px);
+    border-radius: 28px; padding: 14px 16px 16px;
+    background: var(--glass-strong);
+    -webkit-backdrop-filter: blur(30px) saturate(1.4); backdrop-filter: blur(30px) saturate(1.4);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  body:not(.panel-open) #panel { opacity: 0; transform: translateY(-12px); pointer-events: none; }
+  #panel .p-name { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+  #panel .p-sub { font-size: 13px; color: var(--sub); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  #panel .p-row { display: flex; justify-content: space-between; margin-top: 14px; }
+  .p-btn {
+    width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(120,120,128,.36); border: 0; padding: 0;
+  }
+  .p-btn.active { background: #fff; }
+  .p-btn.active svg path { fill: #000; }
+  .p-btn.end { background: var(--red); }
+
+  /* ---------- 종료 ---------- */
+  #ended {
+    position: absolute; inset: 0; display: none; place-items: center;
+    background: rgba(0,0,0,.6); font-size: 17px; color: var(--sub);
+  }
+  #ended.on { display: grid; animation: fadeIn .2s both; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- 설정 ---------- */
+  #setup { background: #000; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  #setup .wrap {
+    max-width: 480px; margin: 0 auto;
+    padding: calc(env(safe-area-inset-top, 20px) + 16px) 16px calc(env(safe-area-inset-bottom, 20px) + 24px);
+  }
+  #setup h1 { font-size: 28px; margin: 8px 4px 4px; letter-spacing: -.5px; }
+  #setup .hint { font-size: 13px; color: var(--sub); margin: 0 4px 18px; line-height: 1.5; }
+  .group { background: #1c1c1e; border-radius: 12px; overflow: hidden; margin-bottom: 22px; }
+  .item {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; min-height: 48px; border-bottom: .5px solid #38383a; font-size: 16px;
+  }
+  .item:last-child { border-bottom: 0; }
+  .item input[type=text], .item input[type=number] {
+    flex: 1; min-width: 0; text-align: right; background: transparent; border: 0; color: #fff;
+    font: inherit; font-size: 16px; outline: none; -webkit-user-select: text; user-select: text;
+  }
+  .item input[type=number] { max-width: 80px; }
+  .item .val { color: var(--sub); font-size: 15px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item label.file { color: #0a84ff; cursor: pointer; }
+  .item input[type=file] { display: none; }
+  .toggle { position: relative; width: 51px; height: 31px; flex: none; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle i {
+    position: absolute; inset: 0; border-radius: 31px; background: #39393d; transition: background .2s;
+  }
+  .toggle i::after {
+    content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%;
+    background: #fff; transition: transform .2s; box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  }
+  .toggle input:checked + i { background: var(--green); }
+  .toggle input:checked + i::after { transform: translateX(20px); }
+  .group-title { font-size: 13px; color: var(--sub); margin: 0 16px 6px; text-transform: uppercase; }
+  #start {
+    width: 100%; height: 52px; border: 0; border-radius: 14px; background: var(--green);
+    color: #fff; font: inherit; font-size: 17px; font-weight: 600;
+  }
+  .note { font-size: 13px; color: var(--sub); line-height: 1.6; margin: 18px 4px 0; }
+  .note b { color: #fff; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- 설정 -->
+<section id="setup" class="screen on">
+  <div class="wrap">
+    <h1>영상통화 촬영 소품</h1>
+    <p class="hint">설정 후 「시작」을 누르면 검은 화면이 됩니다. 정해 둔 시간이 지나거나 화면을 탭하면 전화가 걸려옵니다.</p>
+
+    <div class="group-title">수신 화면</div>
+    <div class="group">
+      <div class="item"><span>이름</span><input id="f-name" type="text" value="엄마"></div>
+      <div class="item"><span>윗줄 문구</span><input id="f-label" type="text" value="영상 통화"></div>
+      <div class="item"><span>자동 수신(초, 0=탭)</span><input id="f-delay" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
+      <div class="item"><span>벨소리</span><label class="toggle"><input id="f-ring" type="checkbox" checked><i></i></label></div>
+      <div class="item">
+        <span>벨소리 파일</span>
+        <span class="val" id="v-ring">기본음</span>
+        <label class="file" for="f-ringfile">선택</label>
+        <input id="f-ringfile" type="file" accept="audio/*,video/*">
+      </div>
+      <div class="item"><span>받을 때·끊을 때 효과음</span><label class="toggle"><input id="f-sfx" type="checkbox" checked><i></i></label></div>
+    </div>
+
+    <div class="group-title">통화 화면</div>
+    <div class="group">
+      <div class="item">
+        <span>상대 영상</span>
+        <span class="val" id="v-video">없음</span>
+        <label class="file" for="f-video">선택</label>
+        <input id="f-video" type="file" accept="video/*">
+      </div>
+      <div class="item"><span>상대 영상 반복 재생</span><label class="toggle"><input id="f-loop" type="checkbox"><i></i></label></div>
+      <div class="item"><span>내 카메라(전면) 사용</span><label class="toggle"><input id="f-cam" type="checkbox" checked><i></i></label></div>
+      <div class="item"><span>통화 시간 표시</span><label class="toggle"><input id="f-timer" type="checkbox" checked><i></i></label></div>
+    </div>
+
+    <button id="start">시작</button>
+
+    <p class="note">
+      <b>설정 다시 열기</b> · 화면 왼쪽 위 모서리를 1초 길게 누르기(화면에 보이지 않음)<br>
+      <b>전체 화면</b> · Safari 공유 버튼 → 「홈 화면에 추가」 후 홈 화면 아이콘으로 열면 주소창이 사라집니다<br>
+      <b>통화 중</b> · 화면을 탭하면 위쪽 버튼이 나타났다 사라집니다. 빨간 버튼 = 통화 종료<br>
+      <b>소리</b> · 벨소리 파일을 고르지 않으면 기본 합성음이 납니다. 소리가 안 나면 무음 스위치와 음량을 확인하세요
+    </p>
+  </div>
+</section>
+
+<!-- 대기 -->
+<section id="standby" class="screen"></section>
+
+<!-- 수신 -->
+<section id="incoming" class="screen">
+  <div class="bg-fallback"></div>
+  <video class="bg mirror" id="in-cam" playsinline muted autoplay></video>
+  <div class="shade"></div>
+  <div class="who">
+    <div class="label" id="in-label"></div>
+    <div class="name" id="in-name"></div>
+  </div>
+  <div class="actions">
+    <div class="small-row">
+      <div class="small-btn">
+        <div class="circ"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+        <span>나중에 알림</span>
+      </div>
+      <div class="small-btn">
+        <div class="circ"><svg width="21" height="21" viewBox="0 0 24 24"><path fill="#fff" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+        <span>메시지</span>
+      </div>
+    </div>
+    <div class="big-row">
+      <div class="big-btn decline" id="btn-decline">
+        <div class="circ"><svg width="36" height="36" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+        <span>거절</span>
+      </div>
+      <div class="big-btn accept" id="btn-accept">
+        <div class="circ"><svg width="36" height="36" viewBox="0 0 24 24"><path fill="#fff" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
+        <span>수락</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 통화 -->
+<section id="call" class="screen">
+  <div id="remote-empty"><div class="avatar" id="avatar"></div></div>
+  <video id="remote" playsinline></video>
+  <div id="self">
+    <video id="self-cam" class="mirror" playsinline muted autoplay></video>
+    <div class="self-off" id="self-off"><svg width="28" height="28" viewBox="0 0 24 24"><path fill="rgba(255,255,255,.5)" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
+  </div>
+  <div id="panel">
+    <div class="p-name" id="p-name"></div>
+    <div class="p-sub" id="p-sub"></div>
+    <div class="p-row">
+      <button class="p-btn" id="b-speaker"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+      <button class="p-btn active" id="b-camera"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></button>
+      <button class="p-btn" id="b-mic"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg></button>
+      <button class="p-btn" id="b-share"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M16 1H8C6.34 1 5 2.34 5 4v16c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V4c0-1.66-1.34-3-3-3zm1 17H7V4h10v14zm-5 4c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg></button>
+      <button class="p-btn end" id="b-end"><svg width="28" height="28" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></button>
+    </div>
+  </div>
+  <div id="ended">통화 종료</div>
+</section>
+
+<div id="corner"></div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const screens = ['setup', 'standby', 'incoming', 'call'];
+  const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
+
+  // ---------- 설정 저장 (이 기기 브라우저에만) ----------
+  const FIELDS = ['name', 'label', 'delay', 'ring', 'sfx', 'loop', 'cam', 'timer'];
+  const load = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('vcall-settings') || '{}');
+      FIELDS.forEach((k) => {
+        if (!(k in saved)) return;
+        const el = $('f-' + k);
+        if (el.type === 'checkbox') el.checked = saved[k]; else el.value = saved[k];
+      });
+    } catch (e) {}
+  };
+  const save = () => {
+    const out = {};
+    FIELDS.forEach((k) => { const el = $('f-' + k); out[k] = el.type === 'checkbox' ? el.checked : el.value; });
+    try { localStorage.setItem('vcall-settings', JSON.stringify(out)); } catch (e) {}
+    return out;
+  };
+  load();
+
+  // ---------- 상대 영상: 기기 안 IndexedDB 에 보관 ----------
+  let remoteURL = null;
+  const db = () => new Promise((res, rej) => {
+    const r = indexedDB.open('vcall', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('files');
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+  const putFile = async (key, file) => {
+    try {
+      const d = await db();
+      d.transaction('files', 'readwrite').objectStore('files').put({ blob: file, name: file.name }, key);
+    } catch (e) {}
+  };
+  const getFile = async (key) => {
+    try {
+      const d = await db();
+      return await new Promise((res) => {
+        const r = d.transaction('files').objectStore('files').get(key);
+        r.onsuccess = () => res(r.result || null);
+        r.onerror = () => res(null);
+      });
+    } catch (e) { return null; }
+  };
+  const setRemote = (blob, name) => {
+    if (remoteURL) URL.revokeObjectURL(remoteURL);
+    remoteURL = URL.createObjectURL(blob);
+    $('remote').src = remoteURL;
+    $('v-video').textContent = name || '선택됨';
+  };
+  const qsVideo = new URLSearchParams(location.search).get('video');
+  if (qsVideo) { $('remote').src = qsVideo; $('v-video').textContent = 'URL'; }
+  else getFile('remote').then((v) => { if (v) setRemote(v.blob, v.name); });
+  $('f-video').addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    setRemote(f, f.name);
+    putFile('remote', f);
+  });
+
+  // ---------- 벨소리 파일 (없으면 합성음) ----------
+  const ringAudio = new Audio();
+  ringAudio.loop = true;
+  ringAudio.playsInline = true;
+  const setRingFile = (blob, name) => {
+    ringAudio.src = URL.createObjectURL(blob);
+    $('v-ring').textContent = name || '선택됨';
+  };
+  getFile('ring').then((v) => { if (v) setRingFile(v.blob, v.name); });
+  $('f-ringfile').addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    setRingFile(f, f.name);
+    putFile('ring', f);
+  });
+
+  // ---------- 전면 카메라 ----------
+  let camStream = null;
+  const startCam = async () => {
+    if (camStream || !navigator.mediaDevices) return;
+    try {
+      camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      $('in-cam').srcObject = camStream;
+      $('self-cam').srcObject = camStream;
+    } catch (e) { camStream = null; }
+  };
+  const stopCam = () => {
+    if (camStream) camStream.getTracks().forEach((t) => t.stop());
+    camStream = null;
+    $('in-cam').srcObject = null;
+    $('self-cam').srcObject = null;
+  };
+
+  // ---------- 벨소리 (합성음) ----------
+  let actx = null, ringTimer = null;
+  const ringOnce = () => {
+    if (!actx) return;
+    const t0 = actx.currentTime;
+    [0, 0.16, 0.32, 0.48].forEach((dt, i) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'sine';
+      o.frequency.value = i % 2 ? 1046.5 : 1318.5;
+      g.gain.setValueAtTime(0, t0 + dt);
+      g.gain.linearRampToValueAtTime(0.25, t0 + dt + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + dt + 0.15);
+      o.connect(g).connect(actx.destination);
+      o.start(t0 + dt); o.stop(t0 + dt + 0.16);
+    });
+  };
+  const startRing = () => {
+    if (ringAudio.src) { ringAudio.currentTime = 0; ringAudio.play().catch(() => {}); return; }
+    ringOnce(); ringTimer = setInterval(ringOnce, 2000);
+  };
+  const stopRing = () => { clearInterval(ringTimer); ringTimer = null; ringAudio.pause(); };
+
+  // 받을 때: 올라가는 두 음 / 끊을 때: 내려가는 두 음
+  const chime = (freqs) => {
+    if (!actx) return;
+    const t0 = actx.currentTime;
+    freqs.forEach((f, i) => {
+      const o = actx.createOscillator(), g = actx.createGain(), dt = i * 0.12;
+      o.type = 'sine';
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0, t0 + dt);
+      g.gain.linearRampToValueAtTime(0.22, t0 + dt + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + dt + 0.35);
+      o.connect(g).connect(actx.destination);
+      o.start(t0 + dt); o.stop(t0 + dt + 0.4);
+    });
+  };
+  const sfxConnect = () => { if (cfg.sfx) chime([880, 1318.5]); };
+  const sfxEnd = () => { if (cfg.sfx) chime([1318.5, 880]); };
+
+  // ---------- 화면 꺼짐 방지 ----------
+  let lock = null;
+  const keepAwake = async () => {
+    try { if ('wakeLock' in navigator && !lock) lock = await navigator.wakeLock.request('screen'); } catch (e) {}
+  };
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { lock = null; keepAwake(); } });
+
+  // ---------- 흐름 ----------
+  let cfg = save(), delayTimer = null, clockTimer = null, hideTimer = null, callStart = 0;
+
+  const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+
+  const goStandby = () => {
+    stopRing(); clearTimeout(delayTimer); clearInterval(clockTimer); clearTimeout(hideTimer);
+    $('remote').pause();
+    $('ended').classList.remove('on');
+    document.body.classList.remove('panel-open');
+    show('standby');
+    const d = parseFloat(cfg.delay) || 0;
+    if (d > 0) delayTimer = setTimeout(ring, d * 1000);
+  };
+
+  const ring = () => {
+    clearTimeout(delayTimer);
+    $('in-name').textContent = cfg.name;
+    $('in-label').textContent = cfg.label;
+    $('in-cam').style.display = camStream ? 'block' : 'none';
+    show('incoming');
+    if (cfg.ring) startRing();
+  };
+
+  const openPanel = () => {
+    document.body.classList.add('panel-open');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => document.body.classList.remove('panel-open'), 4000);
+  };
+
+  const accept = () => {
+    stopRing();
+    sfxConnect();
+    $('p-name').textContent = cfg.name;
+    $('avatar').textContent = (cfg.name || '').trim().slice(0, 1);
+    const hasRemote = !!$('remote').getAttribute('src');
+    $('remote').style.display = hasRemote ? 'block' : 'none';
+    $('remote').loop = !!cfg.loop;
+    $('remote').muted = false;
+    $('self-off').style.display = camStream ? 'none' : 'grid';
+    $('b-camera').classList.toggle('active', !!camStream);
+    show('call');
+    if (hasRemote) { $('remote').currentTime = 0; $('remote').play().catch(() => {}); }
+    callStart = Date.now();
+    const tick = () => {
+      const s = Math.floor((Date.now() - callStart) / 1000);
+      $('p-sub').textContent = cfg.timer ? fmt(s) : '영상 통화';
+    };
+    tick(); clearInterval(clockTimer); clockTimer = setInterval(tick, 500);
+    openPanel();
+  };
+
+  const endCall = () => {
+    $('remote').pause();
+    sfxEnd();
+    clearInterval(clockTimer);
+    $('ended').classList.add('on');
+    setTimeout(goStandby, 1500);
+  };
+
+  $('start').addEventListener('click', async () => {
+    cfg = save();
+    // 무음 스위치가 켜져 있어도 소리가 나게
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); await actx.resume(); } catch (e) {}
+    if (ringAudio.src) ringAudio.play().then(() => ringAudio.pause()).catch(() => {});
+    // 상대 영상 소리 재생 권한을 미리 풀어 둔다
+    const rv = $('remote');
+    if (rv.getAttribute('src')) { rv.muted = true; rv.play().then(() => { rv.pause(); rv.muted = false; }).catch(() => {}); }
+    if (cfg.cam) await startCam(); else stopCam();
+    keepAwake();
+    goStandby();
+  });
+
+  $('standby').addEventListener('click', ring);
+  $('btn-accept').addEventListener('click', accept);
+  $('btn-decline').addEventListener('click', () => { stopRing(); goStandby(); });
+  $('b-end').addEventListener('click', (e) => { e.stopPropagation(); endCall(); });
+  $('panel').addEventListener('click', (e) => { e.stopPropagation(); openPanel(); });
+  ['b-speaker', 'b-mic', 'b-share'].forEach((id) => $(id).addEventListener('click', () => $(id).classList.toggle('active')));
+  $('b-camera').addEventListener('click', () => {
+    const on = !$('b-camera').classList.contains('active');
+    $('b-camera').classList.toggle('active', on);
+    $('self-off').style.display = on && camStream ? 'none' : 'grid';
+  });
+  $('call').addEventListener('click', () => {
+    if (document.body.classList.contains('panel-open')) {
+      clearTimeout(hideTimer); document.body.classList.remove('panel-open');
+    } else openPanel();
+  });
+  $('remote').addEventListener('ended', () => { if (!$('remote').loop) endCall(); });
+
+  // 왼쪽 위 모서리 길게 누르기 → 설정
+  let pressTimer = null;
+  const pressStart = (e) => {
+    pressTimer = setTimeout(() => {
+      stopRing(); clearTimeout(delayTimer); clearInterval(clockTimer);
+      $('remote').pause(); $('ended').classList.remove('on');
+      show('setup');
+    }, 1000);
+  };
+  const pressEnd = () => clearTimeout(pressTimer);
+  $('corner').addEventListener('touchstart', pressStart, { passive: true });
+  $('corner').addEventListener('touchend', pressEnd);
+  $('corner').addEventListener('mousedown', pressStart);
+  $('corner').addEventListener('mouseup', pressEnd);
+  $('corner').addEventListener('click', (e) => {
+    // 대기 화면에서 모서리 짧은 탭은 일반 탭처럼 전화를 울린다
+    if ($('standby').classList.contains('on')) ring();
+  });
+})();
+</script>
+</body>
+</html>

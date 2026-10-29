@@ -169,12 +169,14 @@
   .v-btn.dim svg path { fill: rgba(255,255,255,.3); }
   .v-btn.end .circ { background: #d70d0d; box-shadow: none; }
 
-  /* 통화 종료: 영상은 가운데 글자, 음성은 시간 자리에 글자 + 버튼 흐리게 */
+  /* 통화 종료: 상태 문구(종료 중… → 종료됨)를 이름 아래 상태 자리에. 음성은 시간 자리, 영상은 위쪽 */
   #ended {
-    position: absolute; inset: 0; display: grid; place-items: center;
-    background: rgba(0,0,0,.55); font-size: 17px; color: rgba(255,255,255,.85);
+    position: absolute; inset: 0; text-align: center; padding: calc(var(--top) + 36px) 20px 0;
+    background: rgba(0,0,0,.5);
     opacity: 0; pointer-events: none; transition: opacity .25s ease;
   }
+  #ended .e-name { font-size: 28px; font-weight: 600; letter-spacing: -.3px; }
+  #ended .e-status { font-size: 17px; color: rgba(255,255,255,.7); margin-top: 4px; }
   #ended.on { opacity: 1; }
   #call:has(#ended.on) .avatar { opacity: 0; }
   #voice.ending .v-grid { opacity: .4; transition: opacity .25s ease; }
@@ -357,7 +359,7 @@
     <button class="c-btn" id="b-more"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
     <button class="c-btn end" id="b-end"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
   </div>
-  <div id="ended" data-t="ended"></div>
+  <div id="ended"><div class="e-name" id="e-name"></div><div class="e-status" id="e-status"></div></div>
   <div id="fade"></div>
 </section>
 
@@ -387,7 +389,7 @@
   const $ = (id) => document.getElementById(id);
 
   // ---------- 새 버전 자동 반영 (홈 화면 앱은 옛 페이지를 오래 붙잡고 있다) ----------
-  const BUILD = '2026-10-29-ref1';
+  const BUILD = '2026-10-29-ended2';
   (async () => {
     try {
       const res = await fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' });
@@ -426,17 +428,17 @@
   // 문구 출처: iOS 27.0.1 CallsDialer.framework · InCallService.app · ConversationKit.framework 현지화 문자열
   const TEXT = {
     ko: { label: 'FaceTime 영상 통화', mobile: '휴대 전화', remind: '나중에 알림', message: '메시지 보내기', voicemail: '음성 메시지', decline: '거절', accept: '응답', slide: '밀어서 통화하기',
-          speaker: '스피커', mute: '소리 끔', more: '더 보기', end: '종료', keypad: '키패드', ended: '통화 종료' },
+          speaker: '스피커', mute: '소리 끔', more: '더 보기', end: '종료', keypad: '키패드', ended: '통화 종료', ending: '통화 종료 중…', ftEnding: 'FaceTime 종료 중…', ftEnded: 'FaceTime 종료됨' },
     ja: { label: 'FaceTimeビデオ', mobile: '携帯電話', remind: 'あとで通知', message: 'メッセージを送信', voicemail: '留守番電話', decline: '拒否', accept: '応答', slide: 'スライドで応答',
-          speaker: 'スピーカー', mute: '消音', more: 'その他', end: '終了', keypad: 'キーパッド', ended: '通話終了' },
+          speaker: 'スピーカー', mute: '消音', more: 'その他', end: '終了', keypad: 'キーパッド', ended: '通話終了', ending: '通話終了中…', ftEnding: 'FaceTime終了中…', ftEnded: 'FaceTimeを終了しました' },
     en: { label: 'FaceTime Video', mobile: 'mobile', remind: 'Remind Me', message: 'Message', voicemail: 'Voicemail', decline: 'Decline', accept: 'Accept', slide: 'slide to answer',
-          speaker: 'Speaker', mute: 'Mute', more: 'More', end: 'End', keypad: 'Keypad', ended: 'Call ended' },
+          speaker: 'Speaker', mute: 'Mute', more: 'More', end: 'End', keypad: 'Keypad', ended: 'Call ended', ending: 'Call ending…', ftEnding: 'FaceTime ending…', ftEnded: 'FaceTime ended' },
     zh: { label: 'FaceTime视频', mobile: '手机', remind: '提醒我', message: '信息', voicemail: '语音留言', decline: '拒绝', accept: '接受', slide: '滑动来接听',
-          speaker: '免提', mute: '静音', more: '更多', end: '结束', keypad: '拨号键盘', ended: '通话结束' },
+          speaker: '免提', mute: '静音', more: '更多', end: '结束', keypad: '拨号键盘', ended: '通话结束', ending: '通话即将结束…', ftEnding: 'FaceTime通话即将结束…', ftEnded: 'FaceTime通话已结束' },
     es: { label: 'FaceTime de vídeo', mobile: 'móvil', remind: 'Recordar', message: 'Mensaje', voicemail: 'Buzón de voz', decline: 'Rechazar', accept: 'Aceptar', slide: 'Deslizar para contestar',
-          speaker: 'Altavoz', mute: 'Silenciar', more: 'Más', end: 'Finalizar', keypad: 'Teclado', ended: 'Llamada terminada' },
+          speaker: 'Altavoz', mute: 'Silenciar', more: 'Más', end: 'Finalizar', keypad: 'Teclado', ended: 'Llamada terminada', ending: 'Finalizando la llamada…', ftEnding: 'FaceTime finalizando…', ftEnded: 'FaceTime finalizado' },
     fr: { label: 'FaceTime vidéo', mobile: 'portable', remind: 'Rappel', message: 'Message', voicemail: 'Messagerie', decline: 'Refuser', accept: 'Accepter', slide: 'Répondre',
-          speaker: 'Haut-parleur', mute: 'Couper le micro', more: 'Plus', end: 'Raccrocher', keypad: 'Clavier', ended: 'Appel terminé' },
+          speaker: 'Haut-parleur', mute: 'Couper le micro', more: 'Plus', end: 'Raccrocher', keypad: 'Clavier', ended: 'Appel terminé', ending: 'Fin de l’appel…', ftEnding: 'Arrêt de FaceTime…', ftEnded: 'FaceTime terminé' },
   };
   const t = () => TEXT[$('f-lang').value] || TEXT.ko;
   const applyLang = () => {
@@ -612,8 +614,12 @@
     sfxEnd();
     clearInterval(clockTimer);
     document.body.classList.remove('controls-open');
-    if (isVoice()) { $('v-time').textContent = t().ended; $('voice').classList.add('ending'); }
-    else $('ended').classList.add('on');
+    // 애플 문구: 일반 전화 CALL_ENDING → CALL_ENDED, FaceTime STATUS_ENDING → STATUS_ENDED
+    const status = isVoice() ? $('v-time') : $('e-status');
+    status.textContent = isVoice() ? t().ending : t().ftEnding;
+    setTimeout(() => { status.textContent = isVoice() ? t().ended : t().ftEnded; }, 450);
+    if (isVoice()) $('voice').classList.add('ending');
+    else { $('e-name').textContent = cfg.name; $('ended').classList.add('on'); }
     setTimeout(() => $(isVoice() ? 'vfade' : 'fade').classList.add('on'), 1300);
     setTimeout(() => { ending = false; goStandby(); }, 1700);
   };

@@ -303,6 +303,7 @@
       <b>음성 통화</b> · 상대 영상을 골라 두면 화면 없이 그 소리만 나옵니다<br>
       <b>소리</b> · 벨소리는 나지 않습니다(후반에 넣어 주세요). 효과음이 안 나면 무음 스위치와 음량을 확인하세요
     </p>
+    <p class="note" id="diag" style="opacity:.5;font-size:11px;font-variant-numeric:tabular-nums"></p>
   </div>
 </section>
 
@@ -402,8 +403,24 @@
   fitStandalone();
   addEventListener('resize', fitStandalone);
 
+  // 설정 화면 맨 아래: 버전·화면 값 (문제 생기면 캡처로 바로 진단)
+  const diag = () => {
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;top:env(safe-area-inset-top);bottom:env(safe-area-inset-bottom);left:0;width:1px;visibility:hidden';
+    document.body.appendChild(probe);
+    const r = probe.getBoundingClientRect();
+    probe.remove();
+    const vv = window.visualViewport;
+    $('diag').textContent = `버전 ${BUILD} · 앱모드 ${document.documentElement.classList.contains('standalone') ? 'O' : 'X'}`
+      + ` · 창 ${innerWidth}×${innerHeight} · 화면 ${screen.width}×${screen.height}`
+      + ` · 보이는영역 ${vv ? Math.round(vv.height) : '-'} · 안전영역 위 ${Math.round(r.top)} 아래 ${Math.round(innerHeight - r.bottom)}`
+      + ` · 채움 ${getComputedStyle(document.documentElement).getPropertyValue('--full-h') || '-'}`;
+  };
+  setTimeout(diag, 300);
+  addEventListener('resize', () => setTimeout(diag, 100));
+
   // ---------- 새 버전 자동 반영 (홈 화면 앱은 옛 페이지를 오래 붙잡고 있다) ----------
-  const BUILD = '2026-10-29-fullh';
+  const BUILD = '2026-10-29-diag';
   (async () => {
     try {
       const res = await fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' });

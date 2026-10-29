@@ -14,72 +14,97 @@
   :root {
     --green: #34c759;
     --red: #ff3b30;
-    --glass: rgba(60, 60, 67, 0.55);
-    --glass-strong: rgba(30, 30, 32, 0.72);
+    --orange: #ff9500;
+    --glass: rgba(255, 255, 255, 0.22);
+    --glass-dark: rgba(40, 40, 44, 0.55);
     --text: #ffffff;
-    --sub: rgba(235, 235, 245, 0.72);
+    --sub: rgba(255, 255, 255, 0.78);
+    --top: env(safe-area-inset-top, 44px);
+    --bottom: env(safe-area-inset-bottom, 20px);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
     margin: 0; height: 100%; background: #000; color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Apple SD Gothic Neo", system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", system-ui, sans-serif;
     overflow: hidden; overscroll-behavior: none;
     -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   }
   .screen { position: fixed; inset: 0; display: none; }
   .screen.on { display: block; }
   svg { display: block; }
+  .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6); backdrop-filter: blur(24px) saturate(1.6);
+  }
 
   /* ---------- 대기 (검은 화면) ---------- */
   #standby { background: #000; }
   #corner { position: fixed; top: 0; left: 0; width: 90px; height: 90px; z-index: 50; }
 
-  /* ---------- 수신 화면 ---------- */
+  /* ---------- 수신 화면 (두 종류 공통) ---------- */
   #incoming { background: #111; }
   #incoming .bg-fallback {
     position: absolute; inset: 0;
-    background: radial-gradient(120% 80% at 50% 20%, #4a4a52 0%, #1d1d22 55%, #0a0a0c 100%);
+    background: radial-gradient(120% 80% at 50% 20%, #55555d 0%, #24242a 55%, #0c0c0e 100%);
   }
   #incoming .bg-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   #incoming .shade {
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 35%, rgba(0,0,0,.15) 60%, rgba(0,0,0,.6) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%);
   }
   #incoming .who {
-    position: absolute; left: 0; right: 0;
-    top: calc(env(safe-area-inset-top, 44px) + 64px);
-    text-align: center; padding: 0 24px;
-    animation: fadeIn .45s ease-out both;
+    position: absolute; left: 0; right: 0; top: calc(var(--top) + 28px);
+    text-align: center; padding: 0 20px; animation: fadeIn .4s ease-out both;
   }
-  #incoming .label { font-size: 17px; color: var(--sub); letter-spacing: -.2px; }
+  #incoming .label { font-size: 15px; font-weight: 500; color: var(--sub); letter-spacing: -.1px; }
   #incoming .name {
-    font-size: 36px; font-weight: 500; margin-top: 6px; letter-spacing: -.6px;
-    text-shadow: 0 1px 8px rgba(0,0,0,.25);
+    font-size: 46px; font-weight: 600; line-height: 1.1; margin-top: 4px; letter-spacing: -.8px;
+    text-shadow: 0 1px 10px rgba(0,0,0,.18);
   }
   #incoming .actions {
-    position: absolute; left: 0; right: 0;
-    bottom: calc(env(safe-area-inset-bottom, 20px) + 56px);
-    padding: 0 44px; animation: fadeIn .45s ease-out .1s both;
+    position: absolute; left: 0; right: 0; bottom: calc(var(--bottom) + 28px);
+    padding: 0 40px; animation: fadeIn .4s ease-out .08s both;
   }
-  .small-row { display: flex; justify-content: space-between; margin-bottom: 48px; }
-  .small-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 78px; }
+  .small-row { display: flex; justify-content: space-between; margin-bottom: 44px; }
+  .small-btn, .big-btn { display: flex; flex-direction: column; align-items: center; width: 84px; }
   .small-btn .circ {
-    width: 46px; height: 46px; border-radius: 50%; background: var(--glass);
-    -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
-    display: grid; place-items: center;
+    width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
   }
-  .small-btn span, .big-btn span { font-size: 14px; color: var(--text); }
+  .small-btn span { font-size: 13px; margin-top: 7px; text-align: center; white-space: nowrap; }
   .big-row { display: flex; justify-content: space-between; }
-  .big-btn { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 78px; }
   .big-btn .circ {
     width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center;
     transition: transform .12s ease;
   }
   .big-btn:active .circ { transform: scale(.92); }
+  .big-btn span { font-size: 15px; margin-top: 9px; white-space: nowrap; }
   .decline .circ { background: var(--red); }
   .accept .circ { background: var(--green); }
 
-  /* ---------- 통화 화면 ---------- */
+  /* 밀어서 받기 */
+  #incoming .big-row, #incoming .slider { display: none; }
+  #incoming.mode-buttons .big-row { display: flex; }
+  #incoming.mode-slide .slider { display: block; }
+  .slider {
+    position: relative; height: 76px; border-radius: 38px; margin: 0 -12px; overflow: hidden;
+    touch-action: none;
+  }
+  .slider .track-text {
+    position: absolute; inset: 0; display: grid; place-items: center; padding-left: 70px;
+    font-size: 21px; font-weight: 400;
+    background: linear-gradient(90deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,.45) 40%, #fff 50%, rgba(255,255,255,.45) 60%, rgba(255,255,255,.45) 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 2.6s linear infinite;
+  }
+  .slider .knob {
+    position: absolute; left: 6px; top: 6px; width: 64px; height: 64px; border-radius: 50%;
+    background: #fff; display: grid; place-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  }
+  @keyframes shimmer { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+
+  /* ---------- 통화 화면 (iOS 26 이후: 전체 영상 + 오른쪽 아래 세로 버튼) ---------- */
   #call { background: #000; }
   #remote { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
   #remote-empty {
@@ -91,33 +116,27 @@
     background: linear-gradient(180deg, #a5a5ad, #6e6e76);
     display: grid; place-items: center; font-size: 48px; font-weight: 500; color: #fff;
   }
+  #controls {
+    position: absolute; right: 16px; bottom: calc(var(--bottom) + 24px);
+    display: flex; flex-direction: column; gap: 14px;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  body:not(.controls-open) #controls { opacity: 0; transform: translateX(14px); pointer-events: none; }
+  .c-btn {
+    width: 56px; height: 56px; border-radius: 50%; border: 0; padding: 0;
+    display: grid; place-items: center;
+    background: var(--glass-dark);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6); backdrop-filter: blur(24px) saturate(1.6);
+    box-shadow: inset 0 0 0 .5px rgba(255,255,255,.25);
+  }
+  .c-btn.lit { background: rgba(255,255,255,.92); }
+  .c-btn svg path, .c-btn svg circle { fill: #fff; }
+  #b-camera.lit svg path { fill: var(--green); }
+  #b-mic.lit svg path { fill: var(--orange); }
+  .c-btn.end { background: var(--red); }
 
-  #panel {
-    position: absolute; left: 8px; right: 8px;
-    top: calc(env(safe-area-inset-top, 44px) + 4px);
-    border-radius: 28px; padding: 14px 16px 16px;
-    background: var(--glass-strong);
-    -webkit-backdrop-filter: blur(30px) saturate(1.4); backdrop-filter: blur(30px) saturate(1.4);
-    transition: opacity .25s ease, transform .25s ease;
-  }
-  body:not(.panel-open) #panel { opacity: 0; transform: translateY(-12px); pointer-events: none; }
-  #panel .p-name { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
-  #panel .p-sub { font-size: 13px; color: var(--sub); margin-top: 2px; font-variant-numeric: tabular-nums; }
-  #panel .p-row { display: flex; justify-content: space-between; margin-top: 14px; }
-  .p-btn {
-    width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
-    background: rgba(120,120,128,.36); border: 0; padding: 0;
-  }
-  .p-btn.active { background: #fff; }
-  .p-btn.active svg path { fill: #000; }
-  .p-btn.end { background: var(--red); }
-
-  /* ---------- 종료 ---------- */
-  #ended {
-    position: absolute; inset: 0; display: none; place-items: center;
-    background: rgba(0,0,0,.6); font-size: 17px; color: var(--sub);
-  }
-  #ended.on { display: grid; animation: fadeIn .2s both; }
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+  #fade.on { opacity: 1; }
 
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
@@ -125,7 +144,7 @@
   #setup { background: #000; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   #setup .wrap {
     max-width: 480px; margin: 0 auto;
-    padding: calc(env(safe-area-inset-top, 20px) + 16px) 16px calc(env(safe-area-inset-bottom, 20px) + 24px);
+    padding: calc(var(--top) + 16px) 16px calc(var(--bottom) + 24px);
   }
   #setup h1 { font-size: 28px; margin: 8px 4px 4px; letter-spacing: -.5px; }
   #setup .hint { font-size: 13px; color: var(--sub); margin: 0 4px 18px; line-height: 1.5; }
@@ -158,7 +177,7 @@
   }
   .toggle input:checked + i { background: var(--green); }
   .toggle input:checked + i::after { transform: translateX(20px); }
-  .group-title { font-size: 13px; color: var(--sub); margin: 0 16px 6px; text-transform: uppercase; }
+  .group-title { font-size: 13px; color: var(--sub); margin: 0 16px 6px; }
   #start {
     width: 100%; height: 52px; border: 0; border-radius: 14px; background: var(--green);
     color: #fff; font: inherit; font-size: 17px; font-weight: 600;
@@ -177,6 +196,13 @@
 
     <div class="group-title">수신 화면</div>
     <div class="group">
+      <div class="item">
+        <span>화면 종류</span>
+        <select id="f-mode">
+          <option value="buttons">켜져 있을 때 (버튼)</option>
+          <option value="slide">잠겨 있을 때 (밀어서 받기)</option>
+        </select>
+      </div>
       <div class="item">
         <span>통화 화면 언어</span>
         <select id="f-lang">
@@ -197,6 +223,10 @@
         <input id="f-bg" type="file" accept="image/*">
       </div>
       <div class="item"><span>자동 수신(초, 0=탭)</span><input id="f-delay" type="number" min="0" step="1" value="0" inputmode="numeric"></div>
+    </div>
+
+    <div class="group-title">소리</div>
+    <div class="group">
       <div class="item"><span>벨소리</span><label class="toggle"><input id="f-ring" type="checkbox" checked><i></i></label></div>
       <div class="item">
         <span>벨소리 파일</span>
@@ -216,7 +246,6 @@
         <input id="f-video" type="file" accept="video/*">
       </div>
       <div class="item"><span>상대 영상 반복 재생</span><label class="toggle"><input id="f-loop" type="checkbox"><i></i></label></div>
-      <div class="item"><span>통화 시간 표시</span><label class="toggle"><input id="f-timer" type="checkbox" checked><i></i></label></div>
     </div>
 
     <button id="start">시작</button>
@@ -224,7 +253,7 @@
     <p class="note">
       <b>설정 다시 열기</b> · 화면 왼쪽 위 모서리를 1초 길게 누르기(화면에 보이지 않음)<br>
       <b>전체 화면</b> · Safari 공유 버튼 → 「홈 화면에 추가」 후 홈 화면 아이콘으로 열면 주소창이 사라집니다<br>
-      <b>통화 중</b> · 화면을 탭하면 위쪽 버튼이 나타났다 사라집니다. 빨간 버튼 = 통화 종료<br>
+      <b>통화 중</b> · 버튼은 몇 초 뒤 숨고, 화면을 탭하면 오른쪽 아래에 다시 나옵니다. 빨간 버튼 = 통화 종료<br>
       <b>소리</b> · 벨소리 파일을 고르지 않으면 기본 합성음이 납니다. 소리가 안 나면 무음 스위치와 음량을 확인하세요
     </p>
   </div>
@@ -234,34 +263,38 @@
 <section id="standby" class="screen"></section>
 
 <!-- 수신 -->
-<section id="incoming" class="screen">
+<section id="incoming" class="screen mode-buttons">
   <div class="bg-fallback"></div>
   <img class="bg-photo" id="in-bg" alt="" style="display:none">
   <div class="shade"></div>
   <div class="who">
-    <div class="label" id="in-label"></div>
+    <div class="label" data-t="label"></div>
     <div class="name" id="in-name"></div>
   </div>
   <div class="actions">
     <div class="small-row">
       <div class="small-btn">
-        <div class="circ"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+        <div class="circ glass"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM12.5 8H11v6l4.75 2.85.75-1.23-4-2.37V8zM12 4c-4.970 0-9 4.03-9 9s4.02 9 9 9c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg></div>
         <span data-t="remind"></span>
       </div>
       <div class="small-btn">
-        <div class="circ"><svg width="21" height="21" viewBox="0 0 24 24"><path fill="#fff" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+        <div class="circ glass"><svg width="21" height="21" viewBox="0 0 24 24"><path fill="#fff" d="M12 3C6.48 3 2 6.92 2 11.75c0 2.61 1.31 4.95 3.39 6.55-.13 1.2-.62 2.33-1.39 3.2 1.86-.1 3.5-.77 4.67-1.790 1.04.3 2.16.54 3.33.54 5.52 0 10-3.92 10-8.75S17.52 3 12 3z"/></svg></div>
         <span data-t="message"></span>
       </div>
     </div>
     <div class="big-row">
       <div class="big-btn decline" id="btn-decline">
-        <div class="circ"><svg width="36" height="36" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+        <div class="circ"><svg width="34" height="34" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
         <span data-t="decline"></span>
       </div>
       <div class="big-btn accept" id="btn-accept">
-        <div class="circ"><svg width="36" height="36" viewBox="0 0 24 24"><path fill="#fff" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
+        <div class="circ"><svg width="34" height="34" viewBox="0 0 24 24"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
         <span data-t="accept"></span>
       </div>
+    </div>
+    <div class="slider glass" id="slider">
+      <div class="track-text" data-t="slide"></div>
+      <div class="knob" id="knob"><svg width="30" height="30" viewBox="0 0 24 24"><path fill="#34c759" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
     </div>
   </div>
 </section>
@@ -270,18 +303,13 @@
 <section id="call" class="screen">
   <div id="remote-empty"><div class="avatar" id="avatar"></div></div>
   <video id="remote" playsinline></video>
-  <div id="panel">
-    <div class="p-name" id="p-name"></div>
-    <div class="p-sub" id="p-sub"></div>
-    <div class="p-row">
-      <button class="p-btn" id="b-speaker"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
-      <button class="p-btn active" id="b-camera"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></button>
-      <button class="p-btn" id="b-mic"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg></button>
-      <button class="p-btn" id="b-share"><svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M16 1H8C6.34 1 5 2.34 5 4v16c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V4c0-1.66-1.34-3-3-3zm1 17H7V4h10v14zm-5 4c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg></button>
-      <button class="p-btn end" id="b-end"><svg width="28" height="28" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></button>
-    </div>
+  <div id="controls">
+    <button class="c-btn lit" id="b-camera"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></button>
+    <button class="c-btn lit" id="b-mic"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg></button>
+    <button class="c-btn" id="b-more"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+    <button class="c-btn end" id="b-end"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
   </div>
-  <div id="ended" data-t="ended"></div>
+  <div id="fade"></div>
 </section>
 
 <div id="corner"></div>
@@ -293,7 +321,7 @@
   const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
 
   // ---------- 설정 저장 (이 기기 브라우저에만) ----------
-  const FIELDS = ['lang', 'name', 'delay', 'ring', 'sfx', 'loop', 'timer'];
+  const FIELDS = ['mode', 'lang', 'name', 'delay', 'ring', 'sfx', 'loop'];
   const load = () => {
     try {
       const saved = JSON.parse(localStorage.getItem('vcall-settings') || '{}');
@@ -313,13 +341,14 @@
   load();
 
   // ---------- 통화 화면 언어 (설정 화면은 항상 한국어) ----------
+  // 문구 출처: iOS 27.0.1 CallsDialer.framework · InCallService.app 현지화 문자열
   const TEXT = {
-    ko: { label: '영상 통화', remind: '나중에 알림', message: '메시지', decline: '거절', accept: '수락', ended: '통화 종료' },
-    ja: { label: 'ビデオ通話', remind: '後で通知', message: 'メッセージ', decline: '拒否', accept: '応答', ended: '通話終了' },
-    en: { label: 'Video Call', remind: 'Remind Me', message: 'Message', decline: 'Decline', accept: 'Accept', ended: 'Call Ended' },
-    zh: { label: '视频通话', remind: '稍后提醒', message: '信息', decline: '拒绝', accept: '接听', ended: '通话结束' },
-    es: { label: 'Videollamada', remind: 'Recordar', message: 'Mensaje', decline: 'Rechazar', accept: 'Aceptar', ended: 'Llamada finalizada' },
-    fr: { label: 'Appel vidéo', remind: 'Me rappeler', message: 'Message', decline: 'Refuser', accept: 'Accepter', ended: 'Appel terminé' },
+    ko: { label: 'FaceTime 영상 통화', remind: '나중에 알림', message: '메시지 보내기', decline: '거절', accept: '응답', slide: '밀어서 통화하기' },
+    ja: { label: 'FaceTimeビデオ', remind: 'あとで通知', message: 'メッセージを送信', decline: '拒否', accept: '応答', slide: 'スライドで応答' },
+    en: { label: 'FaceTime Video', remind: 'Remind Me', message: 'Message', decline: 'Decline', accept: 'Accept', slide: 'slide to answer' },
+    zh: { label: 'FaceTime视频', remind: '提醒我', message: '信息', decline: '拒绝', accept: '接受', slide: '滑动来接听' },
+    es: { label: 'FaceTime de vídeo', remind: 'Recordar', message: 'Mensaje', decline: 'Rechazar', accept: 'Aceptar', slide: 'Deslizar para contestar' },
+    fr: { label: 'FaceTime vidéo', remind: 'Rappel', message: 'Message', decline: 'Refuser', accept: 'Accepter', slide: 'Répondre' },
   };
   const t = () => TEXT[$('f-lang').value] || TEXT.ko;
   const applyLang = () => {
@@ -330,8 +359,7 @@
   $('f-lang').addEventListener('change', applyLang);
   applyLang();
 
-  // ---------- 상대 영상: 기기 안 IndexedDB 에 보관 ----------
-  let remoteURL = null;
+  // ---------- 파일 보관: 기기 안 IndexedDB ----------
   const db = () => new Promise((res, rej) => {
     const r = indexedDB.open('vcall', 1);
     r.onupgradeneeded = () => r.result.createObjectStore('files');
@@ -354,6 +382,18 @@
       });
     } catch (e) { return null; }
   };
+  const pick = (inputId, key, apply) => {
+    getFile(key).then((v) => { if (v) apply(v.blob, v.name); });
+    $(inputId).addEventListener('change', (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      apply(f, f.name);
+      putFile(key, f);
+    });
+  };
+
+  // 상대 영상
+  let remoteURL = null;
   const setRemote = (blob, name) => {
     if (remoteURL) URL.revokeObjectURL(remoteURL);
     remoteURL = URL.createObjectURL(blob);
@@ -362,9 +402,9 @@
   };
   const qsVideo = new URLSearchParams(location.search).get('video');
   if (qsVideo) { $('remote').src = qsVideo; $('v-video').textContent = 'URL'; }
-  else getFile('remote').then((v) => { if (v) setRemote(v.blob, v.name); });
+  else pick('f-video', 'remote', setRemote);
 
-  // ---------- 수신 화면 배경 사진 ----------
+  // 수신 화면 배경 사진
   let bgURL = null;
   const setBg = (blob, name) => {
     if (bgURL) URL.revokeObjectURL(bgURL);
@@ -374,79 +414,46 @@
     $('v-bg').textContent = blob ? (name || '선택됨') : '없음';
     $('bg-clear').style.display = blob ? 'inline' : 'none';
   };
-  getFile('bg').then((v) => { if (v) setBg(v.blob, v.name); });
-  $('f-bg').addEventListener('change', (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    setBg(f, f.name);
-    putFile('bg', f);
-  });
+  pick('f-bg', 'bg', setBg);
   $('bg-clear').addEventListener('click', async () => {
     setBg(null);
     try { (await db()).transaction('files', 'readwrite').objectStore('files').delete('bg'); } catch (e) {}
   });
-  $('f-video').addEventListener('change', (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    setRemote(f, f.name);
-    putFile('remote', f);
-  });
 
-  // ---------- 벨소리 파일 (없으면 합성음) ----------
+  // 벨소리 파일 (없으면 합성음)
   const ringAudio = new Audio();
   ringAudio.loop = true;
   ringAudio.playsInline = true;
-  const setRingFile = (blob, name) => {
+  pick('f-ringfile', 'ring', (blob, name) => {
     ringAudio.src = URL.createObjectURL(blob);
     $('v-ring').textContent = name || '선택됨';
-  };
-  getFile('ring').then((v) => { if (v) setRingFile(v.blob, v.name); });
-  $('f-ringfile').addEventListener('change', (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    setRingFile(f, f.name);
-    putFile('ring', f);
   });
 
-  // ---------- 벨소리 (합성음) ----------
+  // ---------- 소리 ----------
   let actx = null, ringTimer = null;
-  const ringOnce = () => {
+  const tone = (freqs, step, len, vol) => {
     if (!actx) return;
     const t0 = actx.currentTime;
-    [0, 0.16, 0.32, 0.48].forEach((dt, i) => {
-      const o = actx.createOscillator(), g = actx.createGain();
+    freqs.forEach((f, i) => {
+      const o = actx.createOscillator(), g = actx.createGain(), dt = i * step;
       o.type = 'sine';
-      o.frequency.value = i % 2 ? 1046.5 : 1318.5;
+      o.frequency.value = f;
       g.gain.setValueAtTime(0, t0 + dt);
-      g.gain.linearRampToValueAtTime(0.25, t0 + dt + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.001, t0 + dt + 0.15);
+      g.gain.linearRampToValueAtTime(vol, t0 + dt + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + dt + len);
       o.connect(g).connect(actx.destination);
-      o.start(t0 + dt); o.stop(t0 + dt + 0.16);
+      o.start(t0 + dt); o.stop(t0 + dt + len + 0.02);
     });
   };
+  const ringOnce = () => tone([1318.5, 1046.5, 1318.5, 1046.5], 0.16, 0.15, 0.25);
   const startRing = () => {
     if (ringAudio.src) { ringAudio.currentTime = 0; ringAudio.play().catch(() => {}); return; }
     ringOnce(); ringTimer = setInterval(ringOnce, 2000);
   };
   const stopRing = () => { clearInterval(ringTimer); ringTimer = null; ringAudio.pause(); };
-
   // 받을 때: 올라가는 두 음 / 끊을 때: 내려가는 두 음
-  const chime = (freqs) => {
-    if (!actx) return;
-    const t0 = actx.currentTime;
-    freqs.forEach((f, i) => {
-      const o = actx.createOscillator(), g = actx.createGain(), dt = i * 0.12;
-      o.type = 'sine';
-      o.frequency.value = f;
-      g.gain.setValueAtTime(0, t0 + dt);
-      g.gain.linearRampToValueAtTime(0.22, t0 + dt + 0.015);
-      g.gain.exponentialRampToValueAtTime(0.001, t0 + dt + 0.35);
-      o.connect(g).connect(actx.destination);
-      o.start(t0 + dt); o.stop(t0 + dt + 0.4);
-    });
-  };
-  const sfxConnect = () => { if (cfg.sfx) chime([880, 1318.5]); };
-  const sfxEnd = () => { if (cfg.sfx) chime([1318.5, 880]); };
+  const sfxConnect = () => { if (cfg.sfx) tone([880, 1318.5], 0.12, 0.35, 0.22); };
+  const sfxEnd = () => { if (cfg.sfx) tone([1318.5, 880], 0.12, 0.35, 0.22); };
 
   // ---------- 화면 꺼짐 방지 ----------
   let lock = null;
@@ -456,15 +463,17 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { lock = null; keepAwake(); } });
 
   // ---------- 흐름 ----------
-  let cfg = save(), delayTimer = null, clockTimer = null, hideTimer = null, callStart = 0;
+  let cfg = save(), delayTimer = null, hideTimer = null;
 
-  const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  const resetCall = () => {
+    $('remote').pause();
+    $('fade').classList.remove('on');
+    clearTimeout(hideTimer);
+    document.body.classList.remove('controls-open');
+  };
 
   const goStandby = () => {
-    stopRing(); clearTimeout(delayTimer); clearInterval(clockTimer); clearTimeout(hideTimer);
-    $('remote').pause();
-    $('ended').classList.remove('on');
-    document.body.classList.remove('panel-open');
+    stopRing(); clearTimeout(delayTimer); resetCall();
     show('standby');
     const d = parseFloat(cfg.delay) || 0;
     if (d > 0) delayTimer = setTimeout(ring, d * 1000);
@@ -473,44 +482,64 @@
   const ring = () => {
     clearTimeout(delayTimer);
     $('in-name').textContent = cfg.name;
-    $('in-label').textContent = t().label;
+    $('incoming').className = 'screen mode-' + (cfg.mode === 'slide' ? 'slide' : 'buttons');
     show('incoming');
+    resetKnob();
     if (cfg.ring) startRing();
   };
 
-  const openPanel = () => {
-    document.body.classList.add('panel-open');
+  // 버튼은 몇 초 뒤 스스로 숨는다
+  const openControls = () => {
+    document.body.classList.add('controls-open');
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => document.body.classList.remove('panel-open'), 4000);
+    hideTimer = setTimeout(() => document.body.classList.remove('controls-open'), 3500);
   };
 
   const accept = () => {
     stopRing();
     sfxConnect();
-    $('p-name').textContent = cfg.name;
     $('avatar').textContent = (cfg.name || '').trim().slice(0, 1);
-    const hasRemote = !!$('remote').getAttribute('src');
-    $('remote').style.display = hasRemote ? 'block' : 'none';
-    $('remote').loop = !!cfg.loop;
-    $('remote').muted = false;
+    const rv = $('remote');
+    const hasRemote = !!rv.getAttribute('src');
+    rv.style.display = hasRemote ? 'block' : 'none';
+    rv.loop = !!cfg.loop;
+    rv.muted = false;
+    ['b-camera', 'b-mic'].forEach((id) => $(id).classList.add('lit'));
     show('call');
-    if (hasRemote) { $('remote').currentTime = 0; $('remote').play().catch(() => {}); }
-    callStart = Date.now();
-    const tick = () => {
-      const s = Math.floor((Date.now() - callStart) / 1000);
-      $('p-sub').textContent = cfg.timer ? fmt(s) : t().label;
-    };
-    tick(); clearInterval(clockTimer); clockTimer = setInterval(tick, 500);
-    openPanel();
+    if (hasRemote) { rv.currentTime = 0; rv.play().catch(() => {}); }
+    openControls();
   };
 
   const endCall = () => {
     $('remote').pause();
     sfxEnd();
-    clearInterval(clockTimer);
-    $('ended').classList.add('on');
-    setTimeout(goStandby, 1500);
+    $('fade').classList.add('on');
+    setTimeout(goStandby, 600);
   };
+
+  // ---------- 밀어서 받기 ----------
+  let dragX = null, knobX = 0;
+  const maxX = () => $('slider').clientWidth - $('knob').offsetWidth - 12;
+  const setKnob = (x, animate) => {
+    knobX = Math.max(0, Math.min(x, maxX()));
+    $('knob').style.transition = animate ? 'transform .25s ease' : 'none';
+    $('knob').style.transform = `translateX(${knobX}px)`;
+    $('slider').querySelector('.track-text').style.opacity = String(Math.max(0, 1 - knobX / Math.max(1, maxX()) * 1.4));
+  };
+  const resetKnob = () => setKnob(0, false);
+  $('knob').addEventListener('pointerdown', (e) => {
+    dragX = e.clientX - knobX;
+    $('knob').setPointerCapture(e.pointerId);
+  });
+  $('knob').addEventListener('pointermove', (e) => { if (dragX !== null) setKnob(e.clientX - dragX, false); });
+  const release = () => {
+    if (dragX === null) return;
+    dragX = null;
+    if (knobX >= maxX() * 0.85) { setKnob(maxX(), true); setTimeout(accept, 120); }
+    else setKnob(0, true);
+  };
+  $('knob').addEventListener('pointerup', release);
+  $('knob').addEventListener('pointercancel', release);
 
   $('start').addEventListener('click', async () => {
     cfg = save();
@@ -527,24 +556,24 @@
 
   $('standby').addEventListener('click', ring);
   $('btn-accept').addEventListener('click', accept);
-  $('btn-decline').addEventListener('click', () => { stopRing(); goStandby(); });
+  $('btn-decline').addEventListener('click', goStandby);
   $('b-end').addEventListener('click', (e) => { e.stopPropagation(); endCall(); });
-  $('panel').addEventListener('click', (e) => { e.stopPropagation(); openPanel(); });
-  ['b-speaker', 'b-camera', 'b-mic', 'b-share'].forEach((id) => $(id).addEventListener('click', () => $(id).classList.toggle('active')));
-
+  ['b-camera', 'b-mic'].forEach((id) => $(id).addEventListener('click', (e) => {
+    e.stopPropagation(); $(id).classList.toggle('lit'); openControls();
+  }));
+  $('b-more').addEventListener('click', (e) => { e.stopPropagation(); openControls(); });
   $('call').addEventListener('click', () => {
-    if (document.body.classList.contains('panel-open')) {
-      clearTimeout(hideTimer); document.body.classList.remove('panel-open');
-    } else openPanel();
+    if (document.body.classList.contains('controls-open')) {
+      clearTimeout(hideTimer); document.body.classList.remove('controls-open');
+    } else openControls();
   });
   $('remote').addEventListener('ended', () => { if (!$('remote').loop) endCall(); });
 
   // 왼쪽 위 모서리 길게 누르기 → 설정
   let pressTimer = null;
-  const pressStart = (e) => {
+  const pressStart = () => {
     pressTimer = setTimeout(() => {
-      stopRing(); clearTimeout(delayTimer); clearInterval(clockTimer);
-      $('remote').pause(); $('ended').classList.remove('on');
+      stopRing(); clearTimeout(delayTimer); resetCall();
       show('setup');
     }, 1000);
   };
@@ -553,7 +582,7 @@
   $('corner').addEventListener('touchend', pressEnd);
   $('corner').addEventListener('mousedown', pressStart);
   $('corner').addEventListener('mouseup', pressEnd);
-  $('corner').addEventListener('click', (e) => {
+  $('corner').addEventListener('click', () => {
     // 대기 화면에서 모서리 짧은 탭은 일반 탭처럼 전화를 울린다
     if ($('standby').classList.contains('on')) ring();
   });

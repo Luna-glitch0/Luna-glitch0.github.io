@@ -30,6 +30,8 @@
     -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   }
   .screen { position: fixed; inset: 0; display: none; }
+  /* 홈 화면 앱: iOS 가 알려 주는 높이가 상태 표시줄만큼 모자라 바닥이 빈다. 실제 화면 높이로 채운다 */
+  html.standalone .screen { bottom: auto; height: var(--full-h, 100%); }
   .screen.on { display: block; }
   svg { display: block; }
   .glass {
@@ -388,8 +390,20 @@
 (() => {
   const $ = (id) => document.getElementById(id);
 
+  // 홈 화면 앱으로 열렸으면 화면 전체 높이를 쓴다
+  const fitStandalone = () => {
+    const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+    document.documentElement.classList.toggle('standalone', !!standalone);
+    if (!standalone) return;
+    const portrait = innerHeight >= innerWidth;
+    const full = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
+    document.documentElement.style.setProperty('--full-h', Math.max(full, innerHeight) + 'px');
+  };
+  fitStandalone();
+  addEventListener('resize', fitStandalone);
+
   // ---------- 새 버전 자동 반영 (홈 화면 앱은 옛 페이지를 오래 붙잡고 있다) ----------
-  const BUILD = '2026-10-29-ended2';
+  const BUILD = '2026-10-29-fullh';
   (async () => {
     try {
       const res = await fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' });

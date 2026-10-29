@@ -83,6 +83,7 @@
 
   /* 밀어서 받기 */
   #incoming .big-row, #incoming .slider { display: none; }
+  #incoming.type-video .only-voice, #incoming.type-voice .only-video { display: none; }
   #incoming.mode-buttons .big-row { display: flex; }
   #incoming.mode-slide .slider { display: block; }
   .slider {
@@ -135,8 +136,38 @@
   #b-mic.lit svg path { fill: var(--orange); }
   .c-btn.end { background: var(--red); }
 
-  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .35s ease; }
-  #fade.on { opacity: 1; }
+  /* ---------- 음성 통화 화면 (iOS 26: 시간·이름 위, 3×2 버튼 아래) ---------- */
+  #voice { background: #0b2a35; }
+  #voice .v-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, #3b6e78 0%, #0f5c63 35%, #0a4660 70%, #0b2f4f 100%);
+  }
+  #voice .v-photo {
+    position: absolute; inset: -40px; width: calc(100% + 80px); height: calc(100% + 80px); object-fit: cover;
+    filter: blur(40px) saturate(1.3) brightness(.65);
+  }
+  #voice .v-top { position: absolute; left: 0; right: 0; top: calc(var(--top) + 36px); text-align: center; padding: 0 20px; }
+  #voice .v-time { font-size: 19px; color: rgba(160, 235, 250, .95); font-variant-numeric: tabular-nums; }
+  #voice .v-name { font-size: 34px; font-weight: 700; margin-top: 6px; letter-spacing: -.4px; }
+  #voice .v-grid {
+    position: absolute; left: 0; right: 0; bottom: calc(var(--bottom) + 40px);
+    display: grid; grid-template-columns: repeat(3, 1fr); row-gap: 22px; padding: 0 30px; justify-items: center;
+  }
+  .v-btn { display: flex; flex-direction: column; align-items: center; width: 90px; border: 0; background: none; padding: 0; color: #fff; font: inherit; }
+  .v-btn .circ {
+    width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(255,255,255,.1); box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+    -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  }
+  .v-btn svg path, .v-btn svg circle { fill: #fff; }
+  .v-btn span { font-size: 15px; margin-top: 8px; white-space: nowrap; }
+  .v-btn.lit .circ { background: #e3fbfa; }
+  .v-btn.lit svg path { fill: #000; }
+  .v-btn.dim svg path { fill: rgba(255,255,255,.3); }
+  .v-btn.end .circ { background: #d70d0d; box-shadow: none; }
+
+  #fade, #vfade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+  #fade.on, #vfade.on { opacity: 1; }
 
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
@@ -197,6 +228,13 @@
     <div class="group-title">수신 화면</div>
     <div class="group">
       <div class="item">
+        <span>통화 종류</span>
+        <select id="f-type">
+          <option value="video">영상 통화</option>
+          <option value="voice">음성 통화</option>
+        </select>
+      </div>
+      <div class="item">
         <span>화면 종류</span>
         <select id="f-mode">
           <option value="buttons">켜져 있을 때 (버튼)</option>
@@ -233,12 +271,12 @@
     <div class="group-title">통화 화면</div>
     <div class="group">
       <div class="item">
-        <span>상대 영상</span>
+        <span>상대 영상(음성 통화는 소리만)</span>
         <span class="val" id="v-video">없음</span>
         <label class="file" for="f-video">선택</label>
         <input id="f-video" type="file" accept="video/*">
       </div>
-      <div class="item"><span>상대 영상 반복 재생</span><label class="toggle"><input id="f-loop" type="checkbox"><i></i></label></div>
+      <div class="item"><span>반복 재생</span><label class="toggle"><input id="f-loop" type="checkbox"><i></i></label></div>
     </div>
 
     <button id="start">시작</button>
@@ -246,7 +284,8 @@
     <p class="note">
       <b>설정 다시 열기</b> · 화면 왼쪽 위 모서리를 1초 길게 누르기(화면에 보이지 않음)<br>
       <b>전체 화면</b> · Safari 공유 버튼 → 「홈 화면에 추가」 후 홈 화면 아이콘으로 열면 주소창이 사라집니다<br>
-      <b>통화 중</b> · 버튼은 몇 초 뒤 숨고, 화면을 탭하면 오른쪽 아래에 다시 나옵니다. 빨간 버튼 = 통화 종료<br>
+      <b>통화 중</b> · 영상 통화는 버튼이 몇 초 뒤 숨고, 화면을 탭하면 오른쪽 아래에 다시 나옵니다. 빨간 버튼 = 통화 종료<br>
+      <b>음성 통화</b> · 상대 영상을 골라 두면 화면 없이 그 소리만 나옵니다<br>
       <b>소리</b> · 벨소리는 나지 않습니다(후반에 넣어 주세요). 효과음이 안 나면 무음 스위치와 음량을 확인하세요
     </p>
   </div>
@@ -261,18 +300,22 @@
   <img class="bg-photo" id="in-bg" alt="" style="display:none">
   <div class="shade"></div>
   <div class="who">
-    <div class="label" data-t="label"></div>
+    <div class="label" id="in-label"></div>
     <div class="name" id="in-name"></div>
   </div>
   <div class="actions">
     <div class="small-row">
-      <div class="small-btn">
+      <div class="small-btn only-video">
         <div class="circ glass"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM12.5 8H11v6l4.75 2.85.75-1.23-4-2.37V8zM12 4c-4.970 0-9 4.03-9 9s4.02 9 9 9c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg></div>
         <span data-t="remind"></span>
       </div>
       <div class="small-btn">
         <div class="circ glass"><svg width="21" height="21" viewBox="0 0 24 24"><path fill="#fff" d="M12 3C6.48 3 2 6.92 2 11.75c0 2.61 1.31 4.95 3.39 6.55-.13 1.2-.62 2.33-1.39 3.2 1.86-.1 3.5-.77 4.67-1.790 1.04.3 2.16.54 3.33.54 5.52 0 10-3.92 10-8.75S17.52 3 12 3z"/></svg></div>
         <span data-t="message"></span>
+      </div>
+      <div class="small-btn only-voice">
+        <div class="circ glass"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#fff" d="M18.5 6C15.46 6 13 8.46 13 11.5c0 1.33.47 2.55 1.26 3.5H9.74c.79-.95 1.26-2.170 1.26-3.5C11 8.46 8.54 6 5.5 6S0 8.46 0 11.5 2.46 17 5.5 17h13c3.04 0 5.5-2.46 5.5-5.5S21.54 6 18.5 6zm-13 9C3.57 15 2 13.43 2 11.5S3.57 8 5.5 8 9 9.57 9 11.5 7.43 15 5.5 15zm13 0c-1.93 0-3.5-1.57-3.5-3.5S16.57 8 18.5 8 22 9.57 22 11.5 20.43 15 18.5 15z"/></svg></div>
+        <span data-t="voicemail"></span>
       </div>
     </div>
     <div class="big-row">
@@ -305,16 +348,35 @@
   <div id="fade"></div>
 </section>
 
+<!-- 음성 통화 -->
+<section id="voice" class="screen">
+  <div class="v-bg"></div>
+  <img class="v-photo" id="v-photo" alt="" style="display:none">
+  <div class="v-top">
+    <div class="v-time" id="v-time">00:00</div>
+    <div class="v-name" id="v-name"></div>
+  </div>
+  <div class="v-grid">
+    <button class="v-btn tg" id="vb-speaker"><div class="circ"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></div><span data-t="speaker"></span></button>
+    <button class="v-btn dim" id="vb-facetime"><div class="circ"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div><span>FaceTime</span></button>
+    <button class="v-btn tg" id="vb-mute"><div class="circ"><svg width="28" height="28" viewBox="0 0 24 24"><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg></div><span data-t="mute"></span></button>
+    <button class="v-btn" id="vb-more"><div class="circ"><svg width="28" height="28" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></div><span data-t="more"></span></button>
+    <button class="v-btn end" id="vb-end"><div class="circ"><svg width="34" height="34" viewBox="0 0 24 24" style="transform:rotate(135deg)"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div><span data-t="end"></span></button>
+    <button class="v-btn" id="vb-keypad"><div class="circ"><svg width="28" height="28" viewBox="0 0 24 24"><circle cx="6" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="6" cy="10" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="18" cy="10" r="2"/><circle cx="6" cy="16" r="2"/><circle cx="12" cy="16" r="2"/><circle cx="18" cy="16" r="2"/><circle cx="12" cy="22" r="2"/></svg></div><span data-t="keypad"></span></button>
+  </div>
+  <div id="vfade"></div>
+</section>
+
 <div id="corner"></div>
 
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
-  const screens = ['setup', 'standby', 'incoming', 'call'];
+  const screens = ['setup', 'standby', 'incoming', 'call', 'voice'];
   const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
 
   // ---------- 설정 저장 (이 기기 브라우저에만) ----------
-  const FIELDS = ['mode', 'lang', 'name', 'delay', 'sfx', 'loop'];
+  const FIELDS = ['type', 'mode', 'lang', 'name', 'delay', 'sfx', 'loop'];
   const load = () => {
     try {
       const saved = JSON.parse(localStorage.getItem('vcall-settings') || '{}');
@@ -336,17 +398,23 @@
   // ---------- 통화 화면 언어 (설정 화면은 항상 한국어) ----------
   // 문구 출처: iOS 27.0.1 CallsDialer.framework · InCallService.app 현지화 문자열
   const TEXT = {
-    ko: { label: 'FaceTime 영상 통화', remind: '나중에 알림', message: '메시지 보내기', decline: '거절', accept: '응답', slide: '밀어서 통화하기' },
-    ja: { label: 'FaceTimeビデオ', remind: 'あとで通知', message: 'メッセージを送信', decline: '拒否', accept: '応答', slide: 'スライドで応答' },
-    en: { label: 'FaceTime Video', remind: 'Remind Me', message: 'Message', decline: 'Decline', accept: 'Accept', slide: 'slide to answer' },
-    zh: { label: 'FaceTime视频', remind: '提醒我', message: '信息', decline: '拒绝', accept: '接受', slide: '滑动来接听' },
-    es: { label: 'FaceTime de vídeo', remind: 'Recordar', message: 'Mensaje', decline: 'Rechazar', accept: 'Aceptar', slide: 'Deslizar para contestar' },
-    fr: { label: 'FaceTime vidéo', remind: 'Rappel', message: 'Message', decline: 'Refuser', accept: 'Accepter', slide: 'Répondre' },
+    ko: { label: 'FaceTime 영상 통화', mobile: '휴대 전화', remind: '나중에 알림', message: '메시지 보내기', voicemail: '음성 메시지', decline: '거절', accept: '응답', slide: '밀어서 통화하기',
+          speaker: '스피커', mute: '소리 끔', more: '더 보기', end: '종료', keypad: '키패드' },
+    ja: { label: 'FaceTimeビデオ', mobile: '携帯電話', remind: 'あとで通知', message: 'メッセージを送信', voicemail: '留守番電話', decline: '拒否', accept: '応答', slide: 'スライドで応答',
+          speaker: 'スピーカー', mute: '消音', more: 'その他', end: '終了', keypad: 'キーパッド' },
+    en: { label: 'FaceTime Video', mobile: 'mobile', remind: 'Remind Me', message: 'Message', voicemail: 'Voicemail', decline: 'Decline', accept: 'Accept', slide: 'slide to answer',
+          speaker: 'Speaker', mute: 'Mute', more: 'More', end: 'End', keypad: 'Keypad' },
+    zh: { label: 'FaceTime视频', mobile: '手机', remind: '提醒我', message: '信息', voicemail: '语音留言', decline: '拒绝', accept: '接受', slide: '滑动来接听',
+          speaker: '免提', mute: '静音', more: '更多', end: '结束', keypad: '拨号键盘' },
+    es: { label: 'FaceTime de vídeo', mobile: 'móvil', remind: 'Recordar', message: 'Mensaje', voicemail: 'Buzón de voz', decline: 'Rechazar', accept: 'Aceptar', slide: 'Deslizar para contestar',
+          speaker: 'Altavoz', mute: 'Silenciar', more: 'Más', end: 'Finalizar', keypad: 'Teclado' },
+    fr: { label: 'FaceTime vidéo', mobile: 'portable', remind: 'Rappel', message: 'Message', voicemail: 'Messagerie', decline: 'Refuser', accept: 'Accepter', slide: 'Répondre',
+          speaker: 'Haut-parleur', mute: 'Couper le micro', more: 'Plus', end: 'Raccrocher', keypad: 'Clavier' },
   };
   const t = () => TEXT[$('f-lang').value] || TEXT.ko;
   const applyLang = () => {
     const lang = $('f-lang').value;
-    ['incoming', 'call'].forEach((id) => $(id).setAttribute('lang', lang === 'zh' ? 'zh-CN' : lang));
+    ['incoming', 'call', 'voice'].forEach((id) => $(id).setAttribute('lang', lang === 'zh' ? 'zh-CN' : lang));
     document.querySelectorAll('[data-t]').forEach((el) => { el.textContent = t()[el.dataset.t]; });
   };
   $('f-lang').addEventListener('change', applyLang);
@@ -404,6 +472,8 @@
     bgURL = blob ? URL.createObjectURL(blob) : null;
     $('in-bg').src = bgURL || '';
     $('in-bg').style.display = bgURL ? 'block' : 'none';
+    $('v-photo').src = bgURL || '';
+    $('v-photo').style.display = bgURL ? 'block' : 'none';
     $('v-bg').textContent = blob ? (name || '선택됨') : '없음';
     $('bg-clear').style.display = blob ? 'inline' : 'none';
   };
@@ -441,11 +511,14 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { lock = null; keepAwake(); } });
 
   // ---------- 흐름 ----------
-  let cfg = save(), delayTimer = null, hideTimer = null;
+  let cfg = save(), delayTimer = null, hideTimer = null, clockTimer = null;
+  const isVoice = () => cfg.type === 'voice';
 
   const resetCall = () => {
     $('remote').pause();
+    clearInterval(clockTimer);
     $('fade').classList.remove('on');
+    $('vfade').classList.remove('on');
     clearTimeout(hideTimer);
     document.body.classList.remove('controls-open');
   };
@@ -460,7 +533,8 @@
   const ring = () => {
     clearTimeout(delayTimer);
     $('in-name').textContent = cfg.name;
-    $('incoming').className = 'screen mode-' + (cfg.mode === 'slide' ? 'slide' : 'buttons');
+    $('incoming').className = 'screen mode-' + (cfg.mode === 'slide' ? 'slide' : 'buttons') + ' type-' + (isVoice() ? 'voice' : 'video');
+    $('in-label').textContent = isVoice() ? t().mobile : t().label;
     show('incoming');
     resetKnob();
   };
@@ -474,6 +548,7 @@
 
   const accept = () => {
     sfxConnect();
+    if (isVoice()) return acceptVoice();
     $('avatar').textContent = (cfg.name || '').trim().slice(0, 1);
     const rv = $('remote');
     const hasRemote = !!rv.getAttribute('src');
@@ -486,10 +561,28 @@
     openControls();
   };
 
+  // 음성 통화: 화면 없이 상대 영상의 소리만 재생
+  const acceptVoice = () => {
+    $('v-name').textContent = cfg.name;
+    document.querySelectorAll('#voice .tg').forEach((b) => b.classList.remove('lit'));
+    const rv = $('remote');
+    rv.loop = !!cfg.loop;
+    rv.muted = false;
+    show('voice');
+    if (rv.getAttribute('src')) { rv.currentTime = 0; rv.play().catch(() => {}); }
+    const start = Date.now();
+    const tick = () => {
+      const sec = Math.floor((Date.now() - start) / 1000);
+      $('v-time').textContent = `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+    };
+    tick(); clearInterval(clockTimer); clockTimer = setInterval(tick, 500);
+  };
+
   const endCall = () => {
     $('remote').pause();
     sfxEnd();
-    $('fade').classList.add('on');
+    clearInterval(clockTimer);
+    $(isVoice() ? 'vfade' : 'fade').classList.add('on');
     setTimeout(goStandby, 600);
   };
 
@@ -542,6 +635,8 @@
       clearTimeout(hideTimer); document.body.classList.remove('controls-open');
     } else openControls();
   });
+  $('vb-end').addEventListener('click', endCall);
+  document.querySelectorAll('#voice .tg').forEach((b) => b.addEventListener('click', () => b.classList.toggle('lit')));
   $('remote').addEventListener('ended', () => { if (!$('remote').loop) endCall(); });
 
   // 왼쪽 위 모서리 길게 누르기 → 설정

@@ -372,6 +372,20 @@
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
+
+  // ---------- 새 버전 자동 반영 (홈 화면 앱은 옛 페이지를 오래 붙잡고 있다) ----------
+  const BUILD = '2026-10-29-voice';
+  (async () => {
+    try {
+      const res = await fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' });
+      const live = ((await res.text()).match(/const BUILD = '([^']+)'/) || [])[1];
+      if (live && live !== BUILD && sessionStorage.getItem('vcall-reloaded') !== live) {
+        sessionStorage.setItem('vcall-reloaded', live);
+        await fetch(location.href, { cache: 'reload' });
+        location.reload();
+      }
+    } catch (e) {}
+  })();
   const screens = ['setup', 'standby', 'incoming', 'call', 'voice'];
   const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
 

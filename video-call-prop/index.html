@@ -227,13 +227,6 @@
 
     <div class="group-title">소리</div>
     <div class="group">
-      <div class="item"><span>벨소리</span><label class="toggle"><input id="f-ring" type="checkbox" checked><i></i></label></div>
-      <div class="item">
-        <span>벨소리 파일</span>
-        <span class="val" id="v-ring">기본음</span>
-        <label class="file" for="f-ringfile">선택</label>
-        <input id="f-ringfile" type="file" accept="audio/*,video/*">
-      </div>
       <div class="item"><span>받을 때·끊을 때 효과음</span><label class="toggle"><input id="f-sfx" type="checkbox" checked><i></i></label></div>
     </div>
 
@@ -254,7 +247,7 @@
       <b>설정 다시 열기</b> · 화면 왼쪽 위 모서리를 1초 길게 누르기(화면에 보이지 않음)<br>
       <b>전체 화면</b> · Safari 공유 버튼 → 「홈 화면에 추가」 후 홈 화면 아이콘으로 열면 주소창이 사라집니다<br>
       <b>통화 중</b> · 버튼은 몇 초 뒤 숨고, 화면을 탭하면 오른쪽 아래에 다시 나옵니다. 빨간 버튼 = 통화 종료<br>
-      <b>소리</b> · 벨소리 파일을 고르지 않으면 기본 합성음이 납니다. 소리가 안 나면 무음 스위치와 음량을 확인하세요
+      <b>소리</b> · 벨소리는 나지 않습니다(후반에 넣어 주세요). 효과음이 안 나면 무음 스위치와 음량을 확인하세요
     </p>
   </div>
 </section>
@@ -321,7 +314,7 @@
   const show = (name) => screens.forEach((s) => $(s).classList.toggle('on', s === name));
 
   // ---------- 설정 저장 (이 기기 브라우저에만) ----------
-  const FIELDS = ['mode', 'lang', 'name', 'delay', 'ring', 'sfx', 'loop'];
+  const FIELDS = ['mode', 'lang', 'name', 'delay', 'sfx', 'loop'];
   const load = () => {
     try {
       const saved = JSON.parse(localStorage.getItem('vcall-settings') || '{}');
@@ -420,17 +413,8 @@
     try { (await db()).transaction('files', 'readwrite').objectStore('files').delete('bg'); } catch (e) {}
   });
 
-  // 벨소리 파일 (없으면 합성음)
-  const ringAudio = new Audio();
-  ringAudio.loop = true;
-  ringAudio.playsInline = true;
-  pick('f-ringfile', 'ring', (blob, name) => {
-    ringAudio.src = URL.createObjectURL(blob);
-    $('v-ring').textContent = name || '선택됨';
-  });
-
   // ---------- 소리 ----------
-  let actx = null, ringTimer = null;
+  let actx = null;
   const tone = (freqs, step, len, vol) => {
     if (!actx) return;
     const t0 = actx.currentTime;
@@ -445,34 +429,6 @@
       o.start(t0 + dt); o.stop(t0 + dt + len + 0.02);
     });
   };
-  // 기본 벨소리: 마림바 음색 (배음 1·4·10배, 빠른 감쇠). 멜로디는 새로 만든 것
-  const marimba = (freq, at, vol) => {
-    [[1, 1, 0.9], [3.93, 0.28, 0.25], [9.2, 0.08, 0.08]].forEach(([mul, amp, len]) => {
-      const o = actx.createOscillator(), g = actx.createGain();
-      o.type = 'sine';
-      o.frequency.value = freq * mul;
-      g.gain.setValueAtTime(0, at);
-      g.gain.linearRampToValueAtTime(vol * amp, at + 0.004);
-      g.gain.exponentialRampToValueAtTime(0.0001, at + len);
-      o.connect(g).connect(actx.destination);
-      o.start(at); o.stop(at + len + 0.02);
-    });
-  };
-  const MELODY = [
-    [0.00, 659.3], [0.14, 784.0], [0.28, 987.8], [0.42, 784.0],
-    [0.56, 880.0], [0.70, 1046.5], [0.84, 987.8], [1.12, 784.0],
-    [1.40, 659.3], [1.54, 784.0], [1.68, 987.8], [1.82, 1174.7], [2.10, 987.8],
-  ];
-  const ringOnce = () => {
-    if (!actx) return;
-    const t0 = actx.currentTime + 0.02;
-    MELODY.forEach(([dt, f]) => marimba(f, t0 + dt, 0.35));
-  };
-  const startRing = () => {
-    if (ringAudio.src) { ringAudio.currentTime = 0; ringAudio.play().catch(() => {}); return; }
-    ringOnce(); ringTimer = setInterval(ringOnce, 3000);
-  };
-  const stopRing = () => { clearInterval(ringTimer); ringTimer = null; ringAudio.pause(); };
   // 받을 때: 올라가는 두 음 / 끊을 때: 내려가는 두 음
   const sfxConnect = () => { if (cfg.sfx) tone([880, 1318.5], 0.12, 0.35, 0.22); };
   const sfxEnd = () => { if (cfg.sfx) tone([1318.5, 880], 0.12, 0.35, 0.22); };
@@ -495,7 +451,7 @@
   };
 
   const goStandby = () => {
-    stopRing(); clearTimeout(delayTimer); resetCall();
+    clearTimeout(delayTimer); resetCall();
     show('standby');
     const d = parseFloat(cfg.delay) || 0;
     if (d > 0) delayTimer = setTimeout(ring, d * 1000);
@@ -507,7 +463,6 @@
     $('incoming').className = 'screen mode-' + (cfg.mode === 'slide' ? 'slide' : 'buttons');
     show('incoming');
     resetKnob();
-    if (cfg.ring) startRing();
   };
 
   // 버튼은 몇 초 뒤 스스로 숨는다
@@ -518,7 +473,6 @@
   };
 
   const accept = () => {
-    stopRing();
     sfxConnect();
     $('avatar').textContent = (cfg.name || '').trim().slice(0, 1);
     const rv = $('remote');
@@ -568,7 +522,6 @@
     // 무음 스위치가 켜져 있어도 소리가 나게
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); await actx.resume(); } catch (e) {}
-    if (ringAudio.src) ringAudio.play().then(() => ringAudio.pause()).catch(() => {});
     // 상대 영상 소리 재생 권한을 미리 풀어 둔다
     const rv = $('remote');
     if (rv.getAttribute('src')) { rv.muted = true; rv.play().then(() => { rv.pause(); rv.muted = false; }).catch(() => {}); }
@@ -595,7 +548,7 @@
   let pressTimer = null;
   const pressStart = () => {
     pressTimer = setTimeout(() => {
-      stopRing(); clearTimeout(delayTimer); resetCall();
+      clearTimeout(delayTimer); resetCall();
       show('setup');
     }, 1000);
   };

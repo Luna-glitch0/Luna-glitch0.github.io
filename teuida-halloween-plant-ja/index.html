@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="ja" data-lang="ja">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="TEUIDAの成長植物を育てて、ハロウィンの仮装をさせて、ストーリーでシェアしよう！">
+<meta property="og:title" content="成長植物にハロウィンの仮装をさせよう · TEUIDA">
+<meta property="og:description" content="TEUIDAの成長植物を育てて、ハロウィンの仮装をさせて、ストーリーでシェアしよう！">
+<meta property="og:image" content="https://luna-glitch0.github.io/teuida-halloween-plant-ja/plants/p70.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Teuida Halloween Plant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/omggif@1.0.10/omggif.js"></script>
+<style>
+/* Layout: one night stage (the plant) beside three steps: grow it, dress it, share it / start a real streak. Single dark world on purpose. */
+:root{
+  --night:#121a20;
+  --night-2:#1a252c;
+  --night-3:#26343c;
+  --fg:#f3ece2;
+  --fg-dim:#b9b6ae;
+  --ink:#2d2a28;
+  --pumpkin:#f39237;
+  --mint:#2ee6b0;
+  --plum-3:#714c84;
+  --display:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--night)}
+body{
+  margin:0;
+  background:var(--night);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.65;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 56px;overflow-x:hidden;
+}
+.en{display:none}
+html[data-lang="en"] .en{display:revert}
+html[data-lang="en"] .ja{display:none}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.25;text-wrap:balance;margin:0;font-feature-settings:"palt";letter-spacing:.02em}
+h1{font-weight:900}
+html[data-lang="ja"] body{word-break:auto-phrase;line-break:strict}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px dashed var(--pumpkin);outline-offset:3px}
+
+.top{max-width:1040px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-block:18px 8px}
+.top img{height:30px;width:auto;display:block}
+.lang{display:flex;background:var(--night-3);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;padding:6px 12px;border-radius:999px;cursor:pointer;font-size:13px;color:var(--fg-dim)}
+.lang button[aria-pressed="true"]{background:var(--pumpkin);color:var(--ink);font-weight:700}
+
+.hero{max-width:1040px;margin:0 auto;padding-block:20px 28px;display:grid;gap:10px}
+.eyebrow{font-size:14px;font-weight:700;color:var(--pumpkin)}
+.hero h1{font-size:clamp(36px,7vw,60px)}
+.hero p.lede{color:var(--fg-dim);max-width:52ch;font-size:17px}
+
+.app{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.stage-wrap{position:sticky;top:calc(12px + env(safe-area-inset-top, 0px));display:grid;gap:10px}
+.stage{position:relative;aspect-ratio:1/1.1;border-radius:22px;overflow:hidden;background:#1f2d36}
+.stage .bd,.stage .pl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage .pl{overflow:visible}
+.bob{animation:bob 3s ease-in-out infinite;transform-box:view-box;transform-origin:80px 156px}
+@keyframes bob{50%{transform:translateY(-3px)}}
+.grow-pop{animation:grow .9s cubic-bezier(.2,1.5,.4,1) both;transform-box:view-box;transform-origin:80px 62px}
+@keyframes grow{0%{transform:scale(.55);opacity:.4}60%{transform:scale(1.07);opacity:1}100%{transform:scale(1)}}
+.day{position:absolute;left:14px;top:14px;background:var(--mint);color:var(--ink);font-family:var(--display);font-weight:900;font-size:14px;border-radius:999px;padding:4px 12px}
+.drops{position:absolute;left:50%;top:6%;width:120px;height:60%;margin-left:-60px;pointer-events:none}
+.drops i{position:absolute;top:0;width:10px;height:14px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#7fc8ff;opacity:0}
+.watering .drops i{animation:drop .7s ease-in forwards}
+@keyframes drop{0%{opacity:0;transform:translateY(0)}15%{opacity:1}100%{opacity:0;transform:translateY(220px)}}
+.can{position:absolute;right:12%;top:10%;width:90px;opacity:0;transform:rotate(0);transition:none}
+.watering .can{animation:pour 1s ease forwards}
+@keyframes pour{0%{opacity:0;transform:translate(30px,-10px) rotate(0)}20%{opacity:1;transform:translate(0,0) rotate(-25deg)}80%{opacity:1;transform:rotate(-30deg)}100%{opacity:0;transform:translate(20px,-10px) rotate(0)}}
+.stage-hint{font-size:13px;color:var(--fg-dim);text-align:center}
+
+.steps{display:grid;gap:18px;min-width:0}
+.step{background:var(--night-2);border-radius:18px;padding:22px;display:grid;gap:14px;min-width:0}
+.step-h{display:flex;gap:12px;align-items:center}
+.step-h b{flex:none;width:32px;height:32px;border-radius:50%;background:var(--pumpkin);color:var(--ink);display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:17px}
+.step-h h2{font-size:26px}
+.step > p{color:var(--fg-dim);font-size:15px}
+
+.track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.track button{border:1px solid var(--night-3);background:var(--night);border-radius:12px;padding:8px 4px;cursor:pointer;display:grid;gap:2px;justify-items:center;font-size:12px;color:var(--fg-dim)}
+.track button b{font-size:14px;color:var(--fg);font-family:var(--display);font-weight:700}
+.track button[disabled]{opacity:.35;cursor:default}
+.track button[aria-pressed="true"]{border-color:var(--mint);background:color-mix(in srgb, var(--mint) 14%, var(--night))}
+.btn{border:0;border-radius:12px;padding:13px 20px;font-family:var(--display);font-weight:700;letter-spacing:.02em;cursor:pointer;background:var(--pumpkin);color:var(--ink);display:inline-flex;gap:8px;align-items:center;justify-content:center;text-decoration:none;font-size:16px}
+.btn.mint{background:var(--mint)}
+.btn.ghost{background:transparent;border:1px solid var(--night-3);color:var(--fg)}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.small{font-size:13px;color:var(--fg-dim)}
+.linkbtn{background:none;border:0;color:var(--fg-dim);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
+
+.dgroup{display:grid;gap:7px}
+.dgroup > span{font-size:13px;font-weight:700;color:var(--fg-dim)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--night-3);background:var(--night);border-radius:999px;padding:5px 13px;font-size:14px;cursor:pointer;font-family:var(--display);font-weight:500}
+.chip[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:var(--ink);font-weight:700}
+.swatch{flex:none;width:30px;height:30px;padding:0;border-radius:50%;border:2px solid var(--night-3);cursor:pointer}
+.swatch[aria-pressed="true"]{outline:2px solid var(--mint);outline-offset:2px}
+
+.cta{border:1px solid var(--night-3);border-radius:14px;padding:16px;display:grid;gap:10px;background:var(--night)}
+.cta h3{font-size:21px}
+.cta p{color:var(--fg-dim);font-size:14.5px}
+.cta.streak{background:color-mix(in srgb, var(--mint) 10%, var(--night));border-color:color-mix(in srgb, var(--mint) 40%, var(--night))}
+.preview{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center}
+.preview[hidden]{display:none}
+.preview img{width:96px;border-radius:10px;border:1px solid var(--night-3);display:block}
+.status{font-size:13px;color:var(--mint);min-height:1.2em}
+
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .stage-wrap{position:relative;top:0}
+  .stage{max-width:440px;width:100%;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <img src="logo/teuida-logo.png" alt="teuida">
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" id="lang-en" data-l="en" aria-pressed="false">EN</button>
+    <button type="button" id="lang-ja" data-l="ja" aria-pressed="false">日本語</button>
+  </div>
+</header>
+
+<section class="hero">
+  <p class="eyebrow"><span class="en">Teuida Halloween</span><span class="ja">TEUIDAハロウィン</span></p>
+  <h1><span class="en">Grow your own Halloween plant</span><span class="ja">成長植物を育てて、<br>ハロウィンの仮装をさせよう！</span></h1>
+  <p class="lede"><span class="en">Every Teuida lesson waters your plant. Grow one here, dress it up for Halloween, and share it to your story.</span><span class="ja">TEUIDAでレッスンを受けるたびに、成長植物に水やりができます。ここで育てて仮装させたら、ストーリーで自慢しよう！</span></p>
+</section>
+
+<main class="app">
+  <div class="stage-wrap">
+    <div class="stage" id="stage">
+      <svg class="bd" id="bd" viewBox="0 0 100 110" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      <svg class="pl" id="pl" viewBox="-15 -39 190 209" role="img" aria-label="Your Teuida Halloween plant"></svg>
+      <span class="day" id="day-badge">Day 1</span>
+      <div class="drops" aria-hidden="true"><i style="left:10px;animation-delay:0s"></i><i style="left:40px;animation-delay:.15s"></i><i style="left:70px;animation-delay:.05s"></i><i style="left:100px;animation-delay:.22s"></i><i style="left:55px;animation-delay:.35s"></i></div>
+      <svg class="can" viewBox="0 0 90 60" aria-hidden="true"><path d="M20 22H58V52Q58 56 54 56H24Q20 56 20 52Z" fill="#7fc8ff"/><path d="M58 30L84 14L86 18L62 38Z" fill="#5aa9e6"/><path d="M26 22C26 8 52 8 52 22" stroke="#5aa9e6" stroke-width="5" fill="none"/><circle cx="85" cy="15" r="4" fill="#5aa9e6"/></svg>
+    </div>
+    <p class="stage-hint"><span class="en">Your plant, live. Every change shows here.</span><span class="ja">水やりも仮装も、ここにすぐ反映されます</span></p>
+  </div>
+
+  <div class="steps">
+    <section class="step" aria-labelledby="s1">
+      <div class="step-h"><b>1</b><h2 id="s1"><span class="en">Grow it</span><span class="ja">育てる</span></h2></div>
+      <p><span class="en">Water your plant to grow it. Each tap jumps to your next streak milestone, just like in the app.</span><span class="ja">水をあげるたびに、次の成長段階へ進みます。アプリの連続記録と同じ育ち方です。</span></p>
+      <div class="track" id="track"></div>
+      <div class="row">
+        <button type="button" class="btn" id="water"><span class="en">Water it</span><span class="ja">水をあげる</span></button>
+        <button type="button" class="linkbtn" id="restart"><span class="en">Start over</span><span class="ja">最初からやり直す</span></button>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s2">
+      <div class="step-h"><b>2</b><h2 id="s2"><span class="en">Dress it up</span><span class="ja">仮装させる</span></h2></div>
+      <div id="dress" style="display:grid;gap:14px"></div>
+      <div class="row"><button type="button" class="btn ghost" id="rand"><span class="en">Surprise me</span><span class="ja">おまかせ仮装</span></button></div>
+    </section>
+
+    <section class="step" aria-labelledby="s3">
+      <div class="step-h"><b>3</b><h2 id="s3"><span class="en">Show it off</span><span class="ja">自慢する</span></h2></div>
+      <div class="cta">
+        <h3><span class="en">Share to your story</span><span class="ja">ストーリーでシェア</span></h3>
+        <p><span class="en">Save a story-sized image or a moving GIF of your plant, then post it on Instagram or TikTok.</span><span class="ja">ストーリーにぴったりのサイズで、画像か動くGIFを保存できます。InstagramやTikTokに投稿しよう！</span></p>
+        <div class="row">
+          <button type="button" class="btn" id="save-png"><span class="en">Save image</span><span class="ja">画像を保存</span></button>
+          <button type="button" class="btn ghost" id="save-gif"><span class="en">Save GIF</span><span class="ja">GIFを保存</span></button>
+        </div>
+        <p class="status" id="status" aria-live="polite"></p>
+        <div class="preview" id="preview" hidden><img id="preview-img" alt="Story image preview"><p class="small" id="preview-note"></p></div>
+      </div>
+      <div class="cta streak">
+        <h3><span class="en">Grow a real one in the app</span><span class="ja">アプリで本物の成長植物を育てよう</span></h3>
+        <p><span class="en">Your Teuida plant grows with your learning streak, from a tiny sprout on Day 1 to a full bouquet. One short lesson a day keeps it growing.</span><span class="ja">TEUIDAの成長植物は、連続記録が伸びるほど育ちます。1日目の新芽から花束まで、1日1回の短いレッスンで育てられます。</span></p>
+        <div class="row"><a class="btn mint" href="https://www.teuida.net/onboarding" target="_blank" rel="noopener"><span class="en">Start my streak</span><span class="ja">連続記録をスタート</span></a></div>
+        <p class="small"><span class="en">Already learning? Open the app and keep your streak going.</span><span class="ja">すでに学習中なら、アプリを開いて連続記録をつなげよう！</span></p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+(function(){
+  var C = {ink:'#333',blush:'#f7a3b3',cape:'#17101c',blood:'#b0323b',orange:'#f39237',bone:'#f5efe4',gold:'#e7c36a',cat:'#1d1a1f'};
+  var POT = 'M32 80H128L121 146Q120 152 114 152H46Q40 152 39 146Z';
+  var uid = 0;
+
+  var STAGES = [
+    {img:'p1', day:1,  en:'Sprout',   ja:'新芽',     vb:[-15,-39,190,209]},
+    {img:'p4', day:4,  en:'Leafy',    ja:'若葉',   vb:[-18,-45,196,215]},
+    {img:'p5', day:5,  en:'Buds',     ja:'つぼみ', vb:[-22,-55,204,225]},
+    {img:'p7', day:7,  en:'Bloom',    ja:'開花',    vb:[-31,-74,222,244]},
+    {img:'p70',day:70, en:'Bouquet',  ja:'花束',   vb:[-65,-149,290,319]}
+  ];
+  var POTC = {
+    beige:{pot:'#e5d3c1',rim:'#eedfd0',ink:'#333'},
+    orange:{pot:'#f39237',rim:'#f7aa5e',ink:'#3a1904'},
+    black:{pot:'#2c2833',rim:'#3d3846',ink:'#f3ece2'},
+    purple:{pot:'#8a5aa8',rim:'#a374c2',ink:'#2a1633'},
+    bone:{pot:'#f3eee6',rim:'#fbf8f2',ink:'#333'},
+    franken:{pot:'#8fbf6a',rim:'#a8d486',ink:'#1f2a17'},
+    red:{pot:'#c9454d',rim:'#dc6a70',ink:'#2a0b0e'}
+  };
+  var ACC = {purple:'#5a3570', red:'#b0323b', green:'#2f7a4a', blue:'#2f4f8a', orange:'#e07a25', black:'#1d1a1f'};
+  var BG = {night:['#26343c','#121a20'], purple:['#6b4680','#24152d'], blood:['#8a222b','#230709'], pumpkin:['#f39237','#7a3409'], moon:['#3d5f92','#111a2c'], mint:['#2ee6b0','#0d5241']};
+  var BAT = 'M32 10c-2-4-4-5-6-5 1 2 1 4-1 5-4-6-12-9-25-6 6 2 9 6 8 11 4-2 8-1 10 3 2-3 6-4 9-1 2-2 3-3 5-3s3 1 5 3c3-3 7-2 9 1 2-4 6-5 10-3-1-5 2-9 8-11-13-3-21 0-25 6-2-1-2-3-1-5-2 0-4 1-6 5z';
+
+  // ---------- drawing ----------
+  function backdrop(scene, t, H){
+    var s = '';
+    if (scene === 'moon') s += '<circle cx="78" cy="'+(H*0.13)+'" r="11" fill="#f6e9b8"/><circle cx="74" cy="'+(H*0.12)+'" r="2.2" fill="#e6d59c"/><circle cx="82" cy="'+(H*0.15)+'" r="1.6" fill="#e6d59c"/>';
+    if (scene === 'moon' || scene === 'stars') {
+      var st = [[10,.08],[28,.2],[92,.3],[6,.42],[60,.06],[88,.55],[16,.62],[40,.12]];
+      st.forEach(function(p,i){ var o = .35 + .45*(0.5+0.5*Math.sin(t*2.2+i*1.7)); s += '<circle cx="'+p[0]+'" cy="'+(p[1]*H)+'" r="'+(scene==='stars'?1.1:.8)+'" fill="#f6e9b8" opacity="'+o.toFixed(2)+'"/>'; });
+    }
+    if (scene === 'bats') {
+      [[18,.12,.18],[70,.08,.22],[84,.3,.14],[10,.38,.12]].forEach(function(p,i){
+        var x = p[0] + Math.sin(t*1.4+i*2)*3, y = p[1]*H + Math.cos(t*1.9+i)*2, f = .7+.3*Math.abs(Math.sin(t*6+i));
+        s += '<g transform="translate('+x.toFixed(2)+' '+y.toFixed(2)+') scale('+p[2]+' '+(p[2]*f).toFixed(3)+') translate(-32 -14)" fill="#0b0f12"><path d="'+BAT+'"/></g>';
+      });
+    }
+    if (scene === 'web') s += '<g stroke="#f3ece2" stroke-width=".35" fill="none" opacity=".55"><path d="M0 0L30 30M0 0L0 40M0 0L40 0M0 0L14 38M0 0L38 14"/><path d="M0 8Q6 6 8 0M0 16Q12 13 16 0M0 25Q19 19 25 0M0 34Q27 26 34 0"/></g><path d="M86 0V'+(H*0.22)+'" stroke="#f3ece2" stroke-width=".3"/><circle cx="86" cy="'+(H*0.22+2)+'" r="2.4" fill="#0b0f12"/>';
+    return s;
+  }
+  function faceLayer(P, kind){
+    var eyes = '<circle cx="62" cy="110" r="4.6" fill="'+P.ink+'"/><circle cx="98" cy="110" r="4.6" fill="'+P.ink+'"/>';
+    var blush = '<ellipse cx="51" cy="121" rx="6" ry="3.6" fill="'+C.blush+'" opacity=".8"/><ellipse cx="109" cy="121" rx="6" ry="3.6" fill="'+C.blush+'" opacity=".8"/>';
+    var mouth = '<path d="M71 116Q80 114 89 116Q88 130 80 130Q72 130 71 116Z" fill="'+P.ink+'"/>';
+    if (kind === 'skull') return '<circle cx="62" cy="108" r="9" fill="#1a1a1a"/><circle cx="98" cy="108" r="9" fill="#1a1a1a"/><path d="M80 114L76 122H84Z" fill="#1a1a1a"/><rect x="66" y="126" width="28" height="9" rx="2" fill="#f5efe4" stroke="#1a1a1a" stroke-width="2"/><path d="M73 126V135M80 126V135M87 126V135" stroke="#1a1a1a" stroke-width="1.6"/>';
+    if (kind === 'zombie') return '<path d="M57 105L67 115M67 105L57 115" stroke="'+P.ink+'" stroke-width="3" stroke-linecap="round"/><circle cx="98" cy="110" r="5.5" fill="'+P.ink+'"/><ellipse cx="51" cy="121" rx="6" ry="3.6" fill="#8fbf6a" opacity=".8"/><ellipse cx="109" cy="121" rx="6" ry="3.6" fill="#8fbf6a" opacity=".8"/><path d="M68 124H92" stroke="'+P.ink+'" stroke-width="2.4" stroke-linecap="round"/><path d="M72 120V128M78 120V128M84 120V128M90 120V128" stroke="'+P.ink+'" stroke-width="1.8" stroke-linecap="round"/>';
+    if (kind === 'scared') return '<circle cx="62" cy="110" r="6" fill="#fff" stroke="'+P.ink+'" stroke-width="2"/><circle cx="98" cy="110" r="6" fill="#fff" stroke="'+P.ink+'" stroke-width="2"/><circle cx="62" cy="111" r="2.6" fill="'+P.ink+'"/><circle cx="98" cy="111" r="2.6" fill="'+P.ink+'"/><path d="M54 98L68 100M106 98L92 100" stroke="'+P.ink+'" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="80" cy="126" rx="6" ry="8" fill="'+P.ink+'"/><path d="M116 92C112 98 112 102 116 102C120 102 120 98 116 92Z" fill="#7fb2ff"/>';
+    var s = eyes + blush + mouth;
+    if (kind === 'fangs') s += '<path d="M73 116.4L75 122L77 116Z M83 116L85 122L87 116.4Z" fill="#fff"/>';
+    if (kind === 'jason') s += '<path d="M80 82Q112 82 116 110Q118 140 98 150Q80 156 62 150Q42 140 44 110Q48 82 80 82Z" fill="#ece6d8" stroke="#bdb3a0" stroke-width="1.6"/><ellipse cx="65" cy="108" rx="8.5" ry="6" fill="#1a1a1a"/><ellipse cx="95" cy="108" rx="8.5" ry="6" fill="#1a1a1a"/><path d="M56 96L64 90L72 96M88 96L96 90L104 96M66 126L58 120L58 132ZM94 126L102 120L102 132Z" fill="none" stroke="#c0282f" stroke-width="3" stroke-linejoin="round"/><g fill="#7a7266"><circle cx="80" cy="92" r="2"/><circle cx="80" cy="102" r="2"/><circle cx="80" cy="114" r="2"/><circle cx="72" cy="136" r="2"/><circle cx="80" cy="140" r="2"/><circle cx="88" cy="136" r="2"/><circle cx="74" cy="124" r="2"/><circle cx="86" cy="124" r="2"/></g><path d="M45 104L24 100M115 104L136 100" stroke="#1a1a1a" stroke-width="2.4"/>';
+    return s;
+  }
+  function broom(){
+    return '<g transform="translate(140 118) rotate(-22)"><rect x="-2.6" y="-50" width="5.2" height="60" rx="2.6" fill="#8a5a2b"/><path d="M-7 8L-17 42Q-9 46 0 43Q9 46 17 42L7 8Z" fill="#e0ad52"/><path d="M-5 12L-12 42M-2 12L-5 44M1 12L2 44M4 12L8 43M6 12L13 41" stroke="#b07f2e" stroke-width="1.3" stroke-linecap="round"/><rect x="-8" y="4" width="16" height="7" rx="2" fill="#7a3f1f"/><path d="M-8 7.5H8" stroke="#c2412f" stroke-width="1.6"/></g>';
+  }
+  function vampTie(){
+    return '<path d="M26 118Q48 142 80 140M134 118Q112 142 80 140" stroke="'+C.gold+'" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M80 140C70 130 62 134 66 142C69 147 76 145 80 140Z M80 140C90 130 98 134 94 142C91 147 84 145 80 140Z" fill="'+C.cape+'"/><path d="M78 142L72 155M82 142L88 155" stroke="'+C.cape+'" stroke-width="3" stroke-linecap="round"/><path d="M80 133L86 140L80 148L74 140Z" fill="'+C.blood+'" stroke="'+C.gold+'" stroke-width="1.8" stroke-linejoin="round"/>';
+  }
+  // returns the layers behind and in front of the plant image
+  function compose(o){
+    var P = POTC[o.color] || POTC.beige, A = ACC[o.accent] || ACC.purple;
+    var back = '<ellipse cx="80" cy="156" rx="58" ry="6" fill="#2ee6b0" opacity=".3"/>', headBack = '', body = '', head = '', prop = '';
+    if (o.body === 'cape') {
+      back += '<path d="M26 74C8 100 6 140 10 156L150 156C154 140 152 100 134 74Z" fill="'+C.cape+'"/><path d="M32 82C20 106 18 136 20 152L140 152C142 136 140 106 128 82Z" fill="'+A+'"/>';
+      body += '<path d="M34 86L14 44L56 72Z" fill="'+C.cape+'"/><path d="M126 86L146 44L104 72Z" fill="'+C.cape+'"/>' + vampTie();
+    }
+    if (o.body === 'mummy') {
+      var id = 'mm'+(uid++);
+      body += '<clipPath id="'+id+'"><path d="'+POT+'"/></clipPath><g clip-path="url(#'+id+')" stroke="'+C.bone+'" stroke-width="8" fill="none"><path d="M20 90L140 98"/><path d="M20 98L52 104"/><path d="M110 102L140 96"/><path d="M20 140L140 130"/><path d="M20 150L140 146"/></g><path d="M24 66H136" stroke="'+C.bone+'" stroke-width="7"/><path d="M124 132C136 136 140 146 136 156" stroke="'+C.bone+'" stroke-width="7" fill="none" stroke-linecap="round"/>';
+    }
+    if (o.body === 'skeleton') body += '<g stroke="'+C.bone+'" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M80 136V152"/><path d="M80 139C70 137 62 139 58 143M80 139C90 137 98 139 102 143M80 146C72 144 66 146 62 150M80 146C88 144 94 146 98 150"/></g><g fill="'+C.bone+'"><circle cx="36" cy="88" r="3.5"/><circle cx="36" cy="96" r="3.5"/><circle cx="124" cy="88" r="3.5"/><circle cx="124" cy="96" r="3.5"/></g><path d="M36 92L46 100M124 92L114 100" stroke="'+C.bone+'" stroke-width="3.5" stroke-linecap="round"/>';
+    if (o.body === 'ghost') body += '<path d="M80 56C70 56 64 60 62 62L24 64C16 92 16 130 18 162Q28 154 38 162Q48 154 58 162Q68 154 78 162Q88 154 98 162Q108 154 118 162Q128 154 142 162C144 130 144 92 136 64L98 62C96 60 90 56 80 56Z" fill="#f6f2ea" opacity=".93"/>';
+    if (o.body === 'cat') back += '<path d="M120 140C150 140 156 110 146 96" stroke="'+C.cat+'" stroke-width="7" fill="none" stroke-linecap="round"/>';
+    if (o.body === 'bowtie') body += '<path d="M80 88L62 78V98Z" fill="'+A+'"/><path d="M80 88L98 78V98Z" fill="'+A+'"/><circle cx="80" cy="88" r="5" fill="'+A+'"/>';
+    if (o.body === 'cobweb') body += '<g stroke="#ffffff" stroke-width="1.2" fill="none" opacity=".8"><path d="M39 152L39 112M39 152L60 116M39 152L72 140M39 152L76 152"/><path d="M39 128Q50 128 54 124M39 140Q52 140 60 136M48 152Q50 144 58 140M58 152Q62 146 70 145"/></g>';
+    if (o.head === 'cat') headBack += '<path d="M28 64L36 34L58 62Z" fill="'+C.cat+'"/><path d="M36 60L39 44L50 60Z" fill="'+C.blush+'"/><path d="M132 64L124 34L102 62Z" fill="'+C.cat+'"/><path d="M124 60L121 44L110 60Z" fill="'+C.blush+'"/>';
+    if (o.head === 'witch') head += '<g transform="translate(30 66) rotate(-16) scale(.62) translate(-80 -66)"><path d="M42 64L76 6C80 1 86 2 88 8L118 64Z" fill="'+A+'"/><path d="M46 56H114L118 64H42Z" fill="'+C.orange+'"/><ellipse cx="80" cy="64" rx="52" ry="7" fill="'+A+'"/><ellipse cx="80" cy="64" rx="52" ry="7" fill="#000" opacity=".3"/></g>';
+    if (o.head === 'pirate') head += '<g transform="translate(130 66) rotate(14) scale(.6) translate(-80 -60)"><path d="M26 66C36 38 58 28 80 34C102 28 124 38 134 66C112 56 48 56 26 66Z" fill="#1d1a1f"/><path d="M34 60C54 52 106 52 126 60" stroke="#e7c36a" stroke-width="2" fill="none"/><circle cx="80" cy="46" r="5.5" fill="#f5efe4"/><path d="M72 52L88 58M88 52L72 58" stroke="#f5efe4" stroke-width="2.4" stroke-linecap="round"/></g>';
+    if (o.head === 'franken') head += '<rect x="12" y="100" width="18" height="10" rx="2" fill="#8d949a"/><rect x="8" y="98" width="6" height="14" rx="1" fill="#6b7177"/><rect x="130" y="100" width="18" height="10" rx="2" fill="#8d949a"/><rect x="146" y="98" width="6" height="14" rx="1" fill="#6b7177"/><path d="M40 72H76M46 67V77M54 67V77M62 67V77M70 67V77" stroke="#3b3b3b" stroke-width="2" stroke-linecap="round"/>';
+    if (o.head === 'spider') head += '<path d="M22 -160V58" stroke="#f3ece2" stroke-width=".8"/><circle cx="22" cy="62" r="6" fill="#1d1a1f"/><path d="M16 58L9 54M16 62L8 62M16 66L9 70M28 58L35 54M28 62L36 62M28 66L35 70" stroke="#1d1a1f" stroke-width="1.8" stroke-linecap="round"/><circle cx="20" cy="61" r="1.2" fill="#fff"/><circle cx="24" cy="61" r="1.2" fill="#fff"/>';
+    if (o.prop === 'broom') prop += broom();
+    if (o.prop === 'bucket') prop += '<path d="M4 130Q19 112 34 130" stroke="#3a3a3a" stroke-width="2" fill="none"/><path d="M2 130H36L32 160H6Z" fill="'+C.orange+'"/><path d="M11 140L15 134L19 140ZM21 140L25 134L29 140Z" fill="#3a1904"/><path d="M11 147Q19 155 28 147Z" fill="#3a1904"/><circle cx="12" cy="128" r="4" fill="#e85d9a"/><circle cx="22" cy="126" r="4" fill="#7fb2ff"/>';
+    if (o.prop === 'bat') prop += '<g transform="translate(118 30) scale(.7)" fill="#1d1a1f"><path d="'+BAT+'"/></g>';
+    if (o.prop === 'candle') prop += '<rect x="138" y="128" width="10" height="28" rx="2" fill="'+C.bone+'"/><path d="M143 112C137 120 139 126 143 126C147 126 149 120 143 112Z" fill="#ffb347"/>';
+    if (o.prop === 'ghost') prop += '<path d="M10 92C22 92 28 102 28 114V132Q24 128 20 132Q16 128 12 132Q8 128 4 132Q0 128 -6 132V114C-6 102 0 92 10 92Z" fill="#f6f2ea"/><ellipse cx="5" cy="110" rx="2.4" ry="3.4" fill="#1a1a1a"/><ellipse cx="15" cy="110" rx="2.4" ry="3.4" fill="#1a1a1a"/><ellipse cx="10" cy="119" rx="2.4" ry="2.8" fill="#1a1a1a"/>';
+    var front = headBack + '<path d="'+POT+'" fill="'+P.pot+'"/><rect x="22" y="60" width="116" height="24" rx="6" fill="'+P.rim+'"/>' + body + faceLayer(P, o.face) + head + prop;
+    return {back:back, front:front};
+  }
+  var IMG = {x:-80, y:-148.5, s:320};
+  function plantImage(href, cls){
+    var id = 'clp'+(uid++);
+    return '<clipPath id="'+id+'"><rect x="-300" y="-400" width="800" height="462"/></clipPath><g class="'+(cls||'')+'"><image href="'+href+'" x="'+IMG.x+'" y="'+IMG.y+'" width="'+IMG.s+'" height="'+IMG.s+'" clip-path="url(#'+id+')"/></g>';
+  }
+
+  // ---------- state ----------
+  var START = {bg:'night', scene:'moon', color:'beige', accent:'purple', head:'cat', face:'fangs', body:'none', prop:'bucket'};
+  var look = Object.assign({}, START), stage = 0, reached = 0;
+  try { var saved = JSON.parse(localStorage.getItem('teuida-plant') || 'null'); if (saved) { Object.assign(look, saved.look || {}); stage = saved.stage || 0; reached = Math.max(stage, saved.reached || 0); } } catch(e){}
+  function persist(){ try { localStorage.setItem('teuida-plant', JSON.stringify({look:look, stage:stage, reached:reached})); } catch(e){} }
+
+  var pl = document.getElementById('pl'), bd = document.getElementById('bd'), stageEl = document.getElementById('stage');
+  var curVB = STAGES[stage].vb.slice();
+  function setVB(v){ pl.setAttribute('viewBox', v.map(function(n){ return n.toFixed(2); }).join(' ')); }
+  function tweenVB(to){
+    var from = curVB.slice(), t0 = performance.now(), D = 900;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { curVB = to.slice(); setVB(curVB); return; }
+    (function step(now){
+      var p = Math.min(1, (now - t0) / D), e = p < .5 ? 2*p*p : 1 - Math.pow(-2*p+2, 2)/2;
+      curVB = from.map(function(f, i){ return f + (to[i] - f) * e; }); setVB(curVB);
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  function drawPlant(pop){
+    var L = compose(look);
+    pl.innerHTML = '<g class="bob">' + L.back + plantImage('plants/'+STAGES[stage].img+'.png', pop ? 'grow-pop' : '') + L.front + '</g>';
+    var c = BG[look.bg] || BG.night;
+    stageEl.style.background = 'radial-gradient(circle at 50% 62%, '+c[0]+', '+c[1]+' 78%)';
+    document.getElementById('day-badge').textContent = (lang === 'ja' ? STAGES[stage].day + '日目' : 'Day ' + STAGES[stage].day);
+    syncControls();
+  }
+  var bdStart = performance.now();
+  (function tick(now){
+    bd.innerHTML = backdrop(look.scene, (now - bdStart) / 1000, 110);
+    setTimeout(function(){ requestAnimationFrame(tick); }, 90);
+  })(bdStart);
+
+  // ---------- grow ----------
+  var track = document.getElementById('track'), water = document.getElementById('water');
+  function buildTrack(){
+    track.innerHTML = STAGES.map(function(s, i){
+      return '<button type="button" data-st="'+i+'"><b>'+(lang === 'ja' ? s.day+'日目' : 'Day '+s.day)+'</b><span>'+(lang === 'ja' ? s.ja : s.en)+'</span></button>';
+    }).join('');
+    syncControls();
+  }
+  function goStage(i, pop){
+    stage = i; reached = Math.max(reached, i); persist();
+    tweenVB(STAGES[i].vb); drawPlant(pop);
+  }
+  track.addEventListener('click', function(e){ var b = e.target.closest('[data-st]'); if (!b || b.disabled) return; goStage(+b.dataset.st, false); });
+  water.addEventListener('click', function(){
+    if (stage >= STAGES.length - 1) return;
+    stageEl.classList.remove('watering'); void stageEl.offsetWidth; stageEl.classList.add('watering');
+    water.disabled = true;
+    setTimeout(function(){ goStage(stage + 1, true); }, 650);
+    setTimeout(function(){ stageEl.classList.remove('watering'); syncControls(); }, 1100);
+  });
+  document.getElementById('restart').addEventListener('click', function(){ reached = 0; goStage(0, true); });
+
+  // ---------- dress up ----------
+  var DRESS = [
+    {k:'bg', ja:'背景の色', en:'Background', sw:function(v){ return 'linear-gradient(135deg,'+BG[v][0]+','+BG[v][1]+')'; }, opts:Object.keys(BG)},
+    {k:'scene', ja:'背景の飾り', en:'Backdrop', opts:[['none','なし','None'],['moon','満月','Full moon'],['stars','星','Stars'],['bats','コウモリ','Bats'],['web','クモの巣','Spiderweb']]},
+    {k:'color', ja:'鉢の色', en:'Pot color', sw:function(v){ return POTC[v].pot; }, opts:Object.keys(POTC)},
+    {k:'accent', ja:'衣装の色', en:'Accent color', sw:function(v){ return ACC[v]; }, opts:Object.keys(ACC)},
+    {k:'head', ja:'頭', en:'Head', opts:[['none','なし','None'],['witch','魔女の帽子','Witch hat'],['cat','ネコ耳','Cat ears'],['pirate','海賊の帽子','Pirate hat'],['franken','フランケンのボルト','Franken bolts'],['spider','クモ','Spider']]},
+    {k:'face', ja:'顔', en:'Face', opts:[['smile','にっこり','Smile'],['fangs','キバ','Fangs'],['jason','ホッケーマスク','Hockey mask'],['skull','ドクロ','Skull'],['zombie','ゾンビ','Zombie'],['scared','びっくり','Scared']]},
+    {k:'body', ja:'衣装', en:'Outfit', opts:[['none','なし','None'],['cape','吸血鬼のマント','Vampire cape'],['mummy','ミイラの包帯','Mummy wraps'],['skeleton','ガイコツ','Skeleton'],['ghost','シーツおばけ','Ghost sheet'],['cat','ネコのしっぽ','Cat tail'],['bowtie','蝶ネクタイ','Bow tie'],['cobweb','クモの巣','Cobwebs']]},
+    {k:'prop', ja:'小物', en:'Prop', opts:[['none','なし','None'],['bucket','お菓子バケツ','Candy bucket'],['broom','ほうき','Broom'],['bat','お供のコウモリ','Bat buddy'],['ghost','お供のおばけ','Ghost buddy'],['candle','ろうそく','Candle']]}
+  ];
+  var dress = document.getElementById('dress');
+  var html = '';
+  DRESS.forEach(function(g){
+    html += '<div class="dgroup"><span><span class="en">'+g.en+'</span><span class="ja">'+g.ja+'</span></span><div class="chips">';
+    g.opts.forEach(function(o){
+      if (g.sw) html += '<button type="button" class="swatch" data-k="'+g.k+'" data-v="'+o+'" aria-label="'+g.en+': '+o+'" style="background:'+g.sw(o)+'"></button>';
+      else html += '<button type="button" class="chip" data-k="'+g.k+'" data-v="'+o[0]+'"><span class="en">'+o[2]+'</span><span class="ja">'+o[1]+'</span></button>';
+    });
+    html += '</div></div>';
+  });
+  dress.innerHTML = html;
+  dress.addEventListener('click', function(e){ var b = e.target.closest('[data-k]'); if (!b) return; look[b.dataset.k] = b.dataset.v; persist(); drawPlant(false); });
+  document.getElementById('rand').addEventListener('click', function(){
+    DRESS.forEach(function(g){ var o = g.opts[Math.floor(Math.random()*g.opts.length)]; look[g.k] = g.sw ? o : o[0]; });
+    persist(); drawPlant(false);
+  });
+  function syncControls(){
+    dress.querySelectorAll('[data-k]').forEach(function(b){ b.setAttribute('aria-pressed', String(look[b.dataset.k] === b.dataset.v)); });
+    track.querySelectorAll('[data-st]').forEach(function(b){ var i = +b.dataset.st; b.disabled = i > reached; b.setAttribute('aria-pressed', String(i === stage)); });
+    var full = stage >= STAGES.length - 1;
+    water.disabled = full || stageEl.classList.contains('watering');
+    water.innerHTML = full ? '<span class="en">Fully grown!</span><span class="ja">満開！</span>' : '<span class="en">Water it</span><span class="ja">水をあげる</span>';
+  }
+
+  // ---------- language ----------
+  var lang = 'ja';
+  function setLang(l){
+    lang = l; document.documentElement.setAttribute('data-lang', l); document.documentElement.lang = l;
+    document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.l === l)); });
+        buildTrack(); drawPlant(false);
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.l); }); });
+
+  // ---------- share image / gif ----------
+  var statusEl = document.getElementById('status');
+  function say(en, ja){ statusEl.textContent = lang === 'ja' ? ja : en; }
+  function loadImg(src){ return new Promise(function(res, rej){ var i = new Image(); i.onload = function(){ res(i); }; i.onerror = rej; i.src = src; }); }
+  function svgImg(inner, vb, w, h){
+    var s = '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="'+vb+'" preserveAspectRatio="xMidYMid meet">'+inner+'</svg>';
+    var url = URL.createObjectURL(new Blob([s], {type:'image/svg+xml'}));
+    return loadImg(url).then(function(i){ URL.revokeObjectURL(url); return i; });
+  }
+  var W = 1080, H = 1920, PR = {x:40, y:400, w:1000, h:1100};
+  function prepare(){
+    var L = compose(look), vb = STAGES[stage].vb, vbs = vb.join(' ');
+    return Promise.all([
+      svgImg(L.back, vbs, PR.w, PR.h), svgImg(L.front, vbs, PR.w, PR.h),
+      loadImg('plants/'+STAGES[stage].img+'.png'), loadImg('logo/teuida-logo.png'),
+      document.fonts ? Promise.all([document.fonts.load('900 80px "Zen Maru Gothic"'), document.fonts.load('700 42px "Zen Maru Gothic"')]).catch(function(){}) : null
+    ]).then(function(r){ return {back:r[0], front:r[1], plant:r[2], logo:r[3], vb:vb}; });
+  }
+  function drawFrame(ctx, A, bdImg, t){
+    var c = BG[look.bg] || BG.night;
+    var g = ctx.createRadialGradient(W/2, H*0.55, 40, W/2, H*0.55, H*0.75);
+    g.addColorStop(0, c[0]); g.addColorStop(1, c[1]);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    if (bdImg) ctx.drawImage(bdImg, 0, 0, W, H);
+    var vb = A.vb, k = PR.w / vb[2];
+    var ox = PR.x - vb[0]*k, oy = PR.y - vb[1]*k;
+    ctx.save();
+    var px = ox + 80*k, py = oy + 156*k;
+    ctx.translate(px, py + Math.sin(t*Math.PI*2)*-10); ctx.rotate(Math.sin(t*Math.PI*2 + 1) * 0.02); ctx.translate(-px, -py);
+    ctx.drawImage(A.back, PR.x, PR.y, PR.w, PR.h);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, oy + 62*k); ctx.clip();
+    ctx.drawImage(A.plant, ox + IMG.x*k, oy + IMG.y*k, IMG.s*k, IMG.s*k);
+    ctx.restore();
+    ctx.drawImage(A.front, PR.x, PR.y, PR.w, PR.h);
+    ctx.restore();
+    ctx.textAlign = 'center'; ctx.fillStyle = '#f3ece2';
+    ctx.font = '900 84px "Zen Maru Gothic", sans-serif';
+    ctx.fillText(lang === 'ja' ? 'ハロウィンの成長植物' : 'My Halloween plant', W/2, 340);
+    var lw = 340, lh = lw * A.logo.naturalHeight / A.logo.naturalWidth;
+    ctx.drawImage(A.logo, (W - lw)/2, 1560, lw, lh);
+    ctx.font = '700 42px "Zen Maru Gothic", sans-serif'; ctx.fillStyle = '#f3ece2';
+    ctx.fillText(lang === 'ja' ? 'teuida.netで育てよう' : 'Grow yours at teuida.net', W/2, 1720);
+  }
+  function showPreview(blob, note){
+    var url = URL.createObjectURL(blob);
+    document.getElementById('preview-img').src = url;
+    document.getElementById('preview').hidden = false;
+    document.getElementById('preview-note').textContent = note ? (lang === 'ja' ? '保存されない場合は、画像を長押しして保存してください。' : 'If it did not save, press and hold the image to save it.') : '';
+  }
+  function offer(blob, name){
+    var file = null;
+    try { file = new File([blob], name, {type: blob.type}); } catch(e){}
+    if (file && navigator.canShare && navigator.canShare({files:[file]})) {
+      showPreview(blob, false);
+      return navigator.share({files:[file]}).then(function(){ say('Shared!', 'シェアしました！'); }, function(err){
+        if (err && err.name === 'AbortError') say('Share canceled.', 'シェアをキャンセルしました。');
+        else { download(blob, name); }
+      });
+    }
+    download(blob, name);
+    return Promise.resolve();
+  }
+  function download(blob, name){
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    showPreview(blob, true);
+    say('Saved! Now post it to your story.', '保存しました！ストーリーに投稿しよう！');
+  }
+  var busy = false;
+  document.getElementById('save-png').addEventListener('click', function(){
+    if (busy) return; busy = true; say('Making your image…', '画像を作成中…');
+    prepare().then(function(A){
+      return svgImg(backdrop(look.scene, 1.3, 178), '0 0 100 178', W, H).then(function(bdImg){
+        var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+        drawFrame(cv.getContext('2d'), A, bdImg, 0);
+        return new Promise(function(r){ cv.toBlob(r, 'image/png'); });
+      });
+    }).then(function(blob){ return offer(blob, 'teuida-halloween-plant.png'); })
+    .catch(function(){ say('Something went wrong. Try again.', '問題が発生しました。もう一度お試しください。'); })
+    .then(function(){ busy = false; });
+  });
+  document.getElementById('save-gif').addEventListener('click', function(){
+    if (busy) return;
+    if (typeof GifWriter === 'undefined') { say('GIF saving is unavailable right now. Try the image instead.', '現在GIFは保存できません。画像で保存してください。'); return; }
+    busy = true; say('Making your GIF… this takes a few seconds.', 'GIFを作成中…（数秒かかります）');
+    var N = 16, GW = 540, GH = 960;
+    prepare().then(function(A){
+      var frames = [], i = 0;
+      var cv = document.createElement('canvas'); cv.width = GW; cv.height = GH;
+      var ctx = cv.getContext('2d');
+      function next(){
+        if (i >= N) return Promise.resolve();
+        var t = i / N;
+        return svgImg(backdrop(look.scene, t * 2.5, 178), '0 0 100 178', W, H).then(function(bdImg){
+          ctx.setTransform(GW / W, 0, 0, GH / H, 0, 0);
+          drawFrame(ctx, A, bdImg, t);
+          frames.push(ctx.getImageData(0, 0, GW, GH).data);
+          i++; return next();
+        });
+      }
+      return next().then(function(){ return encodeGif(frames, GW, GH); });
+    }).then(function(bytes){ return offer(new Blob([bytes], {type:'image/gif'}), 'teuida-halloween-plant.gif'); })
+    .catch(function(){ say('Something went wrong. Try again.', '問題が発生しました。もう一度お試しください。'); })
+    .then(function(){ busy = false; });
+  });
+  function encodeGif(frames, w, h){
+    var hist = new Uint32Array(32768);
+    frames.forEach(function(d){ for (var p = 0; p < d.length; p += 16) hist[((d[p]>>3)<<10)|((d[p+1]>>3)<<5)|(d[p+2]>>3)]++; });
+    var keys = []; for (var k = 0; k < 32768; k++) if (hist[k]) keys.push(k);
+    keys.sort(function(a, b){ return hist[b] - hist[a]; });
+    keys = keys.slice(0, 256);
+    var pal = [], pr = [], pg = [], pb = [];
+    keys.forEach(function(k){ var r = ((k>>10)&31)<<3|4, g = ((k>>5)&31)<<3|4, b = (k&31)<<3|4; pr.push(r); pg.push(g); pb.push(b); pal.push((r<<16)|(g<<8)|b); });
+    while (pal.length < 256) { pal.push(0); pr.push(0); pg.push(0); pb.push(0); }
+    var lut = new Int16Array(32768).fill(-1);
+    function idx(r, g, b){
+      var key = ((r>>3)<<10)|((g>>3)<<5)|(b>>3), v = lut[key];
+      if (v >= 0) return v;
+      var best = 0, bd2 = 1e9;
+      for (var j = 0; j < keys.length; j++) { var dr = r - pr[j], dg = g - pg[j], db = b - pb[j], dd = dr*dr*2 + dg*dg*4 + db*db*3; if (dd < bd2) { bd2 = dd; best = j; } }
+      lut[key] = best; return best;
+    }
+    var buf = new Uint8Array(w * h * frames.length + 1024 * 1024);
+    var gw = new GifWriter(buf, w, h, {palette: pal, loop: 0});
+    var px = new Uint8Array(w * h);
+    frames.forEach(function(d){
+      for (var p = 0, q = 0; q < px.length; p += 4, q++) px[q] = idx(d[p], d[p+1], d[p+2]);
+      gw.addFrame(0, 0, w, h, px, {delay: 8});
+    });
+    return buf.slice(0, gw.end());
+  }
+
+  setLang(lang);
+  setVB(curVB);
+})();
+</script>
+
+</body>
+</html>
